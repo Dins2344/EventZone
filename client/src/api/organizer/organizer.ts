@@ -20,14 +20,15 @@ export const addBasicEventInfo =async (data:BasicFormInterface)=>{
     return res
 }
 
-export const addMediaEventInfo = async(data:any)=>{
+export const addMediaEventInfo = async(data:FormData)=>{
+    console.log(data)
     try{
         const config: AxiosRequestConfig = {
             headers: {
               'Content-Type': 'multipart/form-data',
             },
           };
-        const res =await api.post('http://localhost:4000/organization/add-event-media-info',data,config)
+        const res =await api.post('http://localhost:4000/organization/add-event-media-info',data)
         console.log(res)
         return res
 

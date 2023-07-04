@@ -19,7 +19,7 @@ const userRouter = () => {
   )
 
   router.post("/register-organization", orgController.registerOrganization);
-  router.get('/get-user-details/:id',controller.getUserByEmail)
+  router.get('/get-user-details',controller.getUserByEmail)
 
   return router;
 };

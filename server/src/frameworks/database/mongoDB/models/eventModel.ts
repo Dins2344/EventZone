@@ -42,7 +42,7 @@ const eventSchema = new Schema(
             required:[true,'please add description']
         },
         imageURL:{
-            type:String,
+            type:Array<string>,
         },
         videoURL:{
             type:String,

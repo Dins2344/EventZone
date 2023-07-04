@@ -11,8 +11,10 @@ import { UserRepositoryMongoDB } from "../../../frameworks/database/mongoDB/repo
 import {
   getAllEventCategories,
   getUsersOrganizations,
-  addBasicEventInfo
+  addBasicEventInfo,
+  addMediaEventInfo
 } from "../../../application/usecases/organizatioin/organization";
+import { MediaFormInterface } from "../../../types/organizerInterface";
 
 const organizationController = (
   organizationDbRepository: OrganizationDBInterface,
@@ -87,7 +89,6 @@ const organizationController = (
       const data = req.body
       data.status = 'draft'
       const response =await addBasicEventInfo(data,dbRepositoryOrganization)
-      console.log(response)
       if(response){
         res.json({message:'adding basicInfo done',response})
       }else{
@@ -97,9 +98,14 @@ const organizationController = (
   )
 
   const addMediaEventInfoController = asyncHandler(async(req:Request,res:Response)=>{
-    const data = req.body
-    console.log(req.files)
-    // const uploadedImages=req?.files.map(file => file.path)
+    const data:MediaFormInterface = req.body
+    const medias = req.files as Express.Multer.File[];
+    const response = await addMediaEventInfo(data,medias,dbRepositoryOrganization)
+    if(response){
+      res.json({message:'adding media info done',response})
+    }else{
+      res.json({error:'adding media info failed'})
+    }
   })
 
   return {

@@ -65,7 +65,7 @@ const EventAddingPage = () => {
       </Stepper>
       <div className=" mt-28">
         {activeStep === 0 ? <BasicForm  setActiveStep = {setActiveStep}/> : null}
-        {activeStep === 1 ? <MediaForm /> : null}
+        {activeStep === 1 ? <MediaForm setActiveStep = {setActiveStep} /> : null}
         {activeStep === 2 ? <PublishForm /> : null}
 
         {/* <BasicForm className =  {activeStep !== 0 && 'hidden' }></BasicForm> */}
@@ -119,7 +119,7 @@ const BasicForm = ({setActiveStep}: ChildComponentProps) => {
   );
 };
 
-const MediaForm = () => {
+const MediaForm = ({setActiveStep}: ChildComponentProps) => {
   return (
     <>
       <div className=" lg:px-20">
@@ -158,7 +158,7 @@ const MediaForm = () => {
             </h2>
           </div>
         </div>
-        <MediaInfoForm />
+        <MediaInfoForm setActiveStep = {setActiveStep} />
       </div>
     </>
   );

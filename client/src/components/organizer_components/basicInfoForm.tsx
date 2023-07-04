@@ -9,11 +9,15 @@ import { eventCategoryInterface } from '../../types/adminInterface';
 import { OrganizationInterface } from '../../types/organizerInterface';
 import { addBasicEventInfo } from '../../api/organizer/organizer';
 import { ChildComponentProps } from '../../pages/organizer_pages/eventAdding';
+import { useDispatch } from 'react-redux';
+import { setEvent } from '../../redux/reducers/eventSlice';
+
 
 
 const BasicInfoComponent = ({setActiveStep}:ChildComponentProps) => {
   const [eventCategories,setEventCategories] = useState<eventCategoryInterface[]>([])
   const [organizers,setOrganizers] = useState<OrganizationInterface[]>()
+  const dispatch = useDispatch()
 
   const fetchOrganizer = async()=>{
     const data = await getUsersOrganizations()
@@ -56,9 +60,9 @@ const BasicInfoComponent = ({setActiveStep}:ChildComponentProps) => {
 
   // Form submission handler
   const handleSubmit = async(values:BasicFormInterface,) => {
-   console.log(values)
    const res = await addBasicEventInfo(values)
-   console.log(res)
+   console.log(res.data.response)
+   dispatch(setEvent(res.data.response))
    setActiveStep(1)
   };
 

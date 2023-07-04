@@ -2,6 +2,7 @@ import { UserDBInterface } from "../../../application/repositories/userDBReposit
 import { UserRepositoryMongoDB } from "../../../frameworks/database/mongoDB/repositories/userRepositoryMongoDB";
 import { Request,Response } from "express";
 import asyncHandler from "express-async-handler"
+import { CustomRequest } from "../../../types/userInterface";
 
 
 
@@ -12,16 +13,21 @@ const userController  = (
 
     const dbRepositoryUser = userDbRepository(userDbRepositoryImpl());
 
-    const getUserByEmail = asyncHandler(async(req:Request,res:Response)=>{
-        const email = req.params.id
-        const data = await dbRepositoryUser.getUserByEmail(email)
-        if(data){
-            res.json({data})
+    const getUserByEmail = asyncHandler(async(req:CustomRequest,res:Response)=>{
+        const email = req.user?.email
+        if(email){
+            const data = await dbRepositoryUser.getUserByEmail(email)
+            if(data){
+                res.json({data})
+            }else{
+                res.json({error:'user data fetching failed'})
+            }
         }else{
-            res.status(404).json({error:'user data fetching failed'})
+            res.json({error:'fetching id from api bearer failed'})
         }
     })
-  
+
+
 
     return {
         getUserByEmail

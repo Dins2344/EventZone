@@ -4,6 +4,7 @@ import OrgCreationModal from "./OrgCreateModal";
 import { useSelector } from "react-redux";
 import { selectUser } from "../../../redux/reducers/userSlice";
 import { getUserDetails } from "../../../api/userAuth/userApis";
+import { LoggedUserInterface } from "../../../types/userInterface";
 
 import {
   Navbar,
@@ -132,19 +133,19 @@ function ProfileMenu() {
 
 export default function Example() {
   const [openNav, setOpenNav] = React.useState(false);
-  const [userData, setUserData] = React.useState();
+  const [userData, setUserData] = React.useState<LoggedUserInterface>();
   const user = useSelector(selectUser);
 
-  const fetchUserData = async (id: string) => {
-    console.log(id);
-    const res = await getUserDetails(id);
-    console.log(res?.data.data);
-    setUserData(res?.data.data);
+  const fetchUserData = async () => {
+    const res = await getUserDetails();
+    if(res?.data){
+      console.log(res.data.data)
+      setUserData(res?.data.data);
+    }
   };
   useEffect(() => {
     if (user) {
-      console.log(user);
-      fetchUserData(user.user.email);
+      fetchUserData();
     }
   }, []);
 
@@ -163,7 +164,7 @@ export default function Example() {
         color="blue-gray"
         className="p-1 font-normal"
       >
-        {userData?.organizations.length ? (
+        {userData && userData?.organizations.length ? (
           <Link to="/organization/home" className="flex items-center">
             Organization
           </Link>

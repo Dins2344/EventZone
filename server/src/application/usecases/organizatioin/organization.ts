@@ -1,7 +1,7 @@
 import { HttpStatus } from "../../../types/httpStatus";
 import { OrganizationDBInterface } from "../../repositories/organizationDBRepository";
 import { CreateOrganization } from "../../../types/userInterface";
-import { BasicFormInterface } from "../../../types/organizerInterface";
+import { BasicFormInterface,MediaFormInterface } from "../../../types/organizerInterface";
 import AppError from "../../../utils/appError";
 
 export const organizationRegister = async (
@@ -50,3 +50,16 @@ export const addBasicEventInfo = async (
   }
   return res;
 };
+
+
+export const addMediaEventInfo = async(
+  data:MediaFormInterface,
+  media:Express.Multer.File[],
+  organizationRepository:ReturnType<OrganizationDBInterface>
+)=>{
+  const res = await organizationRepository.addMediaEventInfo(data,media)
+  if(!res){
+    throw new AppError('adding media info failed',HttpStatus.BAD_REQUEST)
+  }
+  return res
+}

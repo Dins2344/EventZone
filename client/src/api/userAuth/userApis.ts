@@ -18,10 +18,10 @@ export const createOrganizer = async (OrgData: createOrganizerInterface) => {
   }
 };
 
-export const getUserDetails = async (id: string) => {
+export const getUserDetails = async () => {
   try {
     const response = await api.get(
-      `http://localhost:4000/user/get-user-details/${id}`
+      `http://localhost:4000/user/get-user-details`
     );
    
     return response

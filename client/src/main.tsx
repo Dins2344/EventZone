@@ -114,7 +114,6 @@ const appRouter = createBrowserRouter([
     ],
   },
 ]);
+export default appRouter
 
-ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
-  <RouterProvider router={appRouter} />
-);
+

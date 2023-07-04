@@ -1,14 +1,21 @@
 import { Formik, Field, ErrorMessage, Form } from 'formik';
 import * as Yup from 'yup';
-import { Button } from '@material-tailwind/react';
+import { Button, useSelect } from '@material-tailwind/react';
 import { ChangeEvent, useState } from 'react';
 import { mediaFormInterface,MediaFormDataToSend } from '../../types/organizerInterface';
 import { addMediaEventInfo } from '../../api/organizer/organizer';
+import { selectEvent } from '../../redux/reducers/eventSlice';
+import { useSelector } from 'react-redux/es/hooks/useSelector';
+import { registeredEventInterface } from '../../types/organizerInterface';
+import { ChildComponentProps } from '../../pages/organizer_pages/eventAdding';
 
-const MediaInfoForm = () => {
+
+const MediaInfoForm = ({setActiveStep}:ChildComponentProps) => {
   const [images, setImages] = useState({
     images: [] as File[],
   });
+  const event:any = useSelector(selectEvent)
+  
   const initialValues = {
     videoURL: '',
     description: '',
@@ -19,29 +26,20 @@ const MediaInfoForm = () => {
     videoURL:Yup.string().url('Please enter a valid URL').required('URL is required'),
   });
 
-  const handleSubmit = async(values:mediaFormInterface) => {  
+  const handleSubmit = async(values:mediaFormInterface) => {
+    console.log(event)  
     const formData = new FormData();
     formData.append('description', values?.description);
     formData.append('videoURL', values?.videoURL);
-    images?.images.forEach((image, index) => {
-      formData.append(`images[${index}]`, image);
-      console.log(image)
+    event && formData.append('eventId',event.eventDetails._id)
+    images?.images.forEach((image,index) => {
+      formData.append(`images`, image,`images${index}`);
     });
-
-    const formDataToSend: MediaFormDataToSend = {
-      description: formData.get('description') as string,
-      videoURL: formData.get('videoURL') as string,
-      images: [],
-    };
-    
-    for (let i = 0; i < images.images.length; i++) {
-      const imageKey = `images[${i}]`;
-      const images = formData.get(imageKey) as File;
-      formDataToSend.images.push(images);
-    }
-    console.log(formDataToSend)
     const res = await addMediaEventInfo(formData)
-    console.log(res)
+    if(res?.data.message){
+      setActiveStep(2)
+    }
+    
   };
   const handleImageChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
