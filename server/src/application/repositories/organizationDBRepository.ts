@@ -1,6 +1,6 @@
 import { OrganizationRepositoryMongoDB} from "../../frameworks/database/mongoDB/repositories/organizationRepository";
 import { CreateOrganization } from "../../types/userInterface";
-import { BasicFormInterface,MediaFormInterface } from "../../types/organizerInterface";
+import { BasicFormInterface,MediaFormInterface,PublishFormInterface } from "../../types/organizerInterface";
 export const organizationDbRepository = (repository:ReturnType<OrganizationRepositoryMongoDB>)=>{
   
     const addOrganization = async(orgData:CreateOrganization)=>{
@@ -28,12 +28,24 @@ export const organizationDbRepository = (repository:ReturnType<OrganizationRepos
         return res
     }
 
+    const addPublishEventInfo = async(data:PublishFormInterface)=>{
+        const res = await repository.addPublishEventInfo(data)
+        return res
+    }
+
+    const getEventDetails = async(id:string) =>{
+        const data = await repository.getEventDetails(id)
+        return data
+    }
+
     return {
         addOrganization,
         getAllEventCategories,
         getUsersOrganizations,
         addBasicEventInfo,
-        addMediaEventInfo
+        addMediaEventInfo,
+        addPublishEventInfo,
+        getEventDetails
     }
 }
 

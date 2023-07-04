@@ -1,4 +1,4 @@
-import React, { useState,ChangeEvent } from "react";
+import React, { useState,ChangeEvent, useEffect } from "react";
 import { Stepper, Step, Button, Typography } from "@material-tailwind/react";
 import {
   CogIcon,
@@ -8,9 +8,17 @@ import {
 import BasicInfoComponent from "../../components/organizer_components/basicInfoForm";
 import MediaInfoForm from "../../components/organizer_components/mediaInfoForm";
 import PublishFormComponent from "../../components/organizer_components/publishForm";
+import { useSelector } from "react-redux";
+import { selectEvent } from "../../redux/reducers/eventSlice";
+import { getEventDetails } from "../../api/organizer/organizer";
+import { RegisteredEventInterface } from "../../types/organizerInterface";
 
 export interface ChildComponentProps {
   setActiveStep: React.Dispatch<React.SetStateAction<number>>;
+}
+export interface setEventChild{
+  setEventDetails:React.Dispatch<React.SetStateAction<RegisteredEventInterface>>;
+
 }
 
 const EventAddingPage = () => {
@@ -165,81 +173,19 @@ const MediaForm = ({setActiveStep}: ChildComponentProps) => {
 };
 
 const PublishForm = () => {
-//   const [selectedOption, setSelectedOption] = useState("");
+  const [eventDetails,setEventDetails] = useState<RegisteredEventInterface>()
+  const event:any = useSelector(selectEvent)
 
-//   const handleOptionChange = (event: ChangeEvent<HTMLInputElement>) => {
-//     setSelectedOption(event.target.value);
-//   };
+  const fetchEvent =async (id:string)=>{
+    const res =await getEventDetails(id)
+    console.log(res)
+    setEventDetails(res?.data.data)
 
-//   const renderInputFields = () => {
-//     if (selectedOption === "option1") {
-//       return (
-//         <>
-//         <form>
-//         <input
-//           type="number"
-//           name="eventCapacity"
-//           placeholder="Enter capacity for event"
-//           className="input-field mr-3"
-//         />
-//         <input
-//         type="text"
-//         name="ticketPrice"
-//         placeholder="Free of cost"
-//         readOnly
-//         value={0}
-//         className="input-field"
-//       />
-//         <Button color="blue" size="sm" variant="outlined" className="ml-2">Submit</Button>
-//         </form>
-//         </>
-//       );
-//     } else if (selectedOption === "option2") {
-//       return (
-//         <>
-//         <form>
-//         <input
-//           type="number"
-//           name="eventCapacity"
-//           placeholder="Enter capacity for event"
-//           className="input-field mr-3"
-//         />
-//         <input
-//         type="text"
-//         name="ticketPrice"
-//         placeholder="Attendees can pay what they want"
-//         readOnly
-//         className="input-field"
-//       />
-//         <Button color="blue" size="sm" variant="outlined" className="ml-2">Submit</Button>
-//         </form>
-//         </>
-//       );
-//     } else if (selectedOption === "option3") {
-//       return (
-//         <>
-//         <form>
-//         <input
-//           type="number"
-//           name="eventCapacity"
-//           placeholder="Enter capacity for event"
-//           className="input-field mr-3"
-//         />
-//         <input
-//         type="number"
-//         name="ticketPrice"
-//         placeholder="Enter ticket price"
-//         className="input-field"
-//       />
-//          <Button color="blue" size="sm" variant="outlined" className="ml-2">Submit</Button>
-//         </form>
-//         </>
-//       );
-//     }
-
-//     return null;
-//   };
-
+  }
+  useEffect(()=>{
+    fetchEvent(event.eventDetails._id)
+  },[])
+ 
   return (
     <>
       <div className=" lg:px-20">
@@ -272,54 +218,7 @@ const PublishForm = () => {
               Ticket details
             </h2>
           </div>
-          {/* <div className="mb-6">
-            <div className="flex flex-wrap mb-3 ">
-                <div className="mr-2">
-            <p>Choose a method for ticketing : </p>
-                </div>
-                <div className="flex">
-              <div className=" mr-2">
-                <label>
-                  <input
-                    type="radio"
-                    name="options"
-                    value="option1"
-                    checked={selectedOption === "option1"}
-                    onChange={handleOptionChange}
-                  />
-                  {' '}Free
-                </label>
-              </div>
-              <div className="mr-2">
-                <label>
-                  <input
-                    type="radio"
-                    name="options"
-                    value="option2"
-                    checked={selectedOption === "option2"}
-                    onChange={handleOptionChange}
-                  />
-                  {' '}Donation
-                </label>
-              </div>
-              <div className="mr-2">
-                <label>
-                  <input
-                    type="radio"
-                    name="options"
-                    value="option3"
-                    checked={selectedOption === "option3"}
-                    onChange={handleOptionChange}
-                  />
-                 {' '} Charge price
-                </label>
-              </div>
-                </div>
-
-            </div>
-              {renderInputFields()}
-          </div> */}
-          <PublishFormComponent />
+          <PublishFormComponent setEventDetails = {setEventDetails} />
 
           <div className="mt-10">
             <div>
@@ -329,18 +228,18 @@ const PublishForm = () => {
             </div>
             <div className="flex flex-wrap justify-center border shadow-md">
               <div className="md:w-1/2 w-full">
-              <img  className="w-full h-auto p-4 rounded-lg" src="https://img.evbuc.com/https%3A%2F%2Fcdn.evbuc.com%2Fimages%2F172482489%2F250110139773%2F1%2Foriginal.20210826-144848?w=940&auto=format%2Ccompress&q=75&sharp=10&rect=0%2C12%2C1200%2C600&s=1dac3212e0fca149b0c72f035d22bd95" alt="image description" />
+              <img  className="w-full h-auto p-4 rounded-lg" src={eventDetails?.imageURL[0]} alt="image description" />
               </div>
               <div className="md:w-1/2 w-full">
                 <div className="flex flex-col p-4">
                   <h5 className="text-xl font-bold dark:text-white">
-                    Heading 5
+                    {eventDetails?.eventName}
                   </h5>
                   <p className="text-gray-500 dark:text-gray-400">
-                    Date at time
+                   data : {eventDetails?.startDate}{" at "}{eventDetails?.startTime}
                   </p>
                   <p className="text-gray-500 dark:text-gray-400">
-                    venue details
+                   venue : {eventDetails?.addressLine1}
                   </p>
                   <div className="flex">
                     <svg
@@ -357,8 +256,8 @@ const PublishForm = () => {
                         d="M16.5 6v.75m0 3v.75m0 3v.75m0 3V18m-9-5.25h5.25M7.5 15h3M3.375 5.25c-.621 0-1.125.504-1.125 1.125v3.026a2.999 2.999 0 010 5.198v3.026c0 .621.504 1.125 1.125 1.125h17.25c.621 0 1.125-.504 1.125-1.125v-3.026a2.999 2.999 0 010-5.198V6.375c0-.621-.504-1.125-1.125-1.125H3.375z"
                       />
                     </svg>
-                    <p className="text-gray-500 dark:text-gray-400">
-                      Ticket Price
+                    <p className="text-gray-500 dark:text-gray-400 mr-3">
+                      {eventDetails?.ticketPrice}
                     </p>
 
                     <svg
@@ -376,7 +275,7 @@ const PublishForm = () => {
                       />
                     </svg>
                     <p className="text-gray-500 dark:text-gray-400">
-                      event capacity
+                      {eventDetails?.eventCapacity}
                     </p>
                   </div>
                 </div>

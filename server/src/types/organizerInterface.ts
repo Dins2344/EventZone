@@ -17,3 +17,9 @@ export interface MediaFormInterface {
   videoURL: string;
   eventId: string;
 }
+export interface PublishFormInterface {
+  eventCapacity: string
+  ticketPrice: string
+  ticketValue: string,
+  eventId:string
+}

@@ -12,7 +12,9 @@ import {
   getAllEventCategories,
   getUsersOrganizations,
   addBasicEventInfo,
-  addMediaEventInfo
+  addMediaEventInfo,
+  addPublishEventInfo,
+  getEventDetails
 } from "../../../application/usecases/organizatioin/organization";
 import { MediaFormInterface } from "../../../types/organizerInterface";
 
@@ -108,13 +110,37 @@ const organizationController = (
     }
   })
 
+  const addPublishEventInfoController = asyncHandler(async(req:Request,res:Response)=>{
+    const data = req.body
+    console.log(data)
+    const response = await addPublishEventInfo(data,dbRepositoryOrganization)
+    if(response){
+      res.json({message:'adding ticket details done',response})
+    }else{
+      res.json({error:'adding ticket info failed'})
+    }
+  })
+
+  const getEventDetailsController = asyncHandler(async(req:Request,res:Response)=>{
+    const id = req.params.id
+    console.log(id)
+    const data = await getEventDetails(id,dbRepositoryOrganization)
+    if(data){
+      res.json({message:'getting event data done',data})
+    }else{
+      res.json({error:'event data fetching failed'})
+    }
+  })
+
   return {
     registerOrganization,
     getAllEventCategoriesController,
     getUsersOrganizations,
     getUsersOrganizationsController,
     addBasicEventInfoController,
-    addMediaEventInfoController
+    addMediaEventInfoController,
+    addPublishEventInfoController,
+    getEventDetailsController
   };
 };
 

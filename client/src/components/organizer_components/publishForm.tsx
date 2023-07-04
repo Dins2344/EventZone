@@ -1,21 +1,38 @@
-import { ChangeEvent, Fragment, useState } from "react";
+import { ChangeEvent, Fragment, useEffect, useState } from "react";
 import {
   Button,
   Dialog,
   DialogBody,
   DialogFooter,
 } from "@material-tailwind/react";
+import { addPublishEventInfo, getEventDetails } from "../../api/organizer/organizer";
+import { useSelector } from "react-redux";
+import { selectEvent } from "../../redux/reducers/eventSlice";
+import { setEventChild } from "../../pages/organizer_pages/eventAdding";
 
-const PublishFormComponent = () => {
+
+const PublishFormComponent= ({setEventDetails}:setEventChild) => {
   const [selectedOption, setSelectedOption] = useState("");
   const [ticketValue, setTicketValue] = useState("");
   const [eventCapacity, setEventCapacity] = useState("");
   const [ticketPrice, setTicketPrice] = useState("0");
   const [error, setError] = useState(false);
   const [submitted, setSubmitted] = useState(true);
+  const event:any = useSelector(selectEvent)
 
+
+  const fetchEventData =async (id:string)=>{
+    const res =await getEventDetails(id)
+    console.log(res)
+    setEventDetails(res?.data.data)
+
+  }
+
+  useEffect(()=>{
+    fetchEventData(event.eventDetails._id)
+  },[ticketPrice])
   const checkValue = () => {
-    if (ticketPrice === "" || eventCapacity === "") {
+    if ((ticketPrice === ""||ticketPrice > '5000') || (eventCapacity === ""||eventCapacity > '20000')) {
       setError(true);
       return false;
     } else {
@@ -23,10 +40,13 @@ const PublishFormComponent = () => {
       return true;
     }
   };
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (checkValue()) {
-      const data = { eventCapacity, ticketPrice, ticketValue };
+      const data = { eventCapacity, ticketPrice, ticketValue,eventId:'' };
+      data.eventId = event.eventDetails._id
       console.log(data);
+      const res = await addPublishEventInfo(data)
+      console.log(res)
       // setSubmitted(false);
     }
   };
@@ -113,7 +133,7 @@ const PublishFormComponent = () => {
                 // defaultValue='0'
                 className="input-field"
               />
-              {error && <p className="text-red-600">enter valid inputs</p>}
+              {/* {error && <p className="text-red-600">enter valid inputs</p>} */}
             </div>
             <SubmitModal />
           </form>
@@ -145,7 +165,7 @@ const PublishFormComponent = () => {
                 readOnly
                 className="input-field"
               />
-              {error && <p className="text-red-600">enter valid inputs</p>}
+              {/* {error && <p className="text-red-600">enter valid inputs</p>} */}
             </div>
             <SubmitModal />
           </form>

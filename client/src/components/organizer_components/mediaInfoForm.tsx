@@ -1,6 +1,6 @@
 import { Formik, Field, ErrorMessage, Form } from 'formik';
 import * as Yup from 'yup';
-import { Button, useSelect } from '@material-tailwind/react';
+import { Button } from '@material-tailwind/react';
 import { ChangeEvent, useState } from 'react';
 import { mediaFormInterface,MediaFormDataToSend } from '../../types/organizerInterface';
 import { addMediaEventInfo } from '../../api/organizer/organizer';

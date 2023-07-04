@@ -4,9 +4,8 @@ import { organizationDbRepository } from "../../../application/repositories/orga
 import { organizationRepositoryMongoDB } from "../../database/mongoDB/repositories/organizationRepository";
 import { userDbRepository } from "../../../application/repositories/userDBRepository";
 import { userRepositoryMongoDB } from "../../database/mongoDB/repositories/userRepositoryMongoDB";
-import {upload} from "../middlewares/cloudinary";
+import { upload } from "../middlewares/cloudinary";
 // import { uploadMiddleware } from "../middlewares/cloudinary";
-
 
 const organizationRouter = () => {
   const router = express.Router();
@@ -17,14 +16,30 @@ const organizationRouter = () => {
     userRepositoryMongoDB
   );
 
-  router.get("/get-all-event-categories",
+  router.get(
+    "/get-all-event-categories",
     orgController.getAllEventCategoriesController
   );
-  router.get("/get-user-organizations",
-  orgController.getUsersOrganizationsController);
+  router.get(
+    "/get-user-organizations",
+    orgController.getUsersOrganizationsController
+  );
 
-  router.post('/add-event-basic-info',orgController.addBasicEventInfoController)
-  router.post('/add-event-media-info',upload,orgController.addMediaEventInfoController)
+  router.post(
+    "/add-event-basic-info",
+    orgController.addBasicEventInfoController
+  );
+  router.post(
+    "/add-event-media-info",
+    upload,
+    orgController.addMediaEventInfoController
+  );
+  router.post(
+    "/add-event-publish-info",
+    orgController.addPublishEventInfoController
+  );
+  router.get("/get-event-details/:id", orgController.getEventDetailsController);
+
   return router;
 };
 

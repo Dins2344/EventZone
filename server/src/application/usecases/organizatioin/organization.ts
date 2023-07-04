@@ -1,7 +1,11 @@
 import { HttpStatus } from "../../../types/httpStatus";
 import { OrganizationDBInterface } from "../../repositories/organizationDBRepository";
 import { CreateOrganization } from "../../../types/userInterface";
-import { BasicFormInterface,MediaFormInterface } from "../../../types/organizerInterface";
+import {
+  BasicFormInterface,
+  MediaFormInterface,
+  PublishFormInterface,
+} from "../../../types/organizerInterface";
 import AppError from "../../../utils/appError";
 
 export const organizationRegister = async (
@@ -51,15 +55,37 @@ export const addBasicEventInfo = async (
   return res;
 };
 
+export const addMediaEventInfo = async (
+  data: MediaFormInterface,
+  media: Express.Multer.File[],
+  organizationRepository: ReturnType<OrganizationDBInterface>
+) => {
+  const res = await organizationRepository.addMediaEventInfo(data, media);
+  if (!res) {
+    throw new AppError("adding media info failed", HttpStatus.BAD_REQUEST);
+  }
+  return res;
+};
 
-export const addMediaEventInfo = async(
-  data:MediaFormInterface,
-  media:Express.Multer.File[],
+export const addPublishEventInfo = async (
+  data: PublishFormInterface,
+  organizationRepository: ReturnType<OrganizationDBInterface>
+) => {
+  const res = await organizationRepository.addPublishEventInfo(data);
+  if (!res) {
+    throw new AppError("adding ticket details failed", HttpStatus.BAD_REQUEST);
+  }
+  return res;
+};
+
+
+export const getEventDetails = async(
+  id:string,
   organizationRepository:ReturnType<OrganizationDBInterface>
 )=>{
-  const res = await organizationRepository.addMediaEventInfo(data,media)
-  if(!res){
-    throw new AppError('adding media info failed',HttpStatus.BAD_REQUEST)
+  const data = await organizationRepository.getEventDetails(id)
+  if(!data){
+    throw new AppError('getting event data failed',HttpStatus.BAD_REQUEST)
   }
-  return res
+  return data
 }

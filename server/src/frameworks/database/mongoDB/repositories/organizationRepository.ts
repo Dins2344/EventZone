@@ -6,6 +6,7 @@ import { OrganizationInterface } from "../../../../types/userInterface";
 import {
   BasicFormInterface,
   MediaFormInterface,
+  PublishFormInterface,
 } from "../../../../types/organizerInterface";
 import { ObjectId } from "mongodb";
 export const organizationRepositoryMongoDB = () => {
@@ -25,6 +26,7 @@ export const organizationRepositoryMongoDB = () => {
   };
 
   const addBasicEventInfo = async (data: BasicFormInterface) => {
+    data.status = "draft"
     const res = await Event.create(data);
     return res;
   };
@@ -33,8 +35,7 @@ export const organizationRepositoryMongoDB = () => {
     data: MediaFormInterface,
     media: Express.Multer.File[]
   ) => {
-    const imageURL :Array<string> = media.map((file) => file.path);
-
+    const imageURL: Array<string> = media.map((file) => file.path);
     const res = await Event.updateOne(
       { _id: new ObjectId(data.eventId) },
       {
@@ -46,12 +47,31 @@ export const organizationRepositoryMongoDB = () => {
     return res;
   };
 
+  const addPublishEventInfo = async (data: PublishFormInterface) => {
+    const res = await Event.updateOne(
+      { _id: new ObjectId(data.eventId) },
+      {
+        eventCapacity: data.eventCapacity,
+        ticketPrice: data.ticketPrice,
+        ticketValue: data.ticketValue,
+      }
+    );
+    return res
+  };
+
+  const getEventDetails = async(id:string)=>{
+    const data = await Event.findOne({_id:new ObjectId(id)})
+    return data
+  }
+
   return {
     addOrganization,
     getAllEventCategories,
     getUsersOrganizations,
     addBasicEventInfo,
     addMediaEventInfo,
+    addPublishEventInfo,
+    getEventDetails
   };
 };
 

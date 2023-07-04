@@ -51,11 +51,17 @@ const eventSchema = new Schema(
             type:String,
         },
         eventCapacity:{
-            type:String,
+            type:Number,
         },
         ticketPrice:{
-            type:String,
+            type:Number,
         },
+        ticketValue:{
+            type:String
+        },
+        status:{
+            type:String
+        }
     }
 )
 
