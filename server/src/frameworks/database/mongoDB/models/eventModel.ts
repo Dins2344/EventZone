@@ -61,6 +61,12 @@ const eventSchema = new Schema(
         },
         status:{
             type:String
+        },
+        registeredTime:{
+            type:String
+        },
+        orgOwnerId:{
+            type:String
         }
     }
 )

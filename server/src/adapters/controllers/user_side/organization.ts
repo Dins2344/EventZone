@@ -14,7 +14,9 @@ import {
   addBasicEventInfo,
   addMediaEventInfo,
   addPublishEventInfo,
-  getEventDetails
+  getEventDetails,
+  publishEvent,
+  getUsersAllEvents
 } from "../../../application/usecases/organizatioin/organization";
 import { MediaFormInterface } from "../../../types/organizerInterface";
 
@@ -123,12 +125,35 @@ const organizationController = (
 
   const getEventDetailsController = asyncHandler(async(req:Request,res:Response)=>{
     const id = req.params.id
-    console.log(id)
     const data = await getEventDetails(id,dbRepositoryOrganization)
     if(data){
       res.json({message:'getting event data done',data})
     }else{
       res.json({error:'event data fetching failed'})
+    }
+  })
+
+  const publishEventController = asyncHandler(async(req:Request,res:Response)=>{
+    const id = req.params.id
+    console.log(id)
+    const response = await publishEvent(id,dbRepositoryOrganization)
+    if(response){
+      res.json({message:'publishing request sent',response})
+    }else{
+      res.json({error:'publishing event failed'})
+    }
+  })
+
+  const getUsersAllEventsController = asyncHandler(async(req:CustomRequest,res:Response)=>{
+    const user = req.user
+    if(user){
+      const{Id} = user
+      const data = await getUsersAllEvents(Id,dbRepositoryOrganization)
+      if(data){
+        res.json({message:'users events getting done',data})
+      }else{
+        res.json({error:'users events fetching failed'})
+      }
     }
   })
 
@@ -140,7 +165,9 @@ const organizationController = (
     addBasicEventInfoController,
     addMediaEventInfoController,
     addPublishEventInfoController,
-    getEventDetailsController
+    getEventDetailsController,
+    publishEventController,
+    getUsersAllEventsController
   };
 };
 

@@ -61,3 +61,22 @@ export const getEventDetails = async(id:string)=>{
         console.log(error)
     }
 }
+
+export const publishEvent = async(id:string)=>{
+  console.log('publish called')
+  try{
+    const res = await api.get(`http://localhost:4000/organization/publish-event/${id}`)
+    return res
+  }catch(error){
+    console.log(error)
+  }
+}
+
+export const getUsersAllEvents = async()=>{
+  try{
+    const data = await api.get('http://localhost:4000/organization/get-users-all-events')
+    return data
+  }catch(error){
+    console.log(error)
+  }
+}

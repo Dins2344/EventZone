@@ -89,3 +89,25 @@ export const getEventDetails = async(
   }
   return data
 }
+
+export const publishEvent = async(
+  id:string,
+  organizationRepository:ReturnType<OrganizationDBInterface>
+)=>{
+  const time = new Date().toDateString()
+  console.log(time)
+  const res = await organizationRepository.publishEvent(id,time)
+  if(!res){
+    throw new AppError('publishing event failed',HttpStatus.BAD_REQUEST)
+  }
+  return res
+}
+
+
+export const getUsersAllEvents = async(userId:string,organizationRepository:ReturnType<OrganizationDBInterface>)=>{
+  const data = await organizationRepository.getUsersAllEvents(userId)
+  if(!data){
+    throw new AppError('getting users all events failed',HttpStatus.BAD_REQUEST)
+  }
+  return data
+}

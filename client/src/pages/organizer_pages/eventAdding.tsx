@@ -10,15 +10,16 @@ import MediaInfoForm from "../../components/organizer_components/mediaInfoForm";
 import PublishFormComponent from "../../components/organizer_components/publishForm";
 import { useSelector } from "react-redux";
 import { selectEvent } from "../../redux/reducers/eventSlice";
-import { getEventDetails } from "../../api/organizer/organizer";
+import { getEventDetails,publishEvent } from "../../api/organizer/organizer";
 import { RegisteredEventInterface } from "../../types/organizerInterface";
+import { useNavigate } from "react-router-dom";
 
 export interface ChildComponentProps {
   setActiveStep: React.Dispatch<React.SetStateAction<number>>;
 }
-export interface setEventChild{
-  setEventDetails:React.Dispatch<React.SetStateAction<RegisteredEventInterface>>;
-
+export interface SubmittedChildComponentProps {
+  submitted: boolean;
+  setSubmitted: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const EventAddingPage = () => {
@@ -172,9 +173,13 @@ const MediaForm = ({setActiveStep}: ChildComponentProps) => {
   );
 };
 
+
+
 const PublishForm = () => {
   const [eventDetails,setEventDetails] = useState<RegisteredEventInterface>()
+  const [submitted, setSubmitted] = useState(true);
   const event:any = useSelector(selectEvent)
+  const navigate = useNavigate()
 
   const fetchEvent =async (id:string)=>{
     const res =await getEventDetails(id)
@@ -184,8 +189,15 @@ const PublishForm = () => {
   }
   useEffect(()=>{
     fetchEvent(event.eventDetails._id)
-  },[])
+  },[submitted])
  
+ const handlePublish = async()=>{
+  const res = await publishEvent(event.eventDetails._id)
+  console.log(res)
+  if(res?.status){
+    navigate('/organization/events')
+  }
+ }
   return (
     <>
       <div className=" lg:px-20">
@@ -212,13 +224,13 @@ const PublishForm = () => {
             </h2>
           </div>
         </div>
-        <form className="mx-12">
+        <div className="mx-12">
           <div className="mt-7">
             <h2 className="mb-4 text-lg font-bold  tracking-tight text-gray-900 md:text-2xl dark:text-white">
               Ticket details
             </h2>
           </div>
-          <PublishFormComponent setEventDetails = {setEventDetails} />
+          <PublishFormComponent submitted={submitted} setSubmitted={setSubmitted} />
 
           <div className="mt-10">
             <div>
@@ -284,11 +296,11 @@ const PublishForm = () => {
           </div>
           <div className="flex justify-end mt-4">
             
-            <Button type="submit" size="sm" color="red" className="mt-3 w-28 ">
+            <Button onClick={handlePublish} type="button" size="sm" color="red" className="mt-3 w-28 ">
               Publish
             </Button>
           </div>
-        </form>
+        </div>
       </div>
     </>
   );

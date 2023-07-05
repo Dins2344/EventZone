@@ -9,6 +9,7 @@ import {
   PublishFormInterface,
 } from "../../../../types/organizerInterface";
 import { ObjectId } from "mongodb";
+
 export const organizationRepositoryMongoDB = () => {
   const addOrganization = async (orgData: CreateOrganization) => {
     const newOrganization = new Organization(orgData);
@@ -26,7 +27,15 @@ export const organizationRepositoryMongoDB = () => {
   };
 
   const addBasicEventInfo = async (data: BasicFormInterface) => {
-    data.status = "draft"
+    data.status = "draft";
+    const organization = await Organization.findOne({
+      orgName: data.organizer,
+    });
+    const ownerId = organization?.ownerId;
+    if (ownerId) {
+      data.orgOwnerId = ownerId;
+    }
+
     const res = await Event.create(data);
     return res;
   };
@@ -56,13 +65,25 @@ export const organizationRepositoryMongoDB = () => {
         ticketValue: data.ticketValue,
       }
     );
-    return res
+    return res;
   };
 
-  const getEventDetails = async(id:string)=>{
-    const data = await Event.findOne({_id:new ObjectId(id)})
-    return data
-  }
+  const getEventDetails = async (id: string) => {
+    const data = await Event.findOne({ _id: new ObjectId(id) });
+    return data;
+  };
+
+  const publishEvent = async (id: string, registeredTime: string) => {
+    const res = await Event.updateOne(
+      { _id: new ObjectId(id) },
+      { status: "requested", registeredTime: registeredTime }
+    );
+    return res;
+  };
+  const getUsersAllEvents = async (id: string) => {
+    const data = await Event.find({ orgOwnerId: id });
+    return data;
+  };
 
   return {
     addOrganization,
@@ -71,7 +92,9 @@ export const organizationRepositoryMongoDB = () => {
     addBasicEventInfo,
     addMediaEventInfo,
     addPublishEventInfo,
-    getEventDetails
+    getEventDetails,
+    publishEvent,
+    getUsersAllEvents,
   };
 };
 

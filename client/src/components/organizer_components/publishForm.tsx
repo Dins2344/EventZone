@@ -5,32 +5,23 @@ import {
   DialogBody,
   DialogFooter,
 } from "@material-tailwind/react";
-import { addPublishEventInfo, getEventDetails } from "../../api/organizer/organizer";
+import { addPublishEventInfo, } from "../../api/organizer/organizer";
 import { useSelector } from "react-redux";
 import { selectEvent } from "../../redux/reducers/eventSlice";
-import { setEventChild } from "../../pages/organizer_pages/eventAdding";
+import { SubmittedChildComponentProps } from "../../pages/organizer_pages/eventAdding";
 
 
-const PublishFormComponent= ({setEventDetails}:setEventChild) => {
+const PublishFormComponent :React.FC<SubmittedChildComponentProps>= ({ submitted, setSubmitted }) => {
   const [selectedOption, setSelectedOption] = useState("");
   const [ticketValue, setTicketValue] = useState("");
   const [eventCapacity, setEventCapacity] = useState("");
   const [ticketPrice, setTicketPrice] = useState("0");
   const [error, setError] = useState(false);
-  const [submitted, setSubmitted] = useState(true);
   const event:any = useSelector(selectEvent)
 
 
-  const fetchEventData =async (id:string)=>{
-    const res =await getEventDetails(id)
-    console.log(res)
-    setEventDetails(res?.data.data)
 
-  }
 
-  useEffect(()=>{
-    fetchEventData(event.eventDetails._id)
-  },[ticketPrice])
   const checkValue = () => {
     if ((ticketPrice === ""||ticketPrice > '5000') || (eventCapacity === ""||eventCapacity > '20000')) {
       setError(true);
@@ -44,10 +35,9 @@ const PublishFormComponent= ({setEventDetails}:setEventChild) => {
     if (checkValue()) {
       const data = { eventCapacity, ticketPrice, ticketValue,eventId:'' };
       data.eventId = event.eventDetails._id
-      console.log(data);
       const res = await addPublishEventInfo(data)
       console.log(res)
-      // setSubmitted(false);
+      setSubmitted(false);
     }
   };
 
@@ -202,15 +192,6 @@ const PublishFormComponent= ({setEventDetails}:setEventChild) => {
               />
               {error && <p className="text-red-600">enter valid inputs</p>}
             </div>
-            {/* <Button
-              onClick={handleSubmit}
-              color="blue"
-              size="sm"
-              variant="outlined"
-              className="h-10"
-            >
-              Submit
-            </Button> */}
             <SubmitModal />
           </form>
         </>

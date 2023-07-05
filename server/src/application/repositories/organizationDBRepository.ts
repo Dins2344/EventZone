@@ -38,6 +38,16 @@ export const organizationDbRepository = (repository:ReturnType<OrganizationRepos
         return data
     }
 
+    const publishEvent = async(id:string,registeredTime:string)=>{
+        const res = await repository.publishEvent(id,registeredTime)
+        return res
+    }
+
+    const getUsersAllEvents = async(userId:string)=>{
+        const data = await repository.getUsersAllEvents(userId)
+        return data
+    }
+
     return {
         addOrganization,
         getAllEventCategories,
@@ -45,7 +55,9 @@ export const organizationDbRepository = (repository:ReturnType<OrganizationRepos
         addBasicEventInfo,
         addMediaEventInfo,
         addPublishEventInfo,
-        getEventDetails
+        getEventDetails,
+        publishEvent,
+        getUsersAllEvents
     }
 }
 

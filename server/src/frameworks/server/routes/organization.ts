@@ -40,6 +40,12 @@ const organizationRouter = () => {
   );
   router.get("/get-event-details/:id", orgController.getEventDetailsController);
 
+  router.get("/publish-event/:id", orgController.publishEventController);
+
+  router.get(
+    "/get-users-all-events",
+    orgController.getUsersAllEventsController
+  );
   return router;
 };
 
