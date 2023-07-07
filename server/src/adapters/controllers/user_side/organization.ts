@@ -88,6 +88,10 @@ const organizationController = (
     }
   );
 
+  const getOrganizationDetailController = asyncHandler(async(req:Request,res:Response)=>{
+    console.log(req.params.id)
+  })
+
   const addBasicEventInfoController = asyncHandler(
     async(req:Request,res:Response)=>{
       const data = req.body
@@ -161,6 +165,7 @@ const organizationController = (
     registerOrganization,
     getAllEventCategoriesController,
     getUsersOrganizations,
+    getOrganizationDetailController,
     getUsersOrganizationsController,
     addBasicEventInfoController,
     addMediaEventInfoController,

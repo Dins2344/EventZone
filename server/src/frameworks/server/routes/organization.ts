@@ -25,6 +25,10 @@ const organizationRouter = () => {
     orgController.getUsersOrganizationsController
   );
 
+  router.get(
+    '/get-organization-details/:id',orgController.getOrganizationDetailController
+  )
+
   router.post(
     "/add-event-basic-info",
     orgController.addBasicEventInfoController

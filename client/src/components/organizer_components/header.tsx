@@ -1,10 +1,27 @@
 import { Link, useNavigate } from "react-router-dom";
 import navLogo from '../../assets/logos/navbar_logo.png'
 import { FaHome,FaTasks } from "react-icons/fa";
+import React from 'react'
+import { getUserDetails } from "../../api/userAuth/userApis";
+import { useDispatch } from "react-redux";
+import { setUser } from "../../redux/reducers/userSlice";
+
 
 
 
 const OrganizationHeader = () => {
+  const dispatch = useDispatch()
+
+ const fetchUser  =async ()=>{
+  const user = await getUserDetails()
+  dispatch(setUser(user?.data.data))
+
+ }
+
+  React.useEffect(()=>{
+    fetchUser()
+  })
+
   const navigate = useNavigate()
   return (
     <>
@@ -34,7 +51,7 @@ const OrganizationHeader = () => {
                   ></path>
                 </svg>
               </button>
-              <Link to={'/admin'} className="flex ml-2 md:mr-24">
+              <Link to={'/organization/home'} className="flex ml-2 md:mr-24">
                 <img
                   src={navLogo}
                   className="h-8 mr-3"
@@ -46,6 +63,9 @@ const OrganizationHeader = () => {
               </Link>
             </div>
             <div className="flex items-center">
+              <Link  to={'/'} className="hidden md:block mr-3">
+                Switch to attendee
+              </Link>
               <div className="flex items-center ml-3">
                 <div>
                   <button
@@ -84,10 +104,10 @@ const OrganizationHeader = () => {
                     <li>
                       <a
                         href="#"
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
+                        className="md:hidden block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
                         role="menuitem"
                       >
-                        Dashboard
+                        Switch to attendee
                       </a>
                     </li>
                     <li>

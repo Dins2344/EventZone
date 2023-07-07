@@ -1,10 +1,10 @@
 import React, { useEffect } from "react";
 import navLogo from "../../../assets/logos/navbar_logo.png";
 import OrgCreationModal from "./OrgCreateModal";
-import { useSelector } from "react-redux";
-import { selectUser } from "../../../redux/reducers/userSlice";
 import { getUserDetails } from "../../../api/userAuth/userApis";
 import { LoggedUserInterface } from "../../../types/userInterface";
+import { useDispatch } from "react-redux";
+import { setUser } from "../../../redux/reducers/userSlice";
 
 import {
   Navbar,
@@ -53,6 +53,7 @@ const profileMenuItems = [
 
 function ProfileMenu() {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+  
 
   const closeMenu = () => setIsMenuOpen(false);
 
@@ -134,19 +135,18 @@ function ProfileMenu() {
 export default function Example() {
   const [openNav, setOpenNav] = React.useState(false);
   const [userData, setUserData] = React.useState<LoggedUserInterface>();
-  const user = useSelector(selectUser);
+  const dispatch = useDispatch()
 
   const fetchUserData = async () => {
     const res = await getUserDetails();
     if(res?.data){
       console.log(res.data.data)
       setUserData(res?.data.data);
+      dispatch(setUser(res.data.data))
     }
   };
   useEffect(() => {
-    if (user) {
       fetchUserData();
-    }
   }, []);
 
   React.useEffect(() => {
