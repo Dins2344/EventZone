@@ -114,7 +114,7 @@ const BasicInfoComponent = ({setActiveStep}:ChildComponentProps) => {
             >
               <option value="">Select an organizer</option>
               {organizers && organizers.map((item)=>{
-                return <option value={item.orgName}>{item.orgName}</option>
+                return <option value={item._id}>{item.orgName}</option>
               })}
               {/* Add options for organizers */}
             </Field>

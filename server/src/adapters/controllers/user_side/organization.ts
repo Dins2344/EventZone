@@ -16,7 +16,8 @@ import {
   addPublishEventInfo,
   getEventDetails,
   publishEvent,
-  getUsersAllEvents
+  getUsersAllEvents,
+  getOrganizersAllEvent
 } from "../../../application/usecases/organizatioin/organization";
 import { MediaFormInterface } from "../../../types/organizerInterface";
 
@@ -161,6 +162,17 @@ const organizationController = (
     }
   })
 
+  const getOrganizersAllEventController = asyncHandler(async(req:Request,res:Response)=>{
+    const orgId = req.params.id
+    console.log(orgId)
+    const data = await getOrganizersAllEvent(orgId,dbRepositoryOrganization)
+    if(data){
+      res.json({message:'events fetching done',data})
+    }else{
+      res.json({error:'event fetching failed'})
+    }
+  })
+
   return {
     registerOrganization,
     getAllEventCategoriesController,
@@ -172,7 +184,9 @@ const organizationController = (
     addPublishEventInfoController,
     getEventDetailsController,
     publishEventController,
-    getUsersAllEventsController
+    getUsersAllEventsController,
+    getOrganizersAllEventController
+    
   };
 };
 

@@ -35,6 +35,7 @@ export interface RegisteredEventInterface {
   status:string
   orgOwnerId:string
   registeredTime:string
+  orgName:string
 }
 export interface mediaFormInterface {
   videoURL: string;

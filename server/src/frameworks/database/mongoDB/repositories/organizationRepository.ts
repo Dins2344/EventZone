@@ -29,11 +29,13 @@ export const organizationRepositoryMongoDB = () => {
   const addBasicEventInfo = async (data: BasicFormInterface) => {
     data.status = "draft";
     const organization = await Organization.findOne({
-      orgName: data.organizer,
+      _id: new ObjectId(data.organizer),
     });
     const ownerId = organization?.ownerId;
-    if (ownerId) {
+    const orgName = organization?.orgName
+    if (ownerId && orgName) {
       data.orgOwnerId = ownerId;
+      data.orgName = orgName
     }
 
     const res = await Event.create(data);
@@ -85,6 +87,11 @@ export const organizationRepositoryMongoDB = () => {
     return data;
   };
 
+  const getOrganizersAllEvent = async(orgId:string)=>{
+    const data = await Event.find({organizer:orgId})
+    return data
+  }
+
   return {
     addOrganization,
     getAllEventCategories,
@@ -95,6 +102,7 @@ export const organizationRepositoryMongoDB = () => {
     getEventDetails,
     publishEvent,
     getUsersAllEvents,
+    getOrganizersAllEvent
   };
 };
 

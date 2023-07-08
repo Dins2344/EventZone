@@ -11,6 +11,7 @@ export interface BasicFormInterface {
   endTime: string;
   status: string;
   orgOwnerId:string
+  orgName:string
 }
 
 export interface MediaFormInterface {

@@ -50,6 +50,8 @@ const organizationRouter = () => {
     "/get-users-all-events",
     orgController.getUsersAllEventsController
   );
+
+  router.get('/get-organizers-all-events/:id',orgController.getOrganizersAllEventController)
   return router;
 };
 

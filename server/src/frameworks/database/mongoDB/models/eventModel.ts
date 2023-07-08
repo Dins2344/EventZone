@@ -67,6 +67,9 @@ const eventSchema = new Schema(
         },
         orgOwnerId:{
             type:String
+        },
+        orgName:{
+            type:String
         }
     }
 )

@@ -170,7 +170,7 @@ const EventsHomeComponent = () => {
                     >
                       {event.eventName}
                     </th>
-                    <td className="px-4 py-3">{event.organizer}</td>
+                    <td className="px-4 py-3">{event.orgName}</td>
                     <td className="px-4 py-3">{event.category}</td>
                     <td className="px-4 py-3"></td>
                     <td className="px-4 py-3">$2999</td>
