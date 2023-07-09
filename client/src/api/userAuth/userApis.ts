@@ -29,3 +29,12 @@ export const getUserDetails = async () => {
     console.log(error);
   }
 };
+
+export const getAllApprovedEvents =async ()=>{
+  try{
+    const data = await api.get(`http://localhost:4000/user/get-all-approved-events`)
+    return data
+  }catch(error){
+    console.log(error)
+  }
+}

@@ -10,7 +10,10 @@ import {
   deleteOrgCategory,
   editOrgCategory,
   getSingleOrgCategory,
-  getAllOrgCategory
+  getAllOrgCategory,
+  getAllEvents,
+  approveEvent,
+  rejectEvent
 } from "../../../application/usecases/admin/adminUsecases";
 import { AdminDbInterface } from "../../../application/repositories/adminDBRepository";
 import { AdminRepositoryMongoDB } from "../../../frameworks/database/mongoDB/repositories/adminRepositoryMongoDB";
@@ -133,6 +136,35 @@ const adminController = (
     }
   })
 
+  const getAllEventsController = asyncHandler(async(req:Request,res:Response)=>{
+    const data = await getAllEvents(dbRepositoryAdmin)
+    if(data){
+      res.json({message:'getting all events done',data})
+    }else{
+      res.json({error:'getting all events failed'})
+    }
+  })
+
+  const approveEventController = asyncHandler(async(req:Request,res:Response)=>{
+    const id = req.params.id
+    const response = await approveEvent (id,dbRepositoryAdmin)
+    if(response){
+      res.json({message:'approve status updated',response})
+    }else{
+      res.json({error:'approve status updating failed',response})
+    }
+  })
+
+  const rejectEventController = asyncHandler(async(req:Request,res:Response)=>{
+    const id = req.params.id
+    const response = await rejectEvent(id,dbRepositoryAdmin)
+    if(response){
+      res.json({message:'reject status updated',response})
+    }else{
+      res.json({error:'reject status updating failed',response})
+    }
+  })
+
   return {
     addEventCategoryController,
     getEventCategoriesController,
@@ -143,7 +175,10 @@ const adminController = (
     deleteEventCategoryController,
     editOrgCategoryController,
     getSingleOrgCategoryController,
-    getAllOrgCategoryController
+    getAllOrgCategoryController,
+    getAllEventsController,
+    approveEventController,
+    rejectEventController
   };
 };
 

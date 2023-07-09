@@ -2,6 +2,7 @@ import { UserInterface } from "../../../../types/userInterface";
 import User from "../models/userModel";
 import { CreateUserInterface } from "../../../../types/userInterface";
 import { ObjectId } from "mongodb";
+import Event from "../models/eventModel";
 
 export const userRepositoryMongoDB = () => {
   const getUserByEmail = async (email: string) => {
@@ -18,10 +19,16 @@ export const userRepositoryMongoDB = () => {
     );
   };
 
+  const getApprovedEvents = async()=>{
+    const data = await Event.find({status:'approved'})
+    return data
+  }
+
   return {
     addUser,
     getUserByEmail,
-    addOrganization
+    addOrganization,
+    getApprovedEvents
   };
 };
 

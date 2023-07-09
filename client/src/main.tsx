@@ -22,6 +22,8 @@ import OrgCategoryForm from "./components/admin_components/orgcategoryAddingForm
 import EventsHome from "./pages/organizer_pages/eventsHome.tsx";
 import "./index.css";
 import EventAddingPage from "./pages/organizer_pages/eventAdding.tsx";
+import RequestManagement from "./pages/admin_pages/requestManagement.tsx";
+import EventDetails from "./pages/user_pages/showEvent.tsx";
 
 const appRouter = createBrowserRouter([
   {
@@ -52,6 +54,10 @@ const appRouter = createBrowserRouter([
       { 
         path: "/admin/category-management", 
         element: <CategoryManagement /> 
+      },
+      { 
+        path: "/admin/request-management", 
+        element: <RequestManagement /> 
       },
      
     ],
@@ -87,6 +93,10 @@ const appRouter = createBrowserRouter([
       {
         path: "/",
         element: <Body />,
+      },
+      {
+        path: "/show-event",
+        element: <EventDetails />,
       },
     ],
   },

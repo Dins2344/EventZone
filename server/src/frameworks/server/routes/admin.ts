@@ -17,6 +17,9 @@ const adminRouter = () => {
   router.post('/edit-org-category',controller.editOrgCategoryController)
   router.get('/get-single-org-category/:id',controller.getSingleOrgCategoryController)
   router.get('/get-all-org-categories',controller.getAllOrgCategoryController)
+  router.get('/get-all-events',controller.getAllEventsController)
+  router.get('/approve-event/:id',controller.approveEventController)
+  router.get('/reject-event/:id',controller.rejectEventController)
 
   return router;
 };

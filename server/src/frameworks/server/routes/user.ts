@@ -20,6 +20,7 @@ const userRouter = () => {
 
   router.post("/register-organization", orgController.registerOrganization);
   router.get('/get-user-details',controller.getUserByEmail)
+  router.get('/get-all-approved-events',controller.getApprovedEventsController)
 
   return router;
 };

@@ -70,3 +70,11 @@ export const addOrganization = async(
     }
     return res
 }
+
+export const getApprovedEvents = async(userRepository:ReturnType<UserDBInterface>)=>{
+    const data = await userRepository.getApprovedEvents()
+    if(!data){
+        throw new AppError('fetching approved events failed',HttpStatus.BAD_REQUEST)
+    }
+    return data
+}

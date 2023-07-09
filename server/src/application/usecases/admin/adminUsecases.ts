@@ -6,6 +6,7 @@ import {
 import { HttpStatus } from "../../../types/httpStatus";
 import AppError from "../../../utils/appError";
 import { AdminDbInterface } from "../../repositories/adminDBRepository";
+import { adminRepositoryMongoDB } from "../../../frameworks/database/mongoDB/repositories/adminRepositoryMongoDB";
 
 export const addEventCategory = async (
   eventData: EventCategoryInterface,
@@ -109,4 +110,29 @@ export const getAllOrgCategory = async(adminRepository:ReturnType<AdminDbInterfa
   } else {
     throw new AppError("all categories fetching failed", HttpStatus.BAD_REQUEST);
   }
+}
+
+export const getAllEvents = async(adminRepository:ReturnType<AdminDbInterface>)=>{
+  const data = await adminRepository.getAllEvents()
+  if(data){
+    return data
+  }else{
+    throw new AppError('getting all events failed',HttpStatus.BAD_REQUEST)
+  }
+}
+
+export const approveEvent =async(id:string,adminRepository:ReturnType<AdminDbInterface>)=>{
+  const res = await adminRepository.approveEvent(id)
+  if(!res){
+    throw new AppError('approve status updating failed',HttpStatus.BAD_REQUEST)
+  }
+  return res
+}
+
+export const rejectEvent = async(id:string,adminRepository:ReturnType<AdminDbInterface>)=>{
+  const res = await adminRepository.rejectEvent(id)
+  if(!res){
+    throw new AppError('reject status updating failed',HttpStatus.BAD_REQUEST)
+  }
+  return res
 }

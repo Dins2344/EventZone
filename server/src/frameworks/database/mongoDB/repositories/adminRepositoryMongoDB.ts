@@ -4,6 +4,7 @@ import OrganizationCategory from "../models/orgCategory"
 import AdminInterface from "../../../../types/adminInterface"
 import { EventCategoryInterface,EditEventCategoryInterface } from "../../../../types/adminInterface"
 import {ObjectId} from 'mongodb'
+import Event from "../models/eventModel"
 
 export const adminRepositoryMongoDB = ()=>{
     const getAdminByEmail = async(email:string)=>{
@@ -56,6 +57,21 @@ export const adminRepositoryMongoDB = ()=>{
     const getAllOrgCategory = async()=>{
         return await OrganizationCategory.find({})
     }
+
+    const getAllEvents = async()=>{
+        const data = await Event.find({})
+        return data
+    }
+
+    const approveEvent = async(id:string)=>{
+        const res = await Event.updateOne({_id: new ObjectId(id)},{status:'approved'})
+        return res
+    }
+
+    const rejectEvent = async(id:string)=>{
+        const res = await Event.updateOne({_id:new ObjectId(id)},{status:'rejected'})
+        return res
+    }
     return {
         getAdminByEmail,
         addEventCategory,
@@ -67,7 +83,10 @@ export const adminRepositoryMongoDB = ()=>{
         deleteOrgCategory,
         editOrgCategory,
         getSingleOrgCategory,
-        getAllOrgCategory
+        getAllOrgCategory,
+        getAllEvents,
+        approveEvent,
+        rejectEvent
     }
 }
 

@@ -2,6 +2,7 @@ import { useState, ChangeEvent, FormEvent } from "react";
 import { OTPRequestPost } from "../../api/userAuth/signUp";
 import { LoginImage } from "./loginForm";
 import { useNavigate } from "react-router-dom";
+
 const OTPRequestForm: React.FC = () => {
   const [email, setEmail] = useState("");
   const navigate = useNavigate()

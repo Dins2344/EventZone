@@ -3,6 +3,7 @@ import { UserRepositoryMongoDB } from "../../../frameworks/database/mongoDB/repo
 import { Request,Response } from "express";
 import asyncHandler from "express-async-handler"
 import { CustomRequest } from "../../../types/userInterface";
+import { getApprovedEvents } from "../../../application/usecases/user/userAuth";
 
 
 
@@ -28,9 +29,19 @@ const userController  = (
     })
 
 
+    const getApprovedEventsController =asyncHandler(async(req:Request,res:Response)=>{
+        const data = await getApprovedEvents(dbRepositoryUser) 
+        if(data){
+            res.json({message:'approved events fetched', data})
+        }else{
+            res.json({error:'approved events fetching failed'})
+        }
+    })
+
 
     return {
-        getUserByEmail
+        getUserByEmail,
+        getApprovedEventsController
     }
 }
 

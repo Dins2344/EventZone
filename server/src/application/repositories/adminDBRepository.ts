@@ -46,6 +46,18 @@ export const adminDbRepository = (repository:AdminRepositoryDBReturn) =>{
         return await repository.getAllOrgCategory()
     }
 
+    const getAllEvents = async()=>{
+        return await repository.getAllEvents()
+    }
+
+    const approveEvent = async(id:string)=>{
+        return await repository.approveEvent(id)
+    }
+
+    const rejectEvent = async (id:string)=>{
+        return await repository.rejectEvent(id)
+    }
+
     return {
         getAdminByEmail,
         addEventCategory,
@@ -57,7 +69,10 @@ export const adminDbRepository = (repository:AdminRepositoryDBReturn) =>{
         deleteOrgCategory,
         editOrgCategory,
         getSingleOrgCategory,
-        getAllOrgCategory
+        getAllOrgCategory,
+        getAllEvents,
+        approveEvent,
+        rejectEvent
     }
 }
 

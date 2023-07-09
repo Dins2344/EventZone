@@ -99,3 +99,30 @@ export const deleteOrgCategory = async(
     console.log(error)
   }
 }
+
+export const getAllEvents = async()=>{
+  try{
+    const data = await adminApi.get('http://localhost:4000/admin/get-all-events')
+    return data
+  }catch(error){
+    console.log(error)
+  }
+}
+
+export const approveEvent = async (id:string)=>{
+  try{
+    const res = await adminApi.get(`http://localhost:4000/admin/approve-event/${id}`)
+    return res
+  }catch(error){
+    console.log(error)
+  }
+}
+
+export const rejectEvent = async(id:string)=>{
+  try{
+    const res = await adminApi.get(`http://localhost:4000/admin/reject-event/${id}`)
+    return res
+  }catch(error){
+    console.log(error)
+  }
+}
