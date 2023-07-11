@@ -25,8 +25,8 @@ const authRouter = () => {
 
   router.post("/register-user", controller.registerUser);
   router.post('/user-login',controller.loginUser)
-  router.get('/user-email-verify/:id' ,controller.OTPLogin)
-  router.get('/user-OTP-verify/:OTP/:email',controller.OTPVerify)
+  router.get('/user-email-verify/:email/:mode' ,controller.OTPLogin)
+  router.get('/user-OTP-verify/:OTP/:email/:mode',controller.OTPVerify)
   router.post ('/admin-login',controller.loginAdmin)
 
   return router;

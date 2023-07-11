@@ -38,3 +38,13 @@ export const getAllApprovedEvents =async ()=>{
     console.log(error)
   }
 }
+
+
+export const getCompleteEventDetails = async(id:string)=>{
+  try{
+    const data = await api.get(`http://localhost:4000/user/get-complete-event-details/${id}`)
+    return data
+  }catch(error){
+    console.log(error)
+  }
+}

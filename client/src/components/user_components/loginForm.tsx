@@ -1,4 +1,3 @@
-
 import { Link, useNavigate } from "react-router-dom";
 import { loginPost } from "../../api/userAuth/signUp";
 import Divider from "../orDivider";
@@ -6,6 +5,9 @@ import { useDispatch } from "react-redux";
 import { setUser } from "../../redux/reducers/userSlice";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export const LoginImage: React.FC = () => {
   return (
@@ -20,8 +22,8 @@ export const LoginImage: React.FC = () => {
   );
 };
 
-
-function LoginForm() {
+const LoginForm: React.FC = () => {
+  const [error, setError] = useState(null);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -36,29 +38,62 @@ function LoginForm() {
         .required("Email is required"),
       password: Yup.string().required("Password is required"),
     }),
-    onSubmit: async  (values) => {
+    onSubmit: async (values) => {
       // Handle form submission
-      console.log(values);
-      const res = await loginPost(values)
-      console.log(res?.data.userData);
-      if (res?.data.userData) {
-        localStorage.setItem("token", res.data.token);
-        dispatch(setUser(res?.data.userData));
-        navigate("/");
+      try {
+        const res = await loginPost(values);
+        console.log(res);
+        if (res?.data.userData) {
+          localStorage.setItem("token", res.data.token);
+          dispatch(setUser(res?.data.userData));
+          await notify();
+          // navigate("/");
+        }
+      } catch (error: any) {
+        alert(error);
+        console.log(error.toString());
+        setError(error.toString());
       }
     },
   });
 
-
+  const notify = async () => {
+   toast.success("successfully logged in", {
+      position: "bottom-right",
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+    });
+    setTimeout(()=>{
+      navigate("/");
+    },3000)
+  };
 
   return (
     <div className="flex justify-center items-center h-screen overflow-hidden">
+      <ToastContainer
+        position="bottom-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      />
       <div className="w-full lg:w-1/2 ">
         <div className="lg:max-w-lg mx-auto flex justify-center">
           <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 w-2/3">
             <form onSubmit={formik.handleSubmit}>
               <h2 className="text-2xl font-bold mb-6">Login</h2>
               <div className="mb-6">
+                {error && <div className="text-red-500">{error}</div>}
                 <label
                   className="block text-gray-700 text-sm font-bold mb-2"
                   htmlFor="email"
@@ -135,6 +170,6 @@ function LoginForm() {
       <LoginImage />
     </div>
   );
-}
+};
 
 export default LoginForm;

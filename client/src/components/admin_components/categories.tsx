@@ -47,7 +47,7 @@ export const EventCategory = () => {
           <ul className="flex flex-wrap items-center mt-3 text-sm font-medium text-gray-500 dark:text-gray-400 sm:mt-0">
             <li>
               <Link
-                to={"/admin/add-org-category"}
+                to={"/admin/add-event-category"}
                 className="mr-4 hover:underline md:mr-6 "
               >
                 Add category

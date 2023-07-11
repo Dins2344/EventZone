@@ -73,25 +73,39 @@ const authController = (
     });
   });
   const OTPLogin = asyncHandler(async (req: Request, res: Response) => {
-    const email: string = req.params.id;
-    console.log(email);
-    const user = await emailVerify(email, dbRepositoryUser);
-    if (user) {
-      console.log(user);
-      emailService.sendEmail(email);
-      res.json({ status: true });
-    } else {
-      res.status(404).json({ error: "User not found" });
+    const email: string = req.params.email;
+    const mode:string = req.params.mode
+    if(mode === 'emailVerification'){
+      const user = await emailVerify(email, dbRepositoryUser);
+      if(user){
+        res.json({error:'user exist'})
+      }else{
+        emailService.sendEmail(email)
+        res.json({message:'OTP has send'})
+      }
+    }else if(mode === 'OTPLogin'){
+      const user = await emailVerify(email, dbRepositoryUser);
+      if (user) {
+        console.log(user);
+        emailService.sendEmail(email);
+        res.json({ status: true });
+      } else {
+        res.status(404).json({ error: "User not found" });
+      }
     }
   });
 
   const OTPVerify = asyncHandler(async (req: Request, res: Response) => {
     const OTP: string = req.params.OTP;
     const email: string = req.params.email;
+    const mode :string = req.params.mode
     console.log(OTP, email);
     const { message } = emailService.verifyOTP(OTP);
     console.log(message);
     if (message == "OTP verified") {
+      if(mode == 'signUpOTP'){
+        res.json({ OTPValidation: true, })
+      }
       const token = await tokenGenerator(email, dbRepositoryUser, authService);
       res.json({ OTPValidation: true, token });
     } else {

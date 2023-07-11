@@ -3,6 +3,7 @@ import User from "../models/userModel";
 import { CreateUserInterface } from "../../../../types/userInterface";
 import { ObjectId } from "mongodb";
 import Event from "../models/eventModel";
+import Organization from "../models/organizationModel";
 
 export const userRepositoryMongoDB = () => {
   const getUserByEmail = async (email: string) => {
@@ -14,21 +15,46 @@ export const userRepositoryMongoDB = () => {
   };
   const addOrganization = async (orgId: string, userId: string) => {
     return await User.updateOne(
-      { _id: new ObjectId(userId) }, 
+      { _id: new ObjectId(userId) },
       { $push: { organizations: orgId } }
     );
   };
 
-  const getApprovedEvents = async()=>{
-    const data = await Event.find({status:'approved'})
-    return data
-  }
+  const getApprovedEvents = async () => {
+    const data = await Event.find({ status: "approved" });
+    return data;
+  };
+
+  const getCompleteEventDetails = async (id: string) => {
+    const data = await Event.aggregate([
+      { $match: { _id: new ObjectId(id) } },
+      {
+        $lookup: {
+          from: "organizations",
+          let: { organizerId: { $toObjectId: "$organizer" } },
+          pipeline: [
+            {
+              $match: {
+                $expr: { $eq: ["$_id", "$$organizerId"] }
+              }
+            }
+          ],
+          as: "organizerInfo"
+        }
+      },
+      {
+        $unwind: "$organizerInfo",
+      },
+    ]);
+    return data;
+  };
 
   return {
     addUser,
     getUserByEmail,
     addOrganization,
-    getApprovedEvents
+    getApprovedEvents,
+    getCompleteEventDetails,
   };
 };
 

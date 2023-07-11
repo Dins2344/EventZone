@@ -78,3 +78,11 @@ export const getApprovedEvents = async(userRepository:ReturnType<UserDBInterface
     }
     return data
 }
+
+export const getCompleteEventDetails = async(id:string,userRepository:ReturnType<UserDBInterface>)=>{
+    const data = await userRepository.getCompleteEventDetails(id)
+    if(!data){
+        throw new AppError('fetching complete event details failed',HttpStatus.BAD_REQUEST)
+    }
+    return data
+}

@@ -18,11 +18,15 @@ export const userDbRepository = (repository:ReturnType<UserRepositoryMongoDB>)=>
         return await repository.getApprovedEvents()
     }
 
+    const getCompleteEventDetails = async(id:string)=>{
+        return await repository.getCompleteEventDetails(id)
+    }
     return {
         addUser,
         getUserByEmail,
         addOrganization,
-        getApprovedEvents
+        getApprovedEvents,
+        getCompleteEventDetails
 
     }
 }

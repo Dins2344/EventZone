@@ -1,5 +1,8 @@
 import { Link, useParams } from "react-router-dom";
-import { eventCategoryEditFormSubmit,getSingleEventCategories } from "../../api/adminAuth/admin";
+import {
+  eventCategoryEditFormSubmit,
+  getSingleEventCategories,
+} from "../../api/adminAuth/admin";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useEffect, useState } from "react";
@@ -12,42 +15,42 @@ const validationSchema = Yup.object().shape({
 });
 
 export interface editEventCategoriesInterface {
-    id?:string,
-    categoryName?: string;
-    subCategoryName?: string;
-    description?: string;
-  }
+  id?: string;
+  categoryName?: string;
+  subCategoryName?: string;
+  description?: string;
+}
 
 const EventCategoryEditForm = () => {
-    const [category,setCategory] = useState<eventCategoryInterface>()
-    const { id } = useParams<{ id: string }>();
-    const fetchCategory = async(id:string|undefined)=>{
-        const data  = await getSingleEventCategories(id)
-        setCategory(data?.data.data)
-    }
-    useEffect(()=>{
-        fetchCategory(id)
-    },[])
-    const initialValues: editEventCategoriesInterface = {
-        categoryName: category?.categoryName,
-        subCategoryName: category?.subCategoryName,
-        description: category?.description,
-        id:category?._id
-      };
-      console.log(initialValues)
+  const [category, setCategory] = useState<eventCategoryInterface>();
+  const { id } = useParams<{ id: string }>();
+  const fetchCategory = async (id: string | undefined) => {
+    const data = await getSingleEventCategories(id);
+    setCategory(data?.data.data);
+  };
+  useEffect(() => {
+    fetchCategory(id);
+  }, []);
+  const initialValues: editEventCategoriesInterface = {
+    categoryName: category?.categoryName,
+    subCategoryName: category?.subCategoryName,
+    description: category?.description,
+    id: category?._id,
+  };
+  console.log(initialValues);
   const formik = useFormik<editEventCategoriesInterface>({
     initialValues,
     validationSchema,
     onSubmit: async (values) => {
-      const formData = new FormData()
-      formData.append('categoryName',values?.categoryName)
-      formData.append('subCategoryName',values.subCategoryName)
-      formData.append('description',values.subCategoryName)
-      formData.append('id',values.id)
+      const formData = new FormData();
+      formData.append("categoryName", values?.categoryName);
+      formData.append("subCategoryName", values.subCategoryName);
+      formData.append("description", values.subCategoryName);
+      formData.append("id", values.id);
       // Handle form submission here
       const res = await eventCategoryEditFormSubmit(values);
       console.log(res);
-      if(res?.statusText == 'OK'){
+      if (res?.statusText == "OK") {
         // navigate('/admin/add-event-category')
       }
     },
@@ -70,8 +73,7 @@ const EventCategoryEditForm = () => {
           onSubmit={formik.handleSubmit}
           className="w-full md:w-2/3 lg:w-1/3 h-min p-6 bg-white border border-gray-200 rounded-lg shadow"
         >
-            <input className="hidden" {...formik.getFieldProps("id")}>
-            </input>
+          <input className="hidden" {...formik.getFieldProps("id")}></input>
           <div className="grid gap-6 mb-6 md:grid-cols-2">
             <div className="mb-6">
               <label
@@ -103,16 +105,17 @@ const EventCategoryEditForm = () => {
                 Sub category
               </label>
               <input
-              {...formik.getFieldProps("subCategoryName")}
+                {...formik.getFieldProps("subCategoryName")}
                 id="subCategoryName"
                 type="text"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               />
-              {formik.touched.subCategoryName && formik.errors.subCategoryName && (
-                <div className="text-red-500 text-sm">
-                  {formik.errors.subCategoryName}
-                </div>
-              )}
+              {formik.touched.subCategoryName &&
+                formik.errors.subCategoryName && (
+                  <div className="text-red-500 text-sm">
+                    {formik.errors.subCategoryName}
+                  </div>
+                )}
             </div>
           </div>
           <label
@@ -146,4 +149,4 @@ const EventCategoryEditForm = () => {
   );
 };
 
-export default EventCategoryEditForm
+export default EventCategoryEditForm;

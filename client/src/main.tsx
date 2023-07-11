@@ -9,6 +9,7 @@ import {
   RegisterHome,
 } from "./pages/homePages.tsx";
 import SignIn from "./pages/user_pages/signInPage.tsx";
+import SignUpEmailVerifyPage from "./pages/user_pages/signupEmailVerify.tsx";
 import LoginPage from "./pages/user_pages/loginPage.tsx";
 import OTPLogin from "./pages/user_pages/OTPLogin.tsx";
 import OTPVerifyPage from "./pages/user_pages/OTPVerify.tsx";
@@ -67,6 +68,10 @@ const appRouter = createBrowserRouter([
     path: "/register",
     element: <RegisterHome />,
     children: [
+      {
+        path: "/register/user-sign-up-email-verify",
+        element: <SignUpEmailVerifyPage />,
+      },
       {
         path: "/register/user-sign-up",
         element: <SignIn />,
