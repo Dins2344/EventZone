@@ -1,5 +1,4 @@
-import ReactDOM from "react-dom/client";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createBrowserRouter } from "react-router-dom";
 import AdminLanding from "./pages/admin_pages/adminHome.tsx";
 import AdminLogin from "./pages/admin_pages/adminLogin.tsx";
 import {

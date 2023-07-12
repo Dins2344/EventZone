@@ -1,5 +1,5 @@
 import { OTPRequestPost, OTPVerifyPost } from "../../api/userAuth/signUp";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { LoginImage } from "./loginForm";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -105,6 +105,7 @@ const SignUpEmailVerify: React.FC = () => {
 const OTPSubmit = ({ email }: { email: string }) => {
   const [error, setError] = useState("");
   const [OTP,setOTP] = useState('')
+  const navigate = useNavigate()
   
 
   const handleSubmit = async(e: React.FormEvent<HTMLFormElement>)=>{
@@ -118,6 +119,8 @@ const OTPSubmit = ({ email }: { email: string }) => {
     }else if(res?.data.message == 'OTP is expired'){
         setError(res.data.message)
         setTimeout(()=>{setError('')},3000)
+    }else if(res?.data.OTPValidation){
+      navigate(`/register/user-sign-up/?email=${email}`)
     }
   }
   return (

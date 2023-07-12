@@ -12,11 +12,9 @@ const OTPVerifyForm: React.FC = () => {
     const urlParams = new URLSearchParams(window.location.search);
     const email  = urlParams.get('email')
     e.preventDefault();
-    console.log(OTP,email)
-    const res = await OTPVerifyPost(OTP,email);
-    console.log(res);
+    const mode = 'OTPLogin'
+    const res = await OTPVerifyPost(OTP,email,mode);
     if(res?.data.OTPValidation){
-      console.log(res.data)
       localStorage.setItem("token", res.data.token);
       navigate('/')
     }

@@ -1,40 +1,50 @@
-
 import { signUpPost } from "../../api/userAuth/signUp";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { LoginImage } from "./loginForm";
 import { useDispatch } from "react-redux";
 import { setUser } from "../../redux/reducers/userSlice";
 import { useFormik } from "formik";
-import * as Yup from 'yup';
+import * as Yup from "yup";
+import { useEffect, useState } from "react";
 
 const validationSchema = Yup.object().shape({
-  firstName: Yup.string().required('First name is required'),
-  lastName: Yup.string().required('Last name is required'),
-  email: Yup.string().email('Invalid email address').required('Email is required'),
-  password: Yup.string().required('Password is required'),
+  firstName: Yup.string().required("First name is required"),
+  lastName: Yup.string().required("Last name is required"),
+  password: Yup.string().required("Password is required"),
   confirmPassword: Yup.string()
-    .oneOf([Yup.ref('password'),], 'Passwords must match')
-    .required('Confirm password is required'),
+    .oneOf([Yup.ref("password")], "Passwords must match")
+    .required("Confirm password is required"),
 });
 
 const SignUpForm: React.FC = () => {
+  const [email, setEmail] = useState("");
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  // const getEmail = ()=>{
+  //   return email
+  // }
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const email = urlParams.get("email");
+    email && setEmail(email);
+  },[]);
   const formik = useFormik({
     initialValues: {
       firstName: "",
       lastName: "",
-      email: "",
+      email:'',
       password: "",
       confirmPassword: "",
-    },validationSchema,
+    },
+    validationSchema,
     onSubmit: async (values) => {
       // Handle form submission here
+      values.email = email
       console.log(values);
       const res = await signUpPost(values);
       console.log(res?.data);
       if (res?.data) {
-        localStorage.setItem('token',res.data.token)
+        localStorage.setItem("token", res.data.token);
         navigate("/");
       }
     },
@@ -66,7 +76,7 @@ const SignUpForm: React.FC = () => {
                   placeholder="First name"
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 />
-                 {formik.touched.firstName && formik.errors.firstName && (
+                {formik.touched.firstName && formik.errors.firstName && (
                   <div className="text-red-500">{formik.errors.firstName}</div>
                 )}
               </div>
@@ -86,12 +96,12 @@ const SignUpForm: React.FC = () => {
                   placeholder="Last name"
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 />
-                 {formik.touched.lastName && formik.errors.lastName && (
+                {formik.touched.lastName && formik.errors.lastName && (
                   <div className="text-red-500">{formik.errors.lastName}</div>
                 )}
               </div>
             </div>
-            <div className="mb-6">
+            {/* <div className="mb-6">
               <label
                 className="block text-gray-700 text-sm font-bold mb-2"
                 htmlFor="email"
@@ -110,7 +120,7 @@ const SignUpForm: React.FC = () => {
                {formik.touched.email && formik.errors.email && (
                   <div className="text-red-500">{formik.errors.email}</div>
                 )}
-            </div>
+            </div> */}
             <div className="mb-6">
               <label
                 className="block text-gray-700 text-sm font-bold mb-2"
@@ -127,9 +137,9 @@ const SignUpForm: React.FC = () => {
                 onBlur={formik.handleBlur}
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               />
-               {formik.touched.password && formik.errors.password && (
-                  <div className="text-red-500">{formik.errors.password}</div>
-                )}
+              {formik.touched.password && formik.errors.password && (
+                <div className="text-red-500">{formik.errors.password}</div>
+              )}
             </div>
             <div className="mb-6">
               <label
@@ -147,8 +157,11 @@ const SignUpForm: React.FC = () => {
                 onBlur={formik.handleBlur}
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               />
-               {formik.touched.confirmPassword && formik.errors.confirmPassword && (
-                  <div className="text-red-500">{formik.errors.confirmPassword}</div>
+              {formik.touched.confirmPassword &&
+                formik.errors.confirmPassword && (
+                  <div className="text-red-500">
+                    {formik.errors.confirmPassword}
+                  </div>
                 )}
             </div>
             <div className="flex items-center justify-between">
