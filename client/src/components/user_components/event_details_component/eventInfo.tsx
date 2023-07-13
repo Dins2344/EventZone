@@ -116,7 +116,7 @@ const EventInfo: React.FC<EventDetailsProps> = ({ event }) => {
               </div>
             </div>
           </div>
-          <div className="flex flex-col">
+          <div className="flex flex-col w-full">
             <h3 className="text-3xl font-bold dark:text-white block ">
               About this event
             </h3>

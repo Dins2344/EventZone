@@ -12,7 +12,8 @@ export default withMT(
       extend: {
         colors: {
           darkSlateGray: '#2F4F4F',
-          panTone:'#425363'
+          panTone:'#394353',
+          headerColor:'#EA3C12'
         },
       },
     },

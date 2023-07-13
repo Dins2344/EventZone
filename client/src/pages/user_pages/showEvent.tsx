@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { getCompleteEventDetails } from "../../api/userAuth/userApis";
 import EventImageSection from "../../components/user_components/event_details_component/imageSection";
 import EventInfo from "../../components/user_components/event_details_component/eventInfo";
-import { Button } from "@material-tailwind/react";
+import ReserveSeatComponent from "../../components/user_components/event_details_component/reserveSeat";
 
 const EventDetails = () => {
   const [eventDetails, setEventDetails] = useState();
@@ -21,12 +21,14 @@ const EventDetails = () => {
   return (
     <>
       <EventImageSection images={eventDetails && eventDetails.imageURL} />
-      <div className="flex mx-10 px-10">
-        <div className="md:w-8/12">
+      <div className="flex md:mx-14 px-10">
+        <div className="flex flex-wrap w-full">
+        <div className="md:w-8/12 w-full px-5">
           <EventInfo event={eventDetails && eventDetails} />
         </div>
-        <div className="md:w-4/12 ">
-          <ReserveSeatComponent />
+        <div className="md:w-4/12 w-full sticky bottom-0 px-5">
+          <ReserveSeatComponent ticketValue={eventDetails && eventDetails.ticketValue} eventId={eventDetails && eventDetails._id} />
+        </div>
         </div>
       </div>
     </>
@@ -36,20 +38,3 @@ const EventDetails = () => {
 export default EventDetails;
 
 
-const ReserveSeatComponent = ()=>{
-  return (
-    <>
-      <div className="w-full p-5 sticky top-0">
-        <div className="flex flex-col border-2 p-5 rounded-md ">
-          <div className="flex mb-3">
-            <label>entry pass</label>
-            <input type="number"></input>
-          </div>
-
-          <Button color="deep-orange">Reserve a spot</Button>
-        </div>
-
-      </div>
-    </>
-  )
-}

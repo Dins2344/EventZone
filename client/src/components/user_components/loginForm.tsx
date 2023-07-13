@@ -152,7 +152,7 @@ const LoginForm: React.FC = () => {
             </form>
             <p className="mt-4">
               don't have an account ..?
-              <Link className="text-blue-600" to={"/register/user-sign-up"}>
+              <Link className="text-blue-600" to={"/register/user-sign-up-email-verify"}>
                 sign up
               </Link>
             </p>

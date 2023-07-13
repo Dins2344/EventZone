@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import navLogo from "../../../assets/logos/navbar_logo.png";
+import navLogo from "../../../assets/logos/svg/logo-no-background.svg";
 import OrgCreationModal from "./OrgCreateModal";
 import { getUserDetails } from "../../../api/userAuth/userApis";
 import { LoggedUserInterface } from "../../../types/userInterface";

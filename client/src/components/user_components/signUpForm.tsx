@@ -1,11 +1,11 @@
 import { signUpPost } from "../../api/userAuth/signUp";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate} from "react-router-dom";
 import { LoginImage } from "./loginForm";
-import { useDispatch } from "react-redux";
-import { setUser } from "../../redux/reducers/userSlice";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useEffect, useState } from "react";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const validationSchema = Yup.object().shape({
   firstName: Yup.string().required("First name is required"),
@@ -19,39 +19,63 @@ const validationSchema = Yup.object().shape({
 const SignUpForm: React.FC = () => {
   const [email, setEmail] = useState("");
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-  // const getEmail = ()=>{
-  //   return email
-  // }
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const email = urlParams.get("email");
     email && setEmail(email);
-  },[]);
+  }, []);
   const formik = useFormik({
     initialValues: {
       firstName: "",
       lastName: "",
-      email:'',
+      email: "",
       password: "",
       confirmPassword: "",
     },
     validationSchema,
     onSubmit: async (values) => {
       // Handle form submission here
-      values.email = email
+      values.email = email;
       console.log(values);
       const res = await signUpPost(values);
       console.log(res?.data);
       if (res?.data) {
         localStorage.setItem("token", res.data.token);
-        navigate("/");
+        notify();
       }
     },
   });
 
+  const notify = async () => {
+    toast.success("Account registered. Redirecting to home page soon.", {
+      position: "top-center",
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+    });
+    setTimeout(() => {
+        navigate("/");
+    }, 3000);
+  };
+
   return (
     <div className="flex justify-center items-center h-screen overflow-hidden">
+      <ToastContainer
+        position="top-center"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      />
       <div className="w-full lg:w-1/2 ">
         <div className="lg:max-w-lg mx-auto flex justify-center">
           <form

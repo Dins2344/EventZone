@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import navLogo from '../../assets/logos/navbar_logo.png'
+import navLogo from '../../assets/logos/svg/logo-no-background.svg'
 import { FaHome,FaTasks } from "react-icons/fa";
 import React from 'react'
 import { getUserDetails } from "../../api/userAuth/userApis";

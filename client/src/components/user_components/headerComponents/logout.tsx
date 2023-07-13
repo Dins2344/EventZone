@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import navLogo from '../../../assets/logos/navbar_logo.png'
+import navLogo from "../../../assets/logos/svg/logo-no-background.svg";
 import {
   Navbar,
   Typography,
@@ -8,13 +8,11 @@ import {
   IconButton,
   Collapse,
 } from "@material-tailwind/react";
-import {
-  ArrowLongRightIcon,
-} from "@heroicons/react/24/outline";
+import { ArrowLongRightIcon } from "@heroicons/react/24/outline";
 
 export default function LoggedOutHeader() {
   const [openNav, setOpenNav] = React.useState(false);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   React.useEffect(() => {
     window.addEventListener(
@@ -23,12 +21,12 @@ export default function LoggedOutHeader() {
     );
   }, []);
 
-  const handleLogin = ()=>{
-    navigate('/register/user-login')
-  }
-  const handleSighUp = ()=>{
-    navigate('/register/user-sign-up-email-verify')
-  }
+  const handleLogin = () => {
+    navigate("/register/user-login");
+  };
+  const handleSighUp = () => {
+    navigate("/register/user-sign-up-email-verify");
+  };
 
   const navList = (
     <ul className="mb-4 mt-2 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6">
@@ -79,21 +77,29 @@ export default function LoggedOutHeader() {
     <>
       <Navbar className="sticky top z-10 h-max max-w-full rounded-none py-2 px-4 lg:px-8 lg:py-4">
         <div className="flex items-center justify-between text-blue-gray-900">
-          <img onClick={()=>{
-            navigate('/')
-          }} className="w-32" src={navLogo}></img>
+          <img
+            onClick={() => {
+              navigate("/");
+            }}
+            className="w-32"
+            src={navLogo}
+          ></img>
           <div className="flex items-center gap-4">
             <div className="mr-4 hidden lg:block">{navList}</div>
             <Button
-            onClick={handleSighUp}
-            color="red"
-              variant="gradient"
+              onClick={handleSighUp}
+              variant="outlined"
               size="sm"
               className="hidden lg:inline-block"
+              color="blue-gray"
             >
               <span>Sign Up</span>
             </Button>
-            <Button onClick={handleLogin} variant="text" className="flex items-center gap-2 hidden lg:inline-flex">
+            <Button
+              onClick={handleLogin}
+              variant="text"
+              className="flex items-center gap-2 hidden lg:inline-flex"
+            >
               Login <ArrowLongRightIcon strokeWidth={2} className="h-5 w-5" />
             </Button>
             <IconButton
@@ -137,12 +143,22 @@ export default function LoggedOutHeader() {
         </div>
         <Collapse open={openNav}>
           {navList}
-          <Button onClick={handleSighUp} variant="text" size="sm"  className="mb-2">
+          <Button
+            onClick={handleSighUp}
+            variant="text"
+            size="sm"
+            className="mb-2"
+          >
             Sign Up
           </Button>
-          <Button onClick={handleLogin} variant="text" size="sm"  className="mb-2">
-              Login
-            </Button>
+          <Button
+            onClick={handleLogin}
+            variant="text"
+            size="sm"
+            className="mb-2"
+          >
+            Login
+          </Button>
         </Collapse>
       </Navbar>
     </>
