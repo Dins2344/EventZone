@@ -1,7 +1,7 @@
 import { Button } from "@material-tailwind/react";
 import VideoPlayer from "./youtube";
 
-type EventData = {
+export type EventData = {
   _id: string;
   eventName: string;
   organizer: string;

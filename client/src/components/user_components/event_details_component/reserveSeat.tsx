@@ -6,48 +6,30 @@ import {
   DialogHeader,
   DialogBody,
   DialogFooter,
-  Typography,
   Checkbox,
+  Typography,
 } from "@material-tailwind/react";
-import { useFormik } from "formik";
-import * as Yup from "yup";
-import { getCompleteEventDetails } from "../../../api/userAuth/userApis";
 
-const validationSchema = Yup.object({
-  firstName: Yup.string().required("First name is required"),
-  lastName: Yup.string().required("Last name is required"),
-  email: Yup.string()
-    .email("Invalid email address")
-    .required("Email address is required"),
-  phoneNumber: Yup.string().required("Phone number is required"),
-  agreeTerms: Yup.boolean().oneOf(
-    [true],
-    "You must agree to the terms and conditions"
-  ),
-});
+import PaypalPayment from "../../paypal/paypalButtonComponent";
+import { EventData } from "./eventInfo";
+import { useSelector } from "react-redux";
+import { selectUser } from "../../../redux/reducers/userSlice";
+import { ticketBookingCreationInterface } from "../../../types/userInterface";
+import { ticketBooking } from "../../../api/userAuth/userApis";
 
 type ReserveSeatProps = {
-  ticketValue: string;
-  eventId: string;
+  eventDetails: EventData;
 };
 
 const ReserveSeatComponent: React.FC<ReserveSeatProps> = ({
-  ticketValue,
-  eventId,
-}) => {
-  const [eventDetail, setEventDetails] = useState();
+  eventDetails,
+}): JSX.Element => {
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
   const [ticketPass, setTicketPass] = useState(1);
-
   const [size, setSize] = useState<null | string>(null);
-  const fetchEventDetails = async () => {
-    const data = await getCompleteEventDetails(eventId);
-    const details = data?.data.data[0];
-    details && setEventDetails(details);
-  };
-
-  useEffect(() => {
-    fetchEventDetails();
-  }, []);
+  const user = useSelector(selectUser);
 
   const handleOpen = (value: string | null) => setSize(value);
   const handleIncrement = () => {
@@ -57,20 +39,21 @@ const ReserveSeatComponent: React.FC<ReserveSeatProps> = ({
     setTicketPass(ticketPass - 1);
   };
 
-  const formik = useFormik({
-    initialValues: {
-      firstName: "",
-      lastName: "",
-      email: "",
-      phoneNumber: "",
-      agreeTerms: false,
-    },
-    validationSchema: validationSchema,
-    onSubmit: (values) => {
-      // Handle form submission
-      console.log(values);
-    },
-  });
+  const handleFreeRegister = async(e: React.FormEvent<HTMLFormElement>): void => {
+    e.preventDefault();
+    const data:ticketBookingCreationInterface  = {
+      firstName,
+      lastName,
+      phoneNumber,
+      email: user.user.email,
+      userId: user.user._id,
+      ticketCount: ticketPass,
+      eventId:eventDetails._id
+    };
+    const res = await ticketBooking(data)
+    console.log(res)
+  };
+
   return (
     <>
       <div className=" w-full p-5  sticky md:top-0 bg-white">
@@ -98,7 +81,11 @@ const ReserveSeatComponent: React.FC<ReserveSeatProps> = ({
                 />
               </svg>
             </Button>
-            <input className="w-1/12 p-0 m=0" type="text" value={ticketPass} />
+            <input
+              className="w-1/12 p-0 m=0 border border-none"
+              type="text"
+              value={ticketPass}
+            />
             <Button
               size="sm"
               variant="text"
@@ -122,7 +109,9 @@ const ReserveSeatComponent: React.FC<ReserveSeatProps> = ({
             </Button>
           </div>
 
-          <label className="mb-3">Ticket type : {ticketValue}</label>
+          <label className="mb-3">
+            Ticket type : {eventDetails && eventDetails?.ticketValue}
+          </label>
 
           <Button onClick={() => handleOpen("xl")} color="deep-orange">
             Reserve a spot
@@ -153,124 +142,105 @@ const ReserveSeatComponent: React.FC<ReserveSeatProps> = ({
         </DialogHeader>
         <DialogBody divider>
           <div className="w-full flex">
-            <div className="w-full md:w-8/12 md:px-14">
+            <div className="w-full md:w-8/12 md:px-14 ">
               <div className="flex justify-center w-11/12 mb-5">
                 <h3 className="text-3xl font-bold text-black">Checkout</h3>
               </div>
-              <form onSubmit={formik.handleSubmit}>
-                <div className="flex flex-col">
-                  <div className="px-3">
-                    <h3 className="text-3xl font-bold dark:text-white mt-2 mb-5">
-                      Contact Information
-                    </h3>
-                  </div>
-                  <div className="flex px-2 mb-4">
-                    <div className="flex flex-col w-1/2  px-2">
-                      {/* <Input variant="outlined" label="First name" /> */}
+              <form>
+                <div className="flex flex-col h-96 overflow-scroll">
+                  <h3 className="text-3xl font-bold dark:text-white">
+                    Contact Information
+                  </h3>
+                  <div className="flex px-2 mb-3 mt-3">
+                    <div className="flex flex-col w-1/2 gap-6 px-2">
                       <Input
+                        value={firstName}
+                        onChange={(e) => {
+                          setFirstName(e.target.value);
+                        }}
                         variant="outlined"
                         label="First name"
-                        type="text"
-                        name="firstName"
-                        value={formik.values.firstName}
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                        className={
-                          formik.errors.firstName && formik.touched.firstName
-                            ? "border-red-500"
-                            : ""
-                        }
                       />
-                      {formik.errors.firstName && formik.touched.firstName && (
-                        <div className="text-red-500">
-                          {formik.errors.firstName}
-                        </div>
-                      )}
                     </div>
-                    <div className="flex flex-col w-1/2  px-2 ">
-                      {/* <Input variant="outlined" label="Last name" /> */}
+                    <div className="flex flex-col w-1/2 gap-6 px-2">
                       <Input
+                        value={lastName}
+                        onChange={(e) => {
+                          setLastName(e.target.value);
+                        }}
                         variant="outlined"
                         label="Last name"
-                        type="text"
-                        name="lastName"
-                        value={formik.values.lastName}
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                        className={
-                          formik.errors.lastName && formik.touched.lastName
-                            ? "border-red-500"
-                            : ""
-                        }
                       />
-                      {formik.errors.lastName && formik.touched.lastName && (
-                        <div className="text-red-500">
-                          {formik.errors.lastName}
-                        </div>
-                      )}
                     </div>
                   </div>
-                  <div className="flex px-2 mb-4">
+                  <div className="flex px-2 mb-3 mt-2">
                     <div className="flex flex-col w-1/2 gap-6 px-2">
-                      <Input variant="outlined" label="email address" />
-                    </div>
-                    <div className="flex flex-col w-1/2 px-2">
-                      {/* <Input variant="outlined" label="phone number" /> */}
                       <Input
                         variant="outlined"
-                        label="phone number"
-                        type="text"
-                        name="phoneNumber"
-                        value={formik.values.phoneNumber}
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                        className={
-                          formik.errors.phoneNumber &&
-                          formik.touched.phoneNumber
-                            ? "border-red-500"
-                            : ""
-                        }
+                        value={user.user.email}
+                        readOnly
                       />
-                      {formik.errors.phoneNumber &&
-                        formik.touched.phoneNumber && (
-                          <div className="text-red-500">
-                            {formik.errors.phoneNumber}
-                          </div>
-                        )}
+                    </div>
+                    <div className="flex flex-col w-1/2 gap-6 px-2">
+                      <Input
+                        value={phoneNumber}
+                        onChange={(e) => {
+                          setPhoneNumber(e.target.value);
+                        }}
+                        variant="outlined"
+                        label="phone number"
+                      />
                     </div>
                   </div>
-                  <div className="px-4 mb-3">
-                    <label>
-                      <input
-                        type="checkbox"
-                        name="agreeTerms"
-                        checked={formik.values.agreeTerms}
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                      />
-                      {' '}I agree with the
-                      <a
-                        href="#"
-                        className="font-medium hover:text-blue-700 transition-colors"
-                      >
-                        &nbsp;terms and conditions
-                      </a>
-                      .
-                    </label>
-                    {formik.errors.agreeTerms && formik.touched.agreeTerms && (
-                      <div className="text-red-500">
-                        {formik.errors.agreeTerms}
-                      </div>
-                    )}
+                  <div className="px-2 mb-3 m-t2">
+                    <Checkbox
+                      label={
+                        <Typography
+                          color="blue-gray"
+                          className="font-medium flex"
+                        >
+                          I agree with the
+                          <Typography
+                            as="a"
+                            href="#"
+                            color="blue"
+                            className="font-medium hover:text-blue-700 transition-colors"
+                          >
+                            &nbsp;terms and conditions
+                          </Typography>
+                          .
+                        </Typography>
+                      }
+                    />
                   </div>
                   <div className="px-3">
-                    <Button
-                      type="submit"
-                      size="md"
-                      color="deep-orange"
-                    >
-                      Register
-                    </Button>
+                    {eventDetails?.ticketValue === "free" && (
+                      <Button
+                        type="submit"
+                        size="md"
+                        color="deep-orange"
+                        className="w-full mb-3"
+                        onClick={handleFreeRegister}
+                      >
+                        Register and continue
+                      </Button>
+                    )}
+                    {eventDetails?.ticketValue ===
+                      ("charged" || "donation") && (
+                      <>
+                        <Button
+                          type="submit"
+                          size="md"
+                          color="deep-orange"
+                          className="w-full mb-3"
+                        >
+                          Register and continue
+                        </Button>
+                        <div>
+                          <PaypalPayment />
+                        </div>
+                      </>
+                    )}
                   </div>
                 </div>
               </form>
@@ -279,7 +249,7 @@ const ReserveSeatComponent: React.FC<ReserveSeatProps> = ({
               <div className="flex flex-col">
                 <img
                   className="h-full w-full rounded-lg shadow-xl shadow-blue-gray-900/50 mb-8"
-                  src="https://images.unsplash.com/photo-1682407186023-12c70a4a35e0?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2832&q=80"
+                  src={eventDetails?.imageURL[0]}
                   alt="nature image"
                 />
                 <h5 className="text-xl font-bold dark:text-white mt-1 mb-5">
@@ -303,9 +273,9 @@ const ReserveSeatComponent: React.FC<ReserveSeatProps> = ({
                       />
                     </svg>
                     {"  "}
-                    {eventDetail && eventDetail.eventName}
+                    {eventDetails && eventDetails?.eventName}
                   </p>
-                  <p>{eventDetail && eventDetail.ticketPrice}</p>
+                  <p>{eventDetails && eventDetails?.ticketPrice}</p>
                 </div>
                 <div className="flex justify-between px-2 mb-5 border-b-2">
                   <p className="flex">
@@ -327,12 +297,14 @@ const ReserveSeatComponent: React.FC<ReserveSeatProps> = ({
                     </svg>
                     {"  "}e-ticket
                   </p>
-                  <p>{eventDetail && ticketPass * eventDetail.ticketPrice}</p>
+                  <p>
+                    {eventDetails && ticketPass * eventDetails?.ticketPrice}
+                  </p>
                 </div>
                 <div className="flex justify-between px-2">
                   <p className="font-bold">Total</p>
                   <p className="font-bold">
-                    {eventDetail && ticketPass * eventDetail.ticketPrice}
+                    {eventDetails && ticketPass * eventDetails?.ticketPrice}
                   </p>
                 </div>
               </div>

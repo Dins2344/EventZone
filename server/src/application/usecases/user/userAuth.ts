@@ -1,5 +1,5 @@
 import { HttpStatus } from "../../../types/httpStatus";
-import { UserInterface } from "../../../types/userInterface";
+import { UserInterface, ticketBookingCreationInterface } from "../../../types/userInterface";
 import { UserDBInterface } from "../../repositories/userDBRepository";
 import { UserRegisterInterface } from "../../../types/user";
 import { AuthServiceInterface } from "../../services/authServiceInterface";
@@ -85,4 +85,21 @@ export const getCompleteEventDetails = async(id:string,userRepository:ReturnType
         throw new AppError('fetching complete event details failed',HttpStatus.BAD_REQUEST)
     }
     return data
+}
+
+export const createBooking = async(data:ticketBookingCreationInterface,userRepository:ReturnType<UserDBInterface>)=>{
+    const dbData = {
+        bookingTime : new Date().toDateString(),
+        eventId:data.eventId,
+        userId:data.userId,
+        contactInfo:{
+            firstName:data.firstName,
+            lastName:data.lastName,
+            phoneNumber:data.phoneNumber,
+            email:data.email,
+        },
+        ticketCount:data.ticketCount
+    }
+    const res = await userRepository.createBooking(dbData)
+    return res
 }

@@ -27,7 +27,7 @@ const EventDetails = () => {
           <EventInfo event={eventDetails && eventDetails} />
         </div>
         <div className="md:w-4/12 w-full sticky bottom-0 px-5">
-          <ReserveSeatComponent ticketValue={eventDetails && eventDetails.ticketValue} eventId={eventDetails && eventDetails._id} />
+          <ReserveSeatComponent eventDetails = {eventDetails && eventDetails} />
         </div>
         </div>
       </div>

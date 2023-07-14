@@ -1,3 +1,4 @@
+import { ticketBookingCreationInterface } from "../../types/userInterface";
 import api from "../itercepters/intercepter";
 
 interface createOrganizerInterface {
@@ -44,6 +45,15 @@ export const getCompleteEventDetails = async(id:string)=>{
   try{
     const data = await api.get(`http://localhost:4000/user/get-complete-event-details/${id}`)
     return data
+  }catch(error){
+    console.log(error)
+  }
+}
+
+export const ticketBooking = async(data :ticketBookingCreationInterface)=>{
+  try{
+    const res = await api.post('http://localhost:4000/user/ticket-booking',data)
+    return res
   }catch(error){
     console.log(error)
   }

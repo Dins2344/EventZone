@@ -1,5 +1,5 @@
 import { UserRepositoryMongoDB } from "../../frameworks/database/mongoDB/repositories/userRepositoryMongoDB";
-import { CreateUserInterface } from "../../types/userInterface";
+import { BookingCreationInterface, CreateUserInterface } from "../../types/userInterface";
 
 
 export const userDbRepository = (repository:ReturnType<UserRepositoryMongoDB>)=>{
@@ -21,12 +21,18 @@ export const userDbRepository = (repository:ReturnType<UserRepositoryMongoDB>)=>
     const getCompleteEventDetails = async(id:string)=>{
         return await repository.getCompleteEventDetails(id)
     }
+
+    const createBooking = async(data:BookingCreationInterface)=>{
+        const res = repository.createBooking(data)
+        return res
+    }
     return {
         addUser,
         getUserByEmail,
         addOrganization,
         getApprovedEvents,
-        getCompleteEventDetails
+        getCompleteEventDetails,
+        createBooking
 
     }
 }

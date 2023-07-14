@@ -1,9 +1,10 @@
-import { UserInterface } from "../../../../types/userInterface";
+import { BookingCreationInterface, UserInterface } from "../../../../types/userInterface";
 import User from "../models/userModel";
 import { CreateUserInterface } from "../../../../types/userInterface";
 import { ObjectId } from "mongodb";
 import Event from "../models/eventModel";
 import Organization from "../models/organizationModel";
+import Bookings from "../models/bookings";
 
 export const userRepositoryMongoDB = () => {
   const getUserByEmail = async (email: string) => {
@@ -49,12 +50,17 @@ export const userRepositoryMongoDB = () => {
     return data;
   };
 
+  const createBooking = async(data:BookingCreationInterface)=>{
+    const res = await Bookings.create(data)
+    return res
+  }
   return {
     addUser,
     getUserByEmail,
     addOrganization,
     getApprovedEvents,
     getCompleteEventDetails,
+    createBooking
   };
 };
 

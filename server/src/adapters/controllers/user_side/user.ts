@@ -2,8 +2,8 @@ import { UserDBInterface } from "../../../application/repositories/userDBReposit
 import { UserRepositoryMongoDB } from "../../../frameworks/database/mongoDB/repositories/userRepositoryMongoDB";
 import { Request,Response } from "express";
 import asyncHandler from "express-async-handler"
-import { CustomRequest } from "../../../types/userInterface";
-import { getApprovedEvents,getCompleteEventDetails } from "../../../application/usecases/user/userAuth";
+import { CustomRequest, ticketBookingCreationInterface } from "../../../types/userInterface";
+import { createBooking, getApprovedEvents,getCompleteEventDetails } from "../../../application/usecases/user/userAuth";
 
 
 
@@ -39,7 +39,7 @@ const userController  = (
     })
 
     const getCompleteEventDetailsController = asyncHandler(async(req:Request,res:Response)=>{
-        const id = req.params.id
+        const id : string = req.params.id
         const data = await getCompleteEventDetails(id,dbRepositoryUser)
         if(data){
             res.json({message:'event details fetch done',data})
@@ -48,11 +48,22 @@ const userController  = (
         }
     })
 
+    const createBookingController = asyncHandler(async(req:Request,res:Response)=>{
+        const data:ticketBookingCreationInterface = req.body
+        const response = await createBooking(data,dbRepositoryUser)
+        if(response){
+            res.json({message:'booking confirmed', response})
+        }else{
+            res.json({error:'booking failed'})
+        }
+    })
+
 
     return {
         getUserByEmail,
         getApprovedEventsController,
-        getCompleteEventDetailsController
+        getCompleteEventDetailsController,
+        createBookingController
     }
 }
 

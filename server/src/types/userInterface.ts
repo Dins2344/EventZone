@@ -32,3 +32,21 @@ export interface CustomRequest extends Request{
         email:string
     }
 }
+
+export interface BookingCreationInterface {
+    eventId:string,
+    userId:string,
+    bookingTime:string,
+    contactInfo:object,
+    ticketCount:number
+
+}
+export interface ticketBookingCreationInterface{
+    firstName: string;
+    lastName: string;
+    phoneNumber: string;
+    email: string;
+    userId: string;
+    ticketCount: number;
+    eventId:string
+}

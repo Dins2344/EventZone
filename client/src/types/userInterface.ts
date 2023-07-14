@@ -19,3 +19,14 @@ export interface LoggedUserInterface {
     __v: number
     organizations: string[]
   }
+
+
+  export interface ticketBookingCreationInterface{
+        firstName: string;
+        lastName: string;
+        phoneNumber: string;
+        email: string;
+        userId: string;
+        ticketCount: number;
+        eventId:string
+  }

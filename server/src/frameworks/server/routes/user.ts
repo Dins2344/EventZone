@@ -22,6 +22,7 @@ const userRouter = () => {
   router.get('/get-user-details',controller.getUserByEmail)
   router.get('/get-all-approved-events',controller.getApprovedEventsController)
   router.get('/get-complete-event-details/:id',controller.getCompleteEventDetailsController)
+  router.post('/ticket-booking',controller.createBookingController)
 
   return router;
 };
