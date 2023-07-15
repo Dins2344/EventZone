@@ -35,6 +35,7 @@ const ReserveSeatComponent: React.FC<ReserveSeatProps> = ({
   const [bookingRes, setBookingRes] = useState<RegisteredBookingInterface>();
   const [size, setSize] = useState<null | string>(null);
   const [showPaypal,setShowPaypal] = useState(false)
+  const [registerInfo,setRegisterInfo] = useState<ticketBookingCreationInterface>()
   const user = useSelector(selectUser);
   const navigate = useNavigate();
 
@@ -45,7 +46,20 @@ const ReserveSeatComponent: React.FC<ReserveSeatProps> = ({
   const handleDecrement = () => {
     setTicketPass(ticketPass - 1);
   };
-
+  const handlePaidRegister = async(e:React.FormEvent<HTMLFormElement>)=>{
+    e.preventDefault()
+    const data: ticketBookingCreationInterface = {
+      firstName,
+      lastName,
+      phoneNumber,
+      email: user.user.email,
+      userId: user.user._id,
+      ticketCount: ticketPass,
+      eventId: eventDetails._id,
+    };
+    setRegisterInfo(data)
+    setShowPaypal(true)
+  }
   const handleFreeRegister = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const data: ticketBookingCreationInterface = {
@@ -345,14 +359,14 @@ const ReserveSeatComponent: React.FC<ReserveSeatProps> = ({
                               size="md"
                               color="deep-orange"
                               className="w-full mb-3"
-                              onClick={()=>{
-                                setShowPaypal(true)
-                              }}
+                              onClick={handlePaidRegister}
                             >
                               Register and continue to payment
                             </Button>
                            {showPaypal &&<div>
                               <PaypalPayment
+                              setBookingRes={setBookingRes}
+                                registerInfo = {registerInfo}
                                 total={total}
                                 eventName={eventDetails.eventName}
                               />

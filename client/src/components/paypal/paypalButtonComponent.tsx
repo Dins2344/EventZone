@@ -1,12 +1,16 @@
 const baseURL = 'http://localhost:4000'
-
+import { ticketBooking } from "../../api/userAuth/userApis";
+import { RegisteredBookingInterface, ticketBookingCreationInterface } from "../../types/userInterface";
 import { PayPalButtons } from "@paypal/react-paypal-js";
+
 type paypalPaymentProps = {
 total:number,
 eventName:string
+registerInfo:ticketBookingCreationInterface
+setBookingRes: React.Dispatch<React.SetStateAction<RegisteredBookingInterface | undefined>>;
 }
 
-const PaypalPayment :React.FC<paypalPaymentProps> = ({total,eventName}): JSX.Element  => {
+const PaypalPayment :React.FC<paypalPaymentProps> = ({total,eventName,registerInfo,setBookingRes}): JSX.Element  => {
   const totalString = total.toString()
   const createOrder = (data: any): Promise<string> => {
     // Order is created on the server and the order id is returned
@@ -30,9 +34,9 @@ const PaypalPayment :React.FC<paypalPaymentProps> = ({total,eventName}): JSX.Ele
       .then((order) => order.id);
   };
 
-  const onApprove = async (data: any): Promise<any> => {
+  const onApprove =  (data: any): Promise<any> => {
     // Order is captured on the server and the response is returned to the browser
-    const response = await fetch(`${baseURL}/my-server/capture-paypal-order`, {
+    const res = fetch(`${baseURL}/my-server/capture-paypal-order`, {
           method: "POST",
           headers: {
               "Content-Type": "application/json",
@@ -40,9 +44,19 @@ const PaypalPayment :React.FC<paypalPaymentProps> = ({total,eventName}): JSX.Ele
           body: JSON.stringify({
               orderID: data.orderID,
           }),
-      });
-      console.log('payment successful', response.json());
-      return response.json();
+      }).then((response)=>{
+        if(response.ok){
+          ticketBooking(registerInfo).then((response:any)=>{
+            if(response){
+              setBookingRes(response.data.response)
+            }
+            return response
+          })
+        }
+        return response
+      })
+      return res
+     
   };
 
   return (
