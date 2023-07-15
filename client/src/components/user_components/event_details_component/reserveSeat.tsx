@@ -34,6 +34,7 @@ const ReserveSeatComponent: React.FC<ReserveSeatProps> = ({
   const [ticketPass, setTicketPass] = useState(1);
   const [bookingRes, setBookingRes] = useState<RegisteredBookingInterface>();
   const [size, setSize] = useState<null | string>(null);
+  const [showPaypal,setShowPaypal] = useState(false)
   const user = useSelector(selectUser);
   const navigate = useNavigate();
 
@@ -258,7 +259,7 @@ const ReserveSeatComponent: React.FC<ReserveSeatProps> = ({
                     <h3 className="text-3xl font-bold text-black">Checkout</h3>
                   </div>
                   <form>
-                    <div className="flex flex-col h-96 overflow-scroll">
+                    <div className="flex flex-col h-96 overflow-scroll no-scrollbar">
                       <h3 className="text-3xl font-bold dark:text-white">
                         Contact Information
                       </h3>
@@ -341,19 +342,21 @@ const ReserveSeatComponent: React.FC<ReserveSeatProps> = ({
                           ("charged" || "donation") && (
                           <>
                             <Button
-                              type="submit"
                               size="md"
                               color="deep-orange"
                               className="w-full mb-3"
+                              onClick={()=>{
+                                setShowPaypal(true)
+                              }}
                             >
-                              Register and continue
+                              Register and continue to payment
                             </Button>
-                            <div>
+                           {showPaypal &&<div>
                               <PaypalPayment
                                 total={total}
                                 eventName={eventDetails.eventName}
                               />
-                            </div>
+                            </div> } 
                           </>
                         )}
                       </div>

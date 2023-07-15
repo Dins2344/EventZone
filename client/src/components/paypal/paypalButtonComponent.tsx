@@ -41,8 +41,8 @@ const PaypalPayment :React.FC<paypalPaymentProps> = ({total,eventName}): JSX.Ele
               orderID: data.orderID,
           }),
       });
-      console.log('payment succfull', response);
-      response.json();
+      console.log('payment successful', response.json());
+      return response.json();
   };
 
   return (

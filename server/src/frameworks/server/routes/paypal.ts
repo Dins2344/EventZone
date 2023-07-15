@@ -10,6 +10,7 @@ const paypalRouter = () => {
     async (req: Request, res: Response) => {
       try {
         const order = await paypal.createOrder(req.body);
+        console.log(order)
         res.json(order);
       } catch (err:any) {
         res.status(500).send(err.message);
@@ -20,10 +21,10 @@ const paypalRouter = () => {
   router.post(
     "/capture-paypal-order",
     async (req: Request, res: Response) => {
-      console.log(req.body);
       const { orderID } = req.body;
       try {
         const captureData = await paypal.capturePayment(orderID);
+        console.log(captureData)
         res.json(captureData);
       } catch (err:any) {
         res.status(500).send(err.message);
