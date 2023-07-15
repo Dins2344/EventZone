@@ -58,3 +58,30 @@ export const ticketBooking = async(data :ticketBookingCreationInterface)=>{
     console.log(error)
   }
 }
+
+export const getBookingDetails = async() =>{
+  try{
+    const data = await api.get('http://localhost:4000/user/get-booking-details')
+    return data
+  }catch(error){
+    console.log(error)
+  }
+}
+
+export const getOneBookingDetails = async(bookingId:string)=>{
+  try{
+    const data = await api.get(`http://localhost:4000/user/get-one-booking-details/${bookingId}`)
+    return data
+  }catch(error){
+    console.log(error)
+  }
+}
+
+export const cancelBooking = async(bookingId:string)=>{
+  try{
+    const res = await api.get(`http://localhost:4000/user/cancel-booking/${bookingId}`)
+    return res
+  }catch(error){
+    console.log(error)
+  }
+}

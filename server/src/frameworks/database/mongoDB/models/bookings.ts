@@ -20,6 +20,10 @@ const bookingsSchema = new Schema({
     ticketCount:{
         type:Number,
         required:[true,'please add ticket count']
+    },
+    status:{
+        type:String,
+        required:[true,'please add ticket count']
     }
 })
 

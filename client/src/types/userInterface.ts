@@ -30,3 +30,46 @@ export interface LoggedUserInterface {
         ticketCount: number;
         eventId:string
   }
+  export interface RegisteredBookingInterface{
+    bookingTime: string;
+    contactInfo: {
+      email: string;
+      firstName: string;
+      lastName: string;
+      phoneNumber: string;
+    };
+    eventId: string;
+    ticketCount: number;
+    userId: string;
+    _id: string;
+    status:string
+  }
+
+  export interface Bookings {
+    bookingTime: string;
+    contactInfo: {
+      email: string;
+      firstName: string;
+      lastName: string;
+      phoneNumber: string;
+    };
+    event: {
+      eventName: string;
+      imageURL: string[];
+      organizer: string;
+      startDate: string;
+      startTime: string;
+      ticketValue: string;
+      endDate:string
+      endTime:string
+      category:string
+      addressLine1:string
+      addressLine2:string
+      addressLine3:string
+    };
+    eventId: string;
+    ticketCount: number;
+    userId: string;
+    _id: string;
+    status:string
+  }

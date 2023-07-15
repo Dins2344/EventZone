@@ -5,6 +5,7 @@ import { getUserDetails } from "../../../api/userAuth/userApis";
 import { LoggedUserInterface } from "../../../types/userInterface";
 import { useDispatch } from "react-redux";
 import { setUser } from "../../../redux/reducers/userSlice";
+import { useNavigate } from "react-router-dom";
 
 import {
   Navbar,
@@ -53,6 +54,7 @@ const profileMenuItems = [
 
 function ProfileMenu() {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+  const navigate = useNavigate()
   
 
   const closeMenu = () => setIsMenuOpen(false);
@@ -61,6 +63,7 @@ function ProfileMenu() {
     // Perform actions based on the clicked menu item
     if (label === "My Profile") {
       // Handle "My Profile" action
+      navigate('/user/user-profile')
     } else if (label === "Edit Profile") {
       // Handle "Edit Profile" action
     } else if (label === "Inbox") {

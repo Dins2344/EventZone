@@ -54,13 +54,132 @@ export const userRepositoryMongoDB = () => {
     const res = await Bookings.create(data)
     return res
   }
+
+  const getBookings = async(userId:string) =>{
+   const data = await Bookings.aggregate([
+      // Match bookings for the specified user
+      {
+        $match: { userId: userId }
+      },
+      {
+        $addFields: {
+          eventId: { $toObjectId: "$eventId" }
+        }
+      },
+      // Lookup to join with the Event collection
+      {
+        $lookup: {
+          from: 'events', // Name of the Event collection
+          localField: 'eventId',
+          foreignField: '_id',
+          as: 'event'
+        }
+      },
+      // Unwind the event array
+      {
+        $unwind: '$event'
+      },
+      // Project the desired fields
+      {
+        $project: {
+          _id: 1,
+          eventId: 1,
+          userId: 1,
+          bookingTime: 1,
+          contactInfo: 1,
+          ticketCount: 1,
+          status:1,
+          event: {
+            eventName: '$event.eventName',
+            organizer: '$event.organizer',
+            imageURL:'$event.imageURL',
+            startDate:'$event.startDate',
+            startTime:'$event.startTime',
+            ticketValue:'$event.ticketValue'
+            // Include other event fields as needed
+          }
+        }
+      }
+    ])
+      .exec()
+      .catch((error:any) => {
+        console.error('Error retrieving user bookings:', error);
+      });
+      return data
+  }
+
+  const getOneBookingDetails = async(bookingId:string)=>{
+    const data = await Bookings.aggregate([
+      // Match bookings for the specified user
+      {
+        $match: { _id:new ObjectId(bookingId) }
+      },
+      {
+        $addFields: {
+          eventId: { $toObjectId: "$eventId" }
+        }
+      },
+      // Lookup to join with the Event collection
+      {
+        $lookup: {
+          from: 'events', // Name of the Event collection
+          localField: 'eventId',
+          foreignField: '_id',
+          as: 'event'
+        }
+      },
+      // Unwind the event array
+      {
+        $unwind: '$event'
+      },
+      // Project the desired fields
+      {
+        $project: {
+          _id: 1,
+          eventId: 1,
+          userId: 1,
+          bookingTime: 1,
+          contactInfo: 1,
+          ticketCount: 1,
+          status:1,
+          event: {
+            eventName: '$event.eventName',
+            organizer: '$event.organizer',
+            imageURL:'$event.imageURL',
+            startDate:'$event.startDate',
+            startTime:'$event.startTime',
+            ticketValue:'$event.ticketValue',
+            endDate:'$event.endDate',
+            endTime:'$event.endTime',
+            category:'$event.category',
+            addressLine1:'$event.addressLine1',
+            addressLine2:'$event.addressLine2',
+            addressLine3:'$event.addressLine3'
+            // Include other event fields as needed
+          }
+        }
+      }
+    ]).exec()
+    return data
+  }
+
+  const cancelBooking = async(bookingId:string)=>{
+    console.log(bookingId)
+    const res = await Bookings.updateOne({_id:new ObjectId(bookingId)},{status:'canceled'})
+    return res
+  }
+
+
   return {
     addUser,
     getUserByEmail,
     addOrganization,
     getApprovedEvents,
     getCompleteEventDetails,
-    createBooking
+    createBooking,
+    getBookings,
+    getOneBookingDetails,
+    cancelBooking
   };
 };
 

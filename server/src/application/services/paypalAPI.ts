@@ -42,6 +42,7 @@ export async function capturePayment(orderId:string) {
       Authorization: `Bearer ${accessToken}`,
     },
   });
+  console.log(response)
 
   return handleResponse(response);
 }
@@ -55,6 +56,7 @@ export async function generateAccessToken() {
       Authorization: `Basic ${auth}`,
     },
   });
+  
 
   const jsonData = await handleResponse(response);
   return jsonData.access_token;

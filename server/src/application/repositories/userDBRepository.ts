@@ -23,16 +23,35 @@ export const userDbRepository = (repository:ReturnType<UserRepositoryMongoDB>)=>
     }
 
     const createBooking = async(data:BookingCreationInterface)=>{
-        const res = repository.createBooking(data)
+        const res = await repository.createBooking(data)
         return res
     }
+
+    const getBookings = async(userId:string)=>{
+        const data = await repository.getBookings(userId)
+        return data
+    }
+
+    const getOneBookingDetails = async(bookingId:string)=>{
+        const data = await repository.getOneBookingDetails(bookingId)
+        return data
+    }
+
+    const cancelBooking = async(bookingId:string)=>{
+        const res = await repository.cancelBooking(bookingId)
+        return res
+    }
+
     return {
         addUser,
         getUserByEmail,
         addOrganization,
         getApprovedEvents,
         getCompleteEventDetails,
-        createBooking
+        createBooking,
+        getBookings,
+        getOneBookingDetails,
+        cancelBooking
 
     }
 }

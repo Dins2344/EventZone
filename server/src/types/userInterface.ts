@@ -38,8 +38,8 @@ export interface BookingCreationInterface {
     userId:string,
     bookingTime:string,
     contactInfo:object,
-    ticketCount:number
-
+    ticketCount:number,
+    status:string
 }
 export interface ticketBookingCreationInterface{
     firstName: string;

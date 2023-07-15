@@ -13,6 +13,8 @@ import LoginPage from "./pages/user_pages/loginPage.tsx";
 import OTPLogin from "./pages/user_pages/OTPLogin.tsx";
 import OTPVerifyPage from "./pages/user_pages/OTPVerify.tsx";
 import Body from "./pages/user_pages/userLanding.tsx";
+import ProfilePage from "./pages/user_pages/profile_pages/profile.tsx";
+import BookingDetailsPage from "./pages/user_pages/profile_pages/bookingDetails.tsx";
 import CreationPage from "./pages/organizer_pages/creation.tsx";
 import OrganizationHome from "./pages/organizer_pages/home.tsx";
 import CategoryManagement from "./pages/admin_pages/categoryManagement.tsx";
@@ -102,6 +104,14 @@ const appRouter = createBrowserRouter([
         path: "/show-event",
         element: <EventDetails />,
       },
+      {
+        path:'/user/user-profile',
+        element: <ProfilePage />
+      },
+      {
+        path:'/show-booking',
+        element: <BookingDetailsPage />
+      }
     ],
   },
 

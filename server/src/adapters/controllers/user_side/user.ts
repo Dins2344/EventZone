@@ -3,7 +3,7 @@ import { UserRepositoryMongoDB } from "../../../frameworks/database/mongoDB/repo
 import { Request,Response } from "express";
 import asyncHandler from "express-async-handler"
 import { CustomRequest, ticketBookingCreationInterface } from "../../../types/userInterface";
-import { createBooking, getApprovedEvents,getCompleteEventDetails } from "../../../application/usecases/user/userAuth";
+import { cancelBooking, createBooking, getApprovedEvents,getBookings,getCompleteEventDetails, getOneBookingDetails } from "../../../application/usecases/user/userAuth";
 
 
 
@@ -58,12 +58,47 @@ const userController  = (
         }
     })
 
+    const getBookingsController = asyncHandler(async(req:CustomRequest,res:Response)=>{
+        const userId=req.user?.Id
+        if(userId){
+            const data = await getBookings(userId,dbRepositoryUser)
+            if(data){
+                res.json({message:'fetching booking details done',data})
+            }else{
+                res.json({error:'fetching booking details failed'})
+            }
+        }
+    })
+
+    const getOneBookingDetailsController = asyncHandler(async(req:Request,res:Response)=>{
+        const bookingId:string = req.params.bookingId
+        const data = await getOneBookingDetails(bookingId,dbRepositoryUser)
+        if(data){
+            res.json({message:'fetching booking details done',data})
+        }else{
+            res.json({error:'fetching details failed'})
+        }
+    })
+
+    const cancelBookingController = asyncHandler(async(req:Request,res:Response)=>{
+        const bookingId:string = req.params.id
+        console.log(bookingId)
+        const response = await cancelBooking(bookingId,dbRepositoryUser)
+        if(response){
+            res.json({message:'canceling order done',response})
+        }else{
+            res.json({error:'canceling order failed'})
+        }
+    })
 
     return {
         getUserByEmail,
         getApprovedEventsController,
         getCompleteEventDetailsController,
-        createBookingController
+        createBookingController,
+        getBookingsController,
+        getOneBookingDetailsController,
+        cancelBookingController
     }
 }
 

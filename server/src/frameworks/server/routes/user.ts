@@ -23,6 +23,9 @@ const userRouter = () => {
   router.get('/get-all-approved-events',controller.getApprovedEventsController)
   router.get('/get-complete-event-details/:id',controller.getCompleteEventDetailsController)
   router.post('/ticket-booking',controller.createBookingController)
+  router.get('/get-booking-details',controller.getBookingsController)
+  router.get('/get-one-booking-details/:bookingId',controller.getOneBookingDetailsController)
+  router.get('/cancel-booking/:id',controller.cancelBookingController)
 
   return router;
 };

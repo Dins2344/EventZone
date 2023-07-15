@@ -1,8 +1,13 @@
 const baseURL = 'http://localhost:4000'
 
 import { PayPalButtons } from "@paypal/react-paypal-js";
+type paypalPaymentProps = {
+total:number,
+eventName:string
+}
 
-const PaypalPayment = (): JSX.Element  => {
+const PaypalPayment :React.FC<paypalPaymentProps> = ({total,eventName}): JSX.Element  => {
+  const totalString = total.toString()
   const createOrder = (data: any): Promise<string> => {
     // Order is created on the server and the order id is returned
     return fetch(`${baseURL}/my-server/create-paypal-order`, {
@@ -15,8 +20,8 @@ const PaypalPayment = (): JSX.Element  => {
       body: JSON.stringify({
         cart: 
           {
-            sku: 'new event',
-            quantity: "1000",
+            sku: {eventName},
+            quantity:'500'
           },
         
       }),

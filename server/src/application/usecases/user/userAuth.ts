@@ -98,8 +98,36 @@ export const createBooking = async(data:ticketBookingCreationInterface,userRepos
             phoneNumber:data.phoneNumber,
             email:data.email,
         },
-        ticketCount:data.ticketCount
+        ticketCount:data.ticketCount,
+        status:'confirmed'
     }
     const res = await userRepository.createBooking(dbData)
+    if(!res){
+        throw new AppError('creating order failed',HttpStatus.BAD_REQUEST)
+    }
+    return res
+}
+
+export const getBookings = async(userId:string,userRepository:ReturnType<UserDBInterface>)=>{
+    const data = await userRepository.getBookings(userId)
+    if(!data){
+        throw new AppError('getting bookings failed',HttpStatus.BAD_REQUEST)
+    }
+    return data
+}
+
+export const getOneBookingDetails = async(bookingId:string,userRepository:ReturnType<UserDBInterface>)=>{
+    const data = await userRepository.getOneBookingDetails(bookingId)
+    if(!data){
+        throw new AppError('getting booking details failed',HttpStatus.BAD_REQUEST)
+    }
+    return data
+}
+
+export const cancelBooking = async(bookingId:string,userRepository:ReturnType<UserDBInterface>)=>{
+    const res = await userRepository.cancelBooking(bookingId)
+    if(!res){
+        throw new AppError('canceling booking failed',HttpStatus.BAD_REQUEST)
+    }
     return res
 }
