@@ -1,5 +1,6 @@
 import { Button } from "@material-tailwind/react";
 import VideoPlayer from "./youtube";
+import { EventDetailsInterface } from "../../../types/userInterface";
 
 export type EventData = {
   _id: string;
@@ -36,7 +37,7 @@ export type EventData = {
 };
 
 type EventDetailsProps = {
-  event: EventData;
+  event: EventDetailsInterface;
 };
 const EventInfo: React.FC<EventDetailsProps> = ({ event }) => {
   const youtubeVideoUrl = event?.videoURL;
@@ -141,7 +142,7 @@ const EventInfo: React.FC<EventDetailsProps> = ({ event }) => {
               </p>
             </div>
           </div>
-          <div className="mt-3 overflow-scroll">
+          <div className="mt-3 overflow-scroll no-scrollbar">
             <VideoPlayer videoId={videoId} />
           </div>
           <div className="flex flex-col mt-3">

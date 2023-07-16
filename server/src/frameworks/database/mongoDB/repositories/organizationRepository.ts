@@ -65,6 +65,7 @@ export const organizationRepositoryMongoDB = () => {
         eventCapacity: data.eventCapacity,
         ticketPrice: data.ticketPrice,
         ticketValue: data.ticketValue,
+        ticketSold:0
       }
     );
     return res;

@@ -24,6 +24,11 @@ const bookingsSchema = new Schema({
     status:{
         type:String,
         required:[true,'please add ticket count']
+    },
+    QRCodeLink:{
+        type:String,
+        required:[true,'please add ticket count']
+
     }
 })
 

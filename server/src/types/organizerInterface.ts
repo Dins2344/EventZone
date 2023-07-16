@@ -20,8 +20,40 @@ export interface MediaFormInterface {
   eventId: string;
 }
 export interface PublishFormInterface {
-  eventCapacity: string
+  eventCapacity: string | number
   ticketPrice: string
   ticketValue: string,
   eventId:string
+}
+
+export interface EventDetailsInterface {
+  addressLine1: string;
+  addressLine2: string;
+  addressLine3: string;
+  category: string;
+  description: string;
+  endDate: string;
+  endTime: string;
+  eventCapacity: number;
+  eventName: string;
+  imageURL: string[];
+  orgName: string;
+  orgOwnerId: string;
+  organizer: string;
+  organizerInfo: {
+    admin: string[]; // Update this with the appropriate type if available
+    orgName: string;
+    orgType: string;
+    ownerId: string;
+    userId: string;
+  };
+  registeredTime: string;
+  startDate: string;
+  startTime: string;
+  status: string;
+  ticketPrice: number;
+  ticketSold: number;
+  ticketValue: string;
+  videoURL: string;
+  _id: string;
 }

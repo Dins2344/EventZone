@@ -3,7 +3,9 @@ import EventsHomeComponent from "../../components/organizer_components/eventsHom
 const EventsHome : React.FC = ()=>{
     return (
         <>
+        <div className="h-screen">
         <EventsHomeComponent/>
+        </div>
         </>
     )
 }

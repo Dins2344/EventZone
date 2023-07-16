@@ -11,7 +11,7 @@ import {
 } from "@material-tailwind/react";
 
 import PaypalPayment from "../../paypal/paypalButtonComponent";
-import { EventData } from "./eventInfo";
+import { EventDetailsInterface } from "../../../types/userInterface";
 import { useSelector } from "react-redux";
 import { selectUser } from "../../../redux/reducers/userSlice";
 import {
@@ -20,9 +20,10 @@ import {
 } from "../../../types/userInterface";
 import { ticketBooking } from "../../../api/userAuth/userApis";
 import { useNavigate } from "react-router-dom";
+import { LoggedUserInterface } from "../../../types/userInterface";
 
 type ReserveSeatProps = {
-  eventDetails: EventData;
+  eventDetails: EventDetailsInterface;
 };
 
 const ReserveSeatComponent: React.FC<ReserveSeatProps> = ({
@@ -82,7 +83,7 @@ const ReserveSeatComponent: React.FC<ReserveSeatProps> = ({
 
   return (
     <>
-      <div className=" w-full p-5  sticky md:top-0 bg-white">
+      <div className=" w-full pt-5 lg:p-5  sticky md:top-0 bg-white">
         <div className="flex flex-col border-2 p-5 rounded-md ">
           <div className="flex mb-3">
             <label className="mr-2">entry pass : </label>
@@ -134,18 +135,34 @@ const ReserveSeatComponent: React.FC<ReserveSeatProps> = ({
               </svg>
             </Button>
           </div>
-
+        {eventDetails && 
+        <div className="flex flex-col">
           <label className="mb-3">
-            Ticket type : {eventDetails && eventDetails?.ticketValue}
+            Ticket type : { eventDetails?.ticketValue}
           </label>
-
+          <label className="mb-3">
+            Ticket price : { eventDetails?.ticketPrice}
+          </label>
+          <label className="mb-3">
+            Ticket sold : { eventDetails?.ticketSold} / { eventDetails?.eventCapacity}
+          </label>
+          {eventDetails.ticketSold + ticketPass <= eventDetails.eventCapacity ?
           <Button onClick={() => handleOpen("xl")} color="deep-orange">
             Reserve a spot
           </Button>
+          
+        :
+        <Button onClick={() => handleOpen("xl")} color="deep-orange">
+           can't provide that much tickets
+          </Button>
+        }
+        </div>
+        }
         </div>
       </div>
+
       <div className="mb-3 flex gap-3"></div>
-      <Dialog open={size === "xl"} size={size} handler={handleOpen}>
+      <Dialog open={size === "xl"} size='xl' handler={handleOpen}>
         <DialogHeader>
           <div className="flex justify-end w-full">
             <button onClick={() => handleOpen(null)}>
@@ -443,15 +460,6 @@ const ReserveSeatComponent: React.FC<ReserveSeatProps> = ({
             </>
           )}
         </DialogBody>
-        <DialogFooter>
-          <Button
-            variant="gradient"
-            color="green"
-            onClick={() => handleOpen(null)}
-          >
-            <span>Confirm</span>
-          </Button>
-        </DialogFooter>
       </Dialog>
     </>
   );

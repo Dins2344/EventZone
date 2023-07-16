@@ -70,6 +70,9 @@ const eventSchema = new Schema(
         },
         orgName:{
             type:String
+        },
+        ticketSold:{
+            type:Number
         }
     }
 )

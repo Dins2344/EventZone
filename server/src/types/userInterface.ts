@@ -39,7 +39,8 @@ export interface BookingCreationInterface {
     bookingTime:string,
     contactInfo:object,
     ticketCount:number,
-    status:string
+    status:string,
+    QRCodeLink:string
 }
 export interface ticketBookingCreationInterface{
     firstName: string;

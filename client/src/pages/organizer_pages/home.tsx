@@ -21,7 +21,7 @@ const OrganizationHome = () => {
   const userDetails = useSelector(selectUser);
   return (
     <>
-      <div className="w-full px-3">
+      <div className="w-full px-3 h-screen">
         <h1 className="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white">
           Hello,{userDetails && userDetails?.user.firstName}
         </h1>
@@ -143,6 +143,8 @@ const NextEvent = (props: homeComponents) => {
   return (
     <>
       <div className="flex flex-col border p-3 rounded-md ">
+        {nextEvent ? 
+        <div>
         <h2 className="text-4xl font-bold dark:text-white">Your next event</h2>
         <Link className="mb-3 text-blue-600" to={"/organization/events"}>
           Go to events
@@ -163,6 +165,9 @@ const NextEvent = (props: homeComponents) => {
             </Button>
           </div>
         </div>
+        </div>
+        :<h2>You don't have any events posted. Add new event</h2>
+        }
       </div>
     </>
   );

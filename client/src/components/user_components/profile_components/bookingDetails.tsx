@@ -7,6 +7,7 @@ import {
   Dialog,
   DialogBody,
 } from "@material-tailwind/react";
+import ViewTicketComponent from "./viewTicket";
 
 const BookingDetails = () => {
   const [bookingDetail, setBookingDetails] = useState<Bookings>();
@@ -41,7 +42,7 @@ const BookingDetails = () => {
       <div className="flex flex-col w-full px-8 md:px-20 lg:px-52 pt-20  h-screen">
         <div className="flex w-full justify-between">
         <h1 className="mb-4 text-2xl font-semibold w-full leading-none tracking-tight text-gray-900 md:text-3xl lg:text-4xl dark:text-white">
-          Order for{" "}
+          Booking for{" "}
           <span className="text-blue-600">
             {bookingDetail?.event.eventName}
           </span>
@@ -67,9 +68,9 @@ const BookingDetails = () => {
         </div>
         <div className="flex flex-wrap mt-5">
           <div className="flex flex-col w-full md:w-4/12 p-2">
-            <Button color="deep-orange" className="mb-3">
-              View ticket
-            </Button>
+            {bookingDetail && 
+            <ViewTicketComponent BookingData={bookingDetail} />
+            }
             <Button onClick={handleOpen} color="red" variant="outlined">
               Cancel order
             </Button>

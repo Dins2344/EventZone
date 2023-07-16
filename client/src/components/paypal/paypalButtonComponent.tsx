@@ -11,7 +11,7 @@ setBookingRes: React.Dispatch<React.SetStateAction<RegisteredBookingInterface | 
 }
 
 const PaypalPayment :React.FC<paypalPaymentProps> = ({total,eventName,registerInfo,setBookingRes}): JSX.Element  => {
-  const totalString = total.toString()
+  // const totalString = total.toString()
   const createOrder = (data: any): Promise<string> => {
     // Order is created on the server and the order id is returned
     return fetch(`${baseURL}/my-server/create-paypal-order`, {
