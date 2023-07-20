@@ -2,11 +2,10 @@ import { Formik, Field, ErrorMessage, Form } from 'formik';
 import * as Yup from 'yup';
 import { Button } from '@material-tailwind/react';
 import { ChangeEvent, useState } from 'react';
-import { mediaFormInterface,MediaFormDataToSend } from '../../types/organizerInterface';
+import { mediaFormInterface, } from '../../types/organizerInterface';
 import { addMediaEventInfo } from '../../api/organizer/organizer';
 import { selectEvent } from '../../redux/reducers/eventSlice';
 import { useSelector } from 'react-redux/es/hooks/useSelector';
-import { registeredEventInterface } from '../../types/organizerInterface';
 import { ChildComponentProps } from '../../pages/organizer_pages/eventAdding';
 
 

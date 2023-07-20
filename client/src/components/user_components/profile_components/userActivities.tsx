@@ -26,7 +26,7 @@ const ProfileActivities: React.FC = () => {
           {bookings &&
             bookings.map((item) => {
               return (
-                <div className="flex justify-between h-min mb-2 border">
+                <div key={item._id} className="flex justify-between h-min mb-2 border">
                   <div className="flex">
                     <img
                       className=" hidden lg:block md:h-20 p-1 mr-2"
@@ -39,7 +39,8 @@ const ProfileActivities: React.FC = () => {
                         on {item.event.startDate} at {item.event.startTime}{" "}
                       </p>
                       <p className="text-sm text-gray-600">
-                        {item.event.ticketValue} booking #{item._id}
+                        {item.event.ticketValue} booking #{item._id}<br/>
+                        booked on : {item.bookingTime}
                       </p>
                     </div>
                   </div>

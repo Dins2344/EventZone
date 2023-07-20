@@ -26,6 +26,10 @@ import "./index.css";
 import EventAddingPage from "./pages/organizer_pages/eventAdding.tsx";
 import RequestManagement from "./pages/admin_pages/requestManagement.tsx";
 import EventDetails from "./pages/user_pages/showEvent.tsx";
+import ViewEvent from "./pages/organizer_pages/viewEvent.tsx";
+import ErrorElement from "./components/common/ErrorElement.tsx";
+import BookingHome from "./pages/organizer_pages/bookingHome.tsx";
+import EditProfile from "./pages/user_pages/profile_pages/editProfile.tsx";
 
 const appRouter = createBrowserRouter([
   {
@@ -33,16 +37,16 @@ const appRouter = createBrowserRouter([
     element: <AdminLogin />,
   },
   {
-    path:'/admin/add-event-category',
-    element: <EventCategoryAddingPage />
+    path: "/admin/add-event-category",
+    element: <EventCategoryAddingPage />,
   },
   {
-    path:'/admin/edit-event-category/:id',
-    element: <EventCategoryEditForm />
+    path: "/admin/edit-event-category/:id",
+    element: <EventCategoryEditForm />,
   },
-    {
-    path:'/admin/add-org-category',
-    element: <OrgCategoryForm />
+  {
+    path: "/admin/add-org-category",
+    element: <OrgCategoryForm />,
   },
   {
     path: "/admin",
@@ -52,16 +56,15 @@ const appRouter = createBrowserRouter([
         path: "/admin",
         element: <AdminLanding />,
       },
-     
-      { 
-        path: "/admin/category-management", 
-        element: <CategoryManagement /> 
+
+      {
+        path: "/admin/category-management",
+        element: <CategoryManagement />,
       },
-      { 
-        path: "/admin/request-management", 
-        element: <RequestManagement /> 
+      {
+        path: "/admin/request-management",
+        element: <RequestManagement />,
       },
-     
     ],
   },
 
@@ -95,6 +98,7 @@ const appRouter = createBrowserRouter([
   {
     path: "/",
     element: <UserHome />,
+    errorElement: <ErrorElement />,
     children: [
       {
         path: "/",
@@ -105,13 +109,17 @@ const appRouter = createBrowserRouter([
         element: <EventDetails />,
       },
       {
-        path:'/user/user-profile',
-        element: <ProfilePage />
+        path: "/user/user-profile",
+        element: <ProfilePage />,
       },
       {
-        path:'/show-booking',
-        element: <BookingDetailsPage />
-      }
+        path: '/user/edit-profile',
+        element: <EditProfile />
+      },
+      {
+        path: "/show-booking",
+        element: <BookingDetailsPage />,
+      },
     ],
   },
 
@@ -132,12 +140,18 @@ const appRouter = createBrowserRouter([
         element: <EventsHome />,
       },
       {
+        path: "/organization/events/event",
+        element: <ViewEvent />,
+      },
+      {
         path: "/organization/add-event",
         element: <EventAddingPage />,
+      },
+      {
+        path: "/organization/bookings",
+        element: <BookingHome />,
       },
     ],
   },
 ]);
-export default appRouter
-
-
+export default appRouter;

@@ -30,12 +30,13 @@ export interface RegisteredEventInterface {
   description: string;
   imageURL:Array<string>;
   eventCapacity: string;
-  ticketPrice: string;
+  ticketPrice: number;
   ticketValue: string;
   status:string
   orgOwnerId:string
   registeredTime:string
   orgName:string
+  ticketSold:number
 }
 export interface mediaFormInterface {
   videoURL: string;

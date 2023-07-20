@@ -19,7 +19,7 @@ const adminLogin = async(
     if(!isPasswordCorrect){
         throw new AppError('invalid password',HttpStatus.UNAUTHORIZED)
     }
-    const token = authService.generateToken({Id:admin._id,email:admin.email})
+    const token = authService.generateToken({Id:admin._id,email:admin.email,role:'admin'})
     return token
 }
 

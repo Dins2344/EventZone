@@ -95,7 +95,14 @@ const BookingDetails = () => {
                   Phone number: {bookingDetail?.contactInfo.phoneNumber}
                 </p>
               </div>
-              <p className="mt-3">Delivery method: e-Ticket</p>
+              <div className="flex flex-wrap mt-3">
+                <p className=" w-full md:w-1/2">
+                  Total amount: {bookingDetail?.totalAmount}
+                </p>
+                <p className="w-full md:w-1/2">
+                Delivery method: e-Ticket
+                </p>
+              </div>
             </div>
           </div>
         </div>

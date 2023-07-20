@@ -1,5 +1,7 @@
 import { HttpStatus } from "../../../types/httpStatus";
 import {
+  AddressFormDataCreateInterface,
+  ProfileContactInfo,
   UserInterface,
   ticketBookingCreationInterface,
 } from "../../../types/userInterface";
@@ -22,7 +24,7 @@ export const userRegister = async (
   }
   user.password = await authService.hashPassword(user.password);
   const { _id: Id, email } = await userRepository.addUser(user);
-  const token = authService.generateToken({ Id: Id.toString(), email });
+  const token = authService.generateToken({ Id: Id.toString(), email,role:'user' });
   return token;
 };
 
@@ -53,6 +55,7 @@ export const userLogin = async (
   const token = authService.generateToken({
     Id: user._id.toString(),
     email: user.email,
+    role:'user'
   });
   return { token, userData };
 };
@@ -74,9 +77,17 @@ export const tokenGenerator = async (
   const token = authService.generateToken({
     Id: user?._id.toString(),
     email: user?.email,
+    role:'user'
   });
   return token;
 };
+export const getUserById = async(userId:string,userRepository:ReturnType<UserDBInterface>)=>{
+  const data = await userRepository.getUserById(userId)
+  if(!data){
+    throw new AppError('user details fetching failed',HttpStatus.BAD_REQUEST)
+  }
+  return data
+}
 
 export const addOrganization = async (
   orgId: string,
@@ -132,11 +143,12 @@ export const createBooking = async (
     };
   const QRDataString =  JSON.stringify(QRData)
   const QRCodeLink = await QRCode.toDataURL(QRDataString);
-  console.log(QRCodeLink)
   const dbData = {
     bookingTime: new Date().toDateString(),
     eventId: data.eventId,
     userId: data.userId,
+    paymentType:data.paymentType,
+    totalAmount:data.totalAmount,
     contactInfo: {
       firstName: data.firstName,
       lastName: data.lastName,
@@ -145,10 +157,11 @@ export const createBooking = async (
     },
     ticketCount: data.ticketCount,
     status: "confirmed",
-    QRCodeLink:QRCodeLink
-  };
+    QRCodeLink:QRCodeLink,
+    orgOwnerId: data.orgOwnerId,
+    organizationId: data.organizationId
+  }
   const res = await userRepository.createBooking(dbData);
-  console.log(res);
   if (!res) {
     throw new AppError("creating order failed", HttpStatus.BAD_REQUEST);
   }
@@ -190,3 +203,37 @@ export const cancelBooking = async (
   }
   return res;
 };
+
+export const getAllOrganizers = async(userRepository:ReturnType<UserDBInterface>)=>{
+  const data = await userRepository.getAllOrganizers()
+  if(!data){
+    throw new AppError('getting all organizers details failed',HttpStatus.BAD_REQUEST)
+  }
+  return data
+}
+
+export const addProfileContactInfo = async(data:ProfileContactInfo,userId:string, userRepository:ReturnType<UserDBInterface>)=>{
+  const res = await userRepository.addProfileContactInfo(data,userId)
+  if(!res){
+    throw new AppError('adding profile contact info failed',HttpStatus.BAD_REQUEST)
+  }
+  return res
+}
+
+export const addAddress = async(data:AddressFormDataCreateInterface,userId:string,userRepository:ReturnType<UserDBInterface>)=>{
+  data.userId = userId
+  const res = userRepository.addAddress(data)
+  if(!res){
+    throw new AppError('adding address failed',HttpStatus.BAD_REQUEST)
+  }
+  return res
+
+}
+
+export const getAddressInfo = async(userId:string,userRepository:ReturnType<UserDBInterface>)=>{
+  const data = userRepository.getAddressInfo(userId)
+  if(!data){
+    throw new AppError('getting address details failed',HttpStatus.BAD_REQUEST)
+  }
+  return data
+}

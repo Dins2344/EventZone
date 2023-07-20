@@ -9,6 +9,7 @@ import {
   PublishFormInterface,
 } from "../../../../types/organizerInterface";
 import { ObjectId } from "mongodb";
+import Bookings from "../models/bookings";
 
 export const organizationRepositoryMongoDB = () => {
   const addOrganization = async (orgData: CreateOrganization) => {
@@ -32,10 +33,10 @@ export const organizationRepositoryMongoDB = () => {
       _id: new ObjectId(data.organizer),
     });
     const ownerId = organization?.ownerId;
-    const orgName = organization?.orgName
+    const orgName = organization?.orgName;
     if (ownerId && orgName) {
       data.orgOwnerId = ownerId;
-      data.orgName = orgName
+      data.orgName = orgName;
     }
 
     const res = await Event.create(data);
@@ -65,7 +66,7 @@ export const organizationRepositoryMongoDB = () => {
         eventCapacity: data.eventCapacity,
         ticketPrice: data.ticketPrice,
         ticketValue: data.ticketValue,
-        ticketSold:0
+        ticketSold: 0,
       }
     );
     return res;
@@ -88,10 +89,96 @@ export const organizationRepositoryMongoDB = () => {
     return data;
   };
 
-  const getOrganizersAllEvent = async(orgId:string)=>{
-    const data = await Event.find({organizer:orgId})
+  const getOrganizersAllEvent = async (orgId: string) => {
+    const data = await Event.find({ organizer: orgId });
+    return data;
+  };
+
+  const getOrganizersAllBookings = async (userId: string) => {
+    const data = await Bookings.aggregate([
+      // Match bookings for the specified user
+      {
+        $match: { orgOwnerId: userId },
+      },
+      {
+        $addFields: {
+          userId: { $toObjectId: "$userId" },
+        },
+      },
+      // Lookup to join with the Event collection
+      {
+        $lookup: {
+          from: "users", // Name of the Event collection
+          localField: "userId",
+          foreignField: "_id",
+          as: "user",
+        },
+      },
+      // Unwind the event array
+      {
+        $unwind: "$user",
+      },
+      {
+        $addFields: {
+          eventId: { $toObjectId: "$eventId" },
+        },
+      },
+      // Lookup to join with the Event collection
+      {
+        $lookup: {
+          from: "events", // Name of the Event collection
+          localField: "eventId",
+          foreignField: "_id",
+          as: "event",
+        },
+      },
+      {
+        $unwind: "$event",
+      },
+      // Project the desired fields
+      {
+        $project: {
+          _id: 1,
+          eventId: 1,
+          userId: 1,
+          bookingTime: 1,
+          contactInfo: 1,
+          ticketCount: 1,
+          status: 1,
+          QRCodeLink:1,
+          paymentType:1,
+          totalAmount:1,
+          user: {
+            firstName: "$user.firstName",
+            lastName: "$user.lastName",
+            email: "$user.email",
+            // Include other event fields as needed
+          },
+          event: {
+            eventName: "$event.eventName",
+            organizer: "$event.organizer",
+            imageURL: "$event.imageURL",
+            startDate: "$event.startDate",
+            startTime: "$event.startTime",
+            ticketValue: "$event.ticketValue",
+            endDate: "$event.endDate",
+            endTime: "$event.endTime",
+            category: "$event.category",
+            addressLine1: "$event.addressLine1",
+            addressLine2: "$event.addressLine2",
+            addressLine3: "$event.addressLine3",
+            orgName:'$event.orgName'
+            // Include other event fields as needed
+          },
+        },
+      },
+      {
+        $sort: { _id: -1 },
+      },
+    ])
+      .exec()
     return data
-  }
+  };
 
   return {
     addOrganization,
@@ -103,7 +190,8 @@ export const organizationRepositoryMongoDB = () => {
     getEventDetails,
     publishEvent,
     getUsersAllEvents,
-    getOrganizersAllEvent
+    getOrganizersAllEvent,
+    getOrganizersAllBookings
   };
 };
 

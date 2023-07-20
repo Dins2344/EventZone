@@ -1,10 +1,13 @@
 import { UserRepositoryMongoDB } from "../../frameworks/database/mongoDB/repositories/userRepositoryMongoDB";
-import { BookingCreationInterface, CreateUserInterface } from "../../types/userInterface";
+import { AddressFormDataCreateInterface, BookingCreationInterface, CreateUserInterface, ProfileContactInfo } from "../../types/userInterface";
 
 
 export const userDbRepository = (repository:ReturnType<UserRepositoryMongoDB>)=>{
     const getUserByEmail = async(email:string)=>{
         return await repository.getUserByEmail(email)
+    }
+    const getUserById = async(userId:string)=>{
+        return await repository.getUserById(userId)
     }
     const addUser = async(user:CreateUserInterface)=>{
        return await repository.addUser(user)
@@ -42,16 +45,40 @@ export const userDbRepository = (repository:ReturnType<UserRepositoryMongoDB>)=>
         return res
     }
 
+    const getAllOrganizers = async()=>{
+        const data = await repository.getAllOrganizers()
+        return data
+    }
+    const addProfileContactInfo = async(data:ProfileContactInfo,userId:string)=>{
+        const res = await repository.addProfileContactInfo(data,userId)
+        return res
+    }
+
+    const addAddress = async(data:AddressFormDataCreateInterface)=>{
+        const res = await repository.addAddress(data)
+        return res
+    }
+
+    const getAddressInfo = async(userId:string)=>{
+        const data = await repository.getAddressInfo(userId)
+        return data
+    }
+
     return {
         addUser,
         getUserByEmail,
+        getUserById,
         addOrganization,
         getApprovedEvents,
         getCompleteEventDetails,
         createBooking,
         getBookings,
         getOneBookingDetails,
-        cancelBooking
+        cancelBooking,
+        getAllOrganizers,
+        addProfileContactInfo,
+        addAddress,
+        getAddressInfo
 
     }
 }

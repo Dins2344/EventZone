@@ -133,8 +133,8 @@ const ViewTicketComponent :React.FC<viewTicketProps> = ({BookingData}) => {
                           <div className="font-semibold">{BookingData.event.endDate} <br/> {BookingData.event.endTime}</div>
                         </div>
                         <div className="flex flex-col text-sm">
-                          <span className="">Total time</span>
-                          <div className="font-semibold">16 Hrs</div>
+                          <span className="">Ticket type</span>
+                          <div className="font-semibold">{BookingData.event.ticketValue}</div>
                         </div>
                       </div>
                       <div className=" border-dashed border-b-2 my-2 pt-5">
@@ -151,8 +151,8 @@ const ViewTicketComponent :React.FC<viewTicketProps> = ({BookingData}) => {
                           <div className="font-semibold">{BookingData.contactInfo.phoneNumber}</div>
                         </div>
                         <div className="flex flex-col">
-                          <span className="">Ticket type</span>
-                          <div className="font-semibold">{BookingData.event.ticketValue}</div>
+                          <span className="">Amount paid</span>
+                          <div className="font-semibold">{BookingData.totalAmount}</div>
                         </div>
                       </div>
                       <div className="flex flex-col py-2  justify-center items-center text-sm ">

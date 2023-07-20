@@ -3,7 +3,10 @@ import { OrganizationDBInterface } from "../../../application/repositories/organ
 import { OrganizationRepositoryMongoDB } from "../../../frameworks/database/mongoDB/repositories/organizationRepository";
 import asyncHandler from "express-async-handler";
 import { CreateOrganization } from "../../../types/userInterface";
-import { organizationRegister } from "../../../application/usecases/organizatioin/organization";
+import {
+  getOrganizersAllBookings,
+  organizationRegister,
+} from "../../../application/usecases/organizatioin/organization";
 import { CustomRequest } from "../../../types/userInterface";
 import { addOrganization } from "../../../application/usecases/user/userAuth";
 import { UserDBInterface } from "../../../application/repositories/userDBRepository";
@@ -17,7 +20,7 @@ import {
   getEventDetails,
   publishEvent,
   getUsersAllEvents,
-  getOrganizersAllEvent
+  getOrganizersAllEvent,
 } from "../../../application/usecases/organizatioin/organization";
 import { MediaFormInterface } from "../../../types/organizerInterface";
 
@@ -89,89 +92,129 @@ const organizationController = (
     }
   );
 
-  const getOrganizationDetailController = asyncHandler(async(req:Request,res:Response)=>{
-    console.log(req.params.id)
-  })
+  const getOrganizationDetailController = asyncHandler(
+    async (req: Request, res: Response) => {
+      console.log(req.params.id);
+    }
+  );
 
   const addBasicEventInfoController = asyncHandler(
-    async(req:Request,res:Response)=>{
-      const data = req.body
-      data.status = 'draft'
-      const response =await addBasicEventInfo(data,dbRepositoryOrganization)
-      if(response){
-        res.json({message:'adding basicInfo done',response})
-      }else{
-        res.status(404).json({error:'adding basicInfo failed'})
+    async (req: Request, res: Response) => {
+      const data = req.body;
+      data.status = "draft";
+      const response = await addBasicEventInfo(data, dbRepositoryOrganization);
+      if (response) {
+        res.json({ message: "adding basicInfo done", response });
+      } else {
+        res.status(404).json({ error: "adding basicInfo failed" });
       }
     }
-  )
+  );
 
-  const addMediaEventInfoController = asyncHandler(async(req:Request,res:Response)=>{
-    const data:MediaFormInterface = req.body
-    const medias = req.files as Express.Multer.File[];
-    const response = await addMediaEventInfo(data,medias,dbRepositoryOrganization)
-    if(response){
-      res.json({message:'adding media info done',response})
-    }else{
-      res.json({error:'adding media info failed'})
-    }
-  })
-
-  const addPublishEventInfoController = asyncHandler(async(req:Request,res:Response)=>{
-    const data = req.body
-    console.log(data)
-    const response = await addPublishEventInfo(data,dbRepositoryOrganization)
-    if(response){
-      res.json({message:'adding ticket details done',response})
-    }else{
-      res.json({error:'adding ticket info failed'})
-    }
-  })
-
-  const getEventDetailsController = asyncHandler(async(req:Request,res:Response)=>{
-    const id = req.params.id
-    const data = await getEventDetails(id,dbRepositoryOrganization)
-    if(data){
-      res.json({message:'getting event data done',data})
-    }else{
-      res.json({error:'event data fetching failed'})
-    }
-  })
-
-  const publishEventController = asyncHandler(async(req:Request,res:Response)=>{
-    const id = req.params.id
-    console.log(id)
-    const response = await publishEvent(id,dbRepositoryOrganization)
-    if(response){
-      res.json({message:'publishing request sent',response})
-    }else{
-      res.json({error:'publishing event failed'})
-    }
-  })
-
-  const getUsersAllEventsController = asyncHandler(async(req:CustomRequest,res:Response)=>{
-    const user = req.user
-    if(user){
-      const{Id} = user
-      const data = await getUsersAllEvents(Id,dbRepositoryOrganization)
-      if(data){
-        res.json({message:'users events getting done',data})
-      }else{
-        res.json({error:'users events fetching failed'})
+  const addMediaEventInfoController = asyncHandler(
+    async (req: Request, res: Response) => {
+      const data: MediaFormInterface = req.body;
+      const medias = req.files as Express.Multer.File[];
+      const response = await addMediaEventInfo(
+        data,
+        medias,
+        dbRepositoryOrganization
+      );
+      if (response) {
+        res.json({ message: "adding media info done", response });
+      } else {
+        res.json({ error: "adding media info failed" });
       }
     }
-  })
+  );
 
-  const getOrganizersAllEventController = asyncHandler(async(req:Request,res:Response)=>{
-    const orgId = req.params.id
-    console.log(orgId)
-    const data = await getOrganizersAllEvent(orgId,dbRepositoryOrganization)
-    if(data){
-      res.json({message:'events fetching done',data})
-    }else{
-      res.json({error:'event fetching failed'})
+  const addPublishEventInfoController = asyncHandler(
+    async (req: Request, res: Response) => {
+      const data = req.body;
+      console.log(data);
+      const response = await addPublishEventInfo(
+        data,
+        dbRepositoryOrganization
+      );
+      if (response) {
+        res.json({ message: "adding ticket details done", response });
+      } else {
+        res.json({ error: "adding ticket info failed" });
+      }
     }
-  })
+  );
+
+  const getEventDetailsController = asyncHandler(
+    async (req: Request, res: Response) => {
+      const id = req.params.id;
+      const data = await getEventDetails(id, dbRepositoryOrganization);
+      if (data) {
+        res.json({ message: "getting event data done", data });
+      } else {
+        res.json({ error: "event data fetching failed" });
+      }
+    }
+  );
+
+  const publishEventController = asyncHandler(
+    async (req: Request, res: Response) => {
+      const id = req.params.id;
+      console.log(id);
+      const response = await publishEvent(id, dbRepositoryOrganization);
+      if (response) {
+        res.json({ message: "publishing request sent", response });
+      } else {
+        res.json({ error: "publishing event failed" });
+      }
+    }
+  );
+
+  const getUsersAllEventsController = asyncHandler(
+    async (req: CustomRequest, res: Response) => {
+      const user = req.user;
+      if (user) {
+        const { Id } = user;
+        const data = await getUsersAllEvents(Id, dbRepositoryOrganization);
+        if (data) {
+          res.json({ message: "users events getting done", data });
+        } else {
+          res.json({ error: "users events fetching failed" });
+        }
+      }
+    }
+  );
+
+  const getOrganizersAllEventController = asyncHandler(
+    async (req: Request, res: Response) => {
+      const orgId = req.params.id;
+      console.log(orgId);
+      const data = await getOrganizersAllEvent(orgId, dbRepositoryOrganization);
+      if (data) {
+        res.json({ message: "events fetching done", data });
+      } else {
+        res.json({ error: "event fetching failed" });
+      }
+    }
+  );
+
+  const getOrganizersAllBookingsController = asyncHandler(
+    async (req: CustomRequest, res: Response) => {
+      const user = req.user;
+      if (user) {
+        console.log(user)
+        const { Id } = user;
+        const data = await getOrganizersAllBookings(
+          Id,
+          dbRepositoryOrganization
+        );
+        if (data) {
+          res.json({ message: "getting organizers all booking done", data });
+        } else {
+          res.json({ error: "getting organizers all booking failed" });
+        }
+      }
+    }
+  );
 
   return {
     registerOrganization,
@@ -185,8 +228,8 @@ const organizationController = (
     getEventDetailsController,
     publishEventController,
     getUsersAllEventsController,
-    getOrganizersAllEventController
-    
+    getOrganizersAllEventController,
+    getOrganizersAllBookingsController
   };
 };
 

@@ -52,6 +52,9 @@ const organizationRouter = () => {
   );
 
   router.get('/get-organizers-all-events/:id',orgController.getOrganizersAllEventController)
+
+  router.get('/get-organizers-all-bookings',orgController.getOrganizersAllBookingsController)
+  
   return router;
 };
 

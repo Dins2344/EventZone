@@ -5,26 +5,26 @@ import { getUsersAllEvents } from "../../api/organizer/organizer";
 import { RegisteredEventInterface } from "../../types/organizerInterface";
 
 const EventsHomeComponent = () => {
-  const [events,setEvents] = useState<RegisteredEventInterface[]>([])
-    const navigate = useNavigate()
+  const [events, setEvents] = useState<RegisteredEventInterface[]>([]);
+  const navigate = useNavigate();
 
-    const fetchEvents = async()=>{
-      const events = await getUsersAllEvents() 
-      console.log(events)
-      if(events){
-        setEvents(events.data.data)
-      }
+  const fetchEvents = async () => {
+    const events = await getUsersAllEvents();
+    console.log(events);
+    if (events) {
+      setEvents(events.data.data);
     }
+  };
 
-  useEffect(()=>{
-     fetchEvents()
-  },[])
+  useEffect(() => {
+    fetchEvents();
+  }, []);
 
   return (
     <>
       <section className="bg-gray-50 dark:bg-gray-900 p-3 sm:p-5">
         <div className="mx-auto max-w-screen-xl px-4 lg:px-12">
-        <h3 className="mb-5 text-lg text">Your events</h3>
+          <h3 className="mb-5 text-lg text">Your events</h3>
           <div className="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
             <div className="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
               <div className="w-full md:w-1/2">
@@ -59,12 +59,12 @@ const EventsHomeComponent = () => {
               </div>
               <div className="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
                 <Button
-                size="sm"
-                color="blue"
+                  size="sm"
+                  color="blue"
                   type="button"
-                  className= 'flex'
-                  onClick={()=>{
-                    navigate('/organization/add-event')
+                  className="flex"
+                  onClick={() => {
+                    navigate("/organization/add-event");
                   }}
                 >
                   <svg
@@ -147,6 +147,9 @@ const EventsHomeComponent = () => {
                       Category
                     </th>
                     <th scope="col" className="px-4 py-3">
+                      Fee type
+                    </th>
+                    <th scope="col" className="px-4 py-3">
                       Tickets sold
                     </th>
                     <th scope="col" className="px-4 py-3">
@@ -161,23 +164,44 @@ const EventsHomeComponent = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {events && events.map((event)=>{
-                    return(
-                  <tr key={event._id} className="border-b dark:border-gray-700">
-                    <th
-                      scope="row"
-                      className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                    >
-                      {event.eventName}
-                    </th>
-                    <td className="px-4 py-3">{event.orgName}</td>
-                    <td className="px-4 py-3">{event.category}</td>
-                    <td className="px-4 py-3"></td>
-                    <td className="px-4 py-3">$2999</td>
-                    <td className="px-4 py-3">{event.status}</td>
-                  </tr>
-                    )
-                  })}
+                  {events &&
+                    events.map((event) => {
+                      return (
+                        <tr
+                          key={event._id}
+                          className="border-b dark:border-gray-700"
+                        >
+                          <th
+                            scope="row"
+                            className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                          >
+                            {event.eventName}
+                          </th>
+                          <td className="px-4 py-3">{event.orgName}</td>
+                          <td className="px-4 py-3">{event.category}</td>
+                          <td className="px-4 py-3">{event.ticketValue}</td>
+                          <td className="px-4 py-3">
+                            {event.ticketSold}/{event.eventCapacity}
+                          </td>
+                          <td className="px-4 py-3">
+                            ${event.ticketPrice * event.ticketSold}
+                          </td>
+                          <td className="px-4 py-3">{event.status}</td>
+                          <td className="px-4 py-3">
+                            <div className="flex">
+                              <Button
+                                onClick={() => {navigate(`/organization/events/event/?eventId=${event._id}`)}}
+                                variant="outlined"
+                                className="h-6 w-50 mr-2 p-2 text-center text py-1"
+                              >
+                                View more
+                              </Button>
+                              
+                            </div>
+                          </td>
+                        </tr>
+                      );
+                    })}
                 </tbody>
               </table>
             </div>
@@ -288,5 +312,4 @@ const EventsHomeComponent = () => {
   );
 };
 
-
-export default EventsHomeComponent
+export default EventsHomeComponent;

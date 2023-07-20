@@ -1,5 +1,7 @@
 import {
+  AddressFormDataCreateInterface,
   BookingCreationInterface,
+  ProfileContactInfo,
   UserInterface,
 } from "../../../../types/userInterface";
 import User from "../models/userModel";
@@ -8,11 +10,16 @@ import { ObjectId } from "mongodb";
 import Event from "../models/eventModel";
 import Organization from "../models/organizationModel";
 import Bookings from "../models/bookings";
+import Address from "../models/address";
 
 export const userRepositoryMongoDB = () => {
   const getUserByEmail = async (email: string) => {
     const user: UserInterface | null = await User.findOne({ email });
     return user;
+  };
+  const getUserById = async (Id: string) => {
+    const data = await User.findById(Id);
+    return data;
   };
   const addUser = async (user: CreateUserInterface) => {
     return await User.create(user);
@@ -54,13 +61,14 @@ export const userRepositoryMongoDB = () => {
   };
 
   const createBooking = async (data: BookingCreationInterface) => {
-    const event = await Event.findById(data.eventId);
-    console.log(event);
+    console.log(data);
     await Event.updateOne(
       { _id: new ObjectId(data.eventId) },
       { $inc: { ticketSold: data.ticketCount } }
     );
-    const res = await Bookings.create(data);
+    const newData = new Bookings(data);
+    const res = await newData.save();
+    console.log(res);
     return res;
   };
 
@@ -98,7 +106,9 @@ export const userRepositoryMongoDB = () => {
           contactInfo: 1,
           ticketCount: 1,
           status: 1,
-          QRCodeLink:1,
+          QRCodeLink: 1,
+          paymentType: 1,
+          totalAmount: 1,
           event: {
             eventName: "$event.eventName",
             organizer: "$event.organizer",
@@ -109,6 +119,9 @@ export const userRepositoryMongoDB = () => {
             // Include other event fields as needed
           },
         },
+      },
+      {
+        $sort: { _id: -1 },
       },
     ])
       .exec()
@@ -152,7 +165,9 @@ export const userRepositoryMongoDB = () => {
           contactInfo: 1,
           ticketCount: 1,
           status: 1,
-          QRCodeLink:1,
+          QRCodeLink: 1,
+          paymentType: 1,
+          totalAmount: 1,
           event: {
             eventName: "$event.eventName",
             organizer: "$event.organizer",
@@ -166,6 +181,7 @@ export const userRepositoryMongoDB = () => {
             addressLine1: "$event.addressLine1",
             addressLine2: "$event.addressLine2",
             addressLine3: "$event.addressLine3",
+            orgName: "$event.orgName",
             // Include other event fields as needed
           },
         },
@@ -183,9 +199,68 @@ export const userRepositoryMongoDB = () => {
     return res;
   };
 
+  const getAllOrganizers = async () => {
+    const data = await Organization.find({});
+    return data;
+  };
+
+  const addProfileContactInfo = async (
+    data: ProfileContactInfo,
+    userId: string
+  ) => {
+    const res = await User.updateOne(
+      { _id: new ObjectId(userId) },
+      {
+        website: data.website,
+        phoneNumber: data.phoneNumber,
+        profileImage: data.imageURL,
+        firstName: data.firstName,
+        lastName: data.lastName,
+      }
+    );
+    return res;
+  };
+
+  const addAddress = async (data: AddressFormDataCreateInterface) => {
+    try {
+      const address = await Address.findOne({ userId: data.userId });
+      if (address) {
+        const res = await Address.updateOne(
+          { userId: data.userId },
+          {
+            addressLine1: data.addressLine1,
+            addressLine2: data.addressLine2,
+            city: data.city,
+            country: data.country,
+            pin: data.pin,
+            state: data.state,
+            wAddressLine1: data.wAddressLine1,
+            wAddressLine2: data.wAddressLine2,
+            wCity: data.wCity,
+            wCountry: data.wCountry,
+            wPin: data.wPin,
+            wState: data.wState,
+          }
+        );
+        return res;
+      } else {
+        const res = await Address.create(data);
+        return res;
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getAddressInfo = async (userId:string)=>{
+   const data = await Address.findOne({userId:userId})
+   return data
+  }
+
   return {
     addUser,
     getUserByEmail,
+    getUserById,
     addOrganization,
     getApprovedEvents,
     getCompleteEventDetails,
@@ -193,6 +268,10 @@ export const userRepositoryMongoDB = () => {
     getBookings,
     getOneBookingDetails,
     cancelBooking,
+    getAllOrganizers,
+    addProfileContactInfo,
+    addAddress,
+    getAddressInfo
   };
 };
 

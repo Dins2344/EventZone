@@ -1,11 +1,10 @@
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 import {
   Button,
   Input,
   Dialog,
   DialogHeader,
   DialogBody,
-  DialogFooter,
   Checkbox,
   Typography,
 } from "@material-tailwind/react";
@@ -20,7 +19,6 @@ import {
 } from "../../../types/userInterface";
 import { ticketBooking } from "../../../api/userAuth/userApis";
 import { useNavigate } from "react-router-dom";
-import { LoggedUserInterface } from "../../../types/userInterface";
 
 type ReserveSeatProps = {
   eventDetails: EventDetailsInterface;
@@ -35,10 +33,13 @@ const ReserveSeatComponent: React.FC<ReserveSeatProps> = ({
   const [ticketPass, setTicketPass] = useState(1);
   const [bookingRes, setBookingRes] = useState<RegisteredBookingInterface>();
   const [size, setSize] = useState<null | string>(null);
-  const [showPaypal,setShowPaypal] = useState(false)
-  const [registerInfo,setRegisterInfo] = useState<ticketBookingCreationInterface>()
+  const [showPaypal, setShowPaypal] = useState(false);
+  const [registerInfo, setRegisterInfo] =
+    useState<ticketBookingCreationInterface>();
   const user = useSelector(selectUser);
   const navigate = useNavigate();
+  
+  console.log(user)
 
   const handleOpen = (value: string | null) => setSize(value);
   const handleIncrement = () => {
@@ -47,35 +48,45 @@ const ReserveSeatComponent: React.FC<ReserveSeatProps> = ({
   const handleDecrement = () => {
     setTicketPass(ticketPass - 1);
   };
-  const handlePaidRegister = async(e:React.FormEvent<HTMLFormElement>)=>{
-    e.preventDefault()
-    const data: ticketBookingCreationInterface = {
-      firstName,
-      lastName,
-      phoneNumber,
-      email: user.user.email,
-      userId: user.user._id,
-      ticketCount: ticketPass,
-      eventId: eventDetails._id,
-    };
-    setRegisterInfo(data)
-    setShowPaypal(true)
-  }
-  const handleFreeRegister = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const data: ticketBookingCreationInterface = {
-      firstName,
-      lastName,
-      phoneNumber,
-      email: user.user.email,
-      userId: user.user._id,
-      ticketCount: ticketPass,
-      eventId: eventDetails._id,
-    };
-    const res = await ticketBooking(data);
-    console.log(res);
-    if (res?.data.message === "booking confirmed") {
-      setBookingRes(res.data.response);
+  const handlePaidRegister = async () => {
+    if (user) {
+      const data: ticketBookingCreationInterface = {
+        firstName,
+        lastName,
+        phoneNumber,
+        email: user.email,
+        userId: user._id,
+        ticketCount: ticketPass,
+        eventId: eventDetails._id,
+        totalAmount: total,
+        paymentType: eventDetails.ticketValue,
+        orgOwnerId: eventDetails.orgOwnerId,
+        organizationId: eventDetails.organizer,
+      };
+      setRegisterInfo(data);
+      setShowPaypal(true);
+    }
+  };
+  const handleFreeRegister = async () => {
+    if (user) {
+      const data: ticketBookingCreationInterface = {
+        firstName,
+        lastName,
+        phoneNumber,
+        email: user.email,
+        userId: user._id,
+        ticketCount: ticketPass,
+        eventId: eventDetails._id,
+        totalAmount: total,
+        paymentType: eventDetails.ticketValue,
+        orgOwnerId: eventDetails.orgOwnerId,
+        organizationId: eventDetails.organizer,
+      };
+      const res = await ticketBooking(data);
+      console.log(res);
+      if (res?.data.message === "booking confirmed") {
+        setBookingRes(res.data.response);
+      }
     }
   };
 
@@ -135,34 +146,35 @@ const ReserveSeatComponent: React.FC<ReserveSeatProps> = ({
               </svg>
             </Button>
           </div>
-        {eventDetails && 
-        <div className="flex flex-col">
-          <label className="mb-3">
-            Ticket type : { eventDetails?.ticketValue}
-          </label>
-          <label className="mb-3">
-            Ticket price : { eventDetails?.ticketPrice}
-          </label>
-          <label className="mb-3">
-            Ticket sold : { eventDetails?.ticketSold} / { eventDetails?.eventCapacity}
-          </label>
-          {eventDetails.ticketSold + ticketPass <= eventDetails.eventCapacity ?
-          <Button onClick={() => handleOpen("xl")} color="deep-orange">
-            Reserve a spot
-          </Button>
-          
-        :
-        <Button onClick={() => handleOpen("xl")} color="deep-orange">
-           can't provide that much tickets
-          </Button>
-        }
-        </div>
-        }
+          {eventDetails && (
+            <div className="flex flex-col">
+              <label className="mb-3">
+                Ticket type : {eventDetails?.ticketValue}
+              </label>
+              <label className="mb-3">
+                Ticket price : {eventDetails?.ticketPrice}
+              </label>
+              <label className="mb-3">
+                Ticket sold : {eventDetails?.ticketSold} /{" "}
+                {eventDetails?.eventCapacity}
+              </label>
+              {eventDetails.ticketSold + ticketPass <=
+              eventDetails.eventCapacity ? (
+                <Button onClick={() => handleOpen("xl")} color="deep-orange">
+                  Reserve a spot
+                </Button>
+              ) : (
+                <Button onClick={() => handleOpen("xl")} color="deep-orange">
+                  can't provide that much tickets
+                </Button>
+              )}
+            </div>
+          )}
         </div>
       </div>
 
       <div className="mb-3 flex gap-3"></div>
-      <Dialog open={size === "xl"} size='xl' handler={handleOpen}>
+      <Dialog open={size === "xl"} size="xl" handler={handleOpen}>
         <DialogHeader>
           <div className="flex justify-end w-full">
             <button onClick={() => handleOpen(null)}>
@@ -320,7 +332,7 @@ const ReserveSeatComponent: React.FC<ReserveSeatProps> = ({
                         <div className="flex flex-col w-1/2 gap-6 px-2">
                           <Input
                             variant="outlined"
-                            value={user.user.email}
+                            value={user.email}
                             readOnly
                           />
                         </div>
@@ -360,7 +372,6 @@ const ReserveSeatComponent: React.FC<ReserveSeatProps> = ({
                       <div className="px-3">
                         {eventDetails?.ticketValue === "free" && (
                           <Button
-                            type="submit"
                             size="md"
                             color="deep-orange"
                             className="w-full mb-3"
@@ -380,14 +391,16 @@ const ReserveSeatComponent: React.FC<ReserveSeatProps> = ({
                             >
                               Register and continue to payment
                             </Button>
-                           {showPaypal &&<div>
-                              <PaypalPayment
-                              setBookingRes={setBookingRes}
-                                registerInfo = {registerInfo}
-                                total={total}
-                                eventName={eventDetails.eventName}
-                              />
-                            </div> } 
+                            {showPaypal && (
+                              <div>
+                                <PaypalPayment
+                                  setBookingRes={setBookingRes}
+                                  registerInfo={registerInfo}
+                                  total={total}
+                                  eventName={eventDetails.eventName}
+                                />
+                              </div>
+                            )}
                           </>
                         )}
                       </div>

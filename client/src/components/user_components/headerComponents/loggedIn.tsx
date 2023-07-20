@@ -66,6 +66,7 @@ function ProfileMenu() {
       navigate('/user/user-profile')
     } else if (label === "Edit Profile") {
       // Handle "Edit Profile" action
+      navigate('/user/edit-profile')
     } else if (label === "Inbox") {
       // Handle "Inbox" action
     } else if (label === "Help") {

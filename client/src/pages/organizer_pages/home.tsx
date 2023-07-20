@@ -23,7 +23,7 @@ const OrganizationHome = () => {
     <>
       <div className="w-full px-3 h-screen">
         <h1 className="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white">
-          Hello,{userDetails && userDetails?.user.firstName}
+          Hello,{userDetails && userDetails?.firstName}
         </h1>
         <OrganizationDetails />
       </div>
@@ -49,15 +49,16 @@ const OrganizationDetails = () => {
   const fetchOrganization = async () => {
     if(selectedOrganization == '' && organizations){
       setOrganizationDetails(organizations[0])
-    }
-    const data =  organizations?.filter((item) => {
-      if (item._id === selectedOrganization) {
-        return item;
+    }else{
+      const data =  organizations?.filter((item) => {
+        if (item._id === selectedOrganization) {
+          return item;
+        }
+        return null;
+      });
+      if (data && data.length > 0) {
+        setOrganizationDetails(data[0]);
       }
-      return null;
-    });
-    if (data && data.length > 0) {
-      setOrganizationDetails(data[0]);
     }
   };
 
@@ -65,19 +66,21 @@ const OrganizationDetails = () => {
     if (organizationDetails) {
       const data = await getOrganizersAllEvents(organizationDetails?._id);
       const event = data?.data.data;
+      console.log(event)
       const currentDate = new Date();
       
-      const nextEvent: RegisteredEventInterface = event
+      const nextData: RegisteredEventInterface = event
         .filter((item: RegisteredEventInterface) => {
           const eventDate = new Date(item.startDate);
           return eventDate > currentDate;
         })
-        .sort((a: RegisteredEventInterface, b: RegisteredEventInterface) => {
-          const dateA: Date = new Date(a.startDate);
-          const dateB: Date = new Date(b.startDate);
-          return dateA.getTime() - dateB.getTime();
-        })[0];
-      setNextEvent(nextEvent);
+        // .sort((a: RegisteredEventInterface, b: RegisteredEventInterface) => {
+        //   const dateA: Date = new Date(a.startDate);
+        //   const dateB: Date = new Date(b.startDate);
+        //   return dateA.getTime() - dateB.getTime();
+        // })[0];
+        console.log(nextData)
+      setNextEvent(event[0]);
     }
   };
   useEffect(() => {
@@ -127,7 +130,7 @@ const OrganizationDetails = () => {
             </option>
             {organizations &&
               organizations.map((item) => {
-                return <option value={item._id}>{item.orgName}</option>;
+                return <option key={item._id} value={item._id}>{item.orgName}</option>;
               })}
           </select>
         </div>

@@ -29,6 +29,22 @@ const bookingsSchema = new Schema({
         type:String,
         required:[true,'please add ticket count']
 
+    },
+    paymentType:{
+        type:String,
+        required:[true,'please add payment type']
+    },
+    totalAmount:{
+        type:Number,
+        required:[true,'please add total amount']
+    },
+    organizationId:{
+        type:String,
+        required:[true,'please,add organizationId']
+    },
+    orgOwnerId:{
+        type:String,
+        required:[true,'add orgOwnerId']
     }
 })
 

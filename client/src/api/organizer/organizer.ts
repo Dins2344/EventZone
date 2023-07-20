@@ -98,3 +98,12 @@ export const getOrganizersAllEvents = async(id:string)=>{
     console.log(error)
   }
 }
+
+export const getOrganizationBookings = async()=>{
+  try{
+    const data = await api.get('http://localhost:4000/organization/get-organizers-all-bookings')
+    return data
+  }catch(error){
+    console.log(error)
+  }
+}

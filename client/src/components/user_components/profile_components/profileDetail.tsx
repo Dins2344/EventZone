@@ -15,7 +15,7 @@ const ProfileDetail: React.FC = () => {
           <div className="flex flex-col ml-4 justify-center">
             <div className="flex">
               <h3 className="text-2xl">
-                {user.user.firstName} {user.user.lastName}
+                {user.firstName} {user.lastName}
               </h3>
               <svg
                 xmlns="http://www.w3.org/2000/svg"

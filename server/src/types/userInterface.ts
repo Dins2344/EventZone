@@ -30,6 +30,7 @@ export interface CustomRequest extends Request{
     user?:{
         Id:string;
         email:string
+        role:string
     }
 }
 
@@ -40,7 +41,11 @@ export interface BookingCreationInterface {
     contactInfo:object,
     ticketCount:number,
     status:string,
-    QRCodeLink:string
+    QRCodeLink:string,
+    paymentType:string
+    totalAmount:number
+    orgOwnerId: string;
+    organizationId: string;
 }
 export interface ticketBookingCreationInterface{
     firstName: string;
@@ -49,5 +54,37 @@ export interface ticketBookingCreationInterface{
     email: string;
     userId: string;
     ticketCount: number;
-    eventId:string
+    eventId:string,
+    paymentType:string
+    totalAmount:number
+    orgOwnerId: string;
+    organizationId: string;
+  
 }
+export interface ProfileContactInfo{
+    firstName:string,
+    lastName: string,
+    phoneNumber: string,       
+    website: string,
+    imageURL: string 
+}
+
+export interface AddressFormDataCreateInterface {
+    //   homeAddress: {
+        userId:string
+    addressLine1: string;
+    addressLine2: string;
+    city: string;
+    country: string;
+    pin: string;
+    state: string;
+    //   };
+    //   workAddress: {
+    wAddressLine1: string;
+    wAddressLine2: string;
+    wCity: string;
+    wCountry: string;
+    wPin: string;
+    wState: string;
+    //   };
+  }

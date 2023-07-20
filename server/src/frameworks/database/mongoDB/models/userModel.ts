@@ -26,7 +26,13 @@ const userSchema = new Schema(
         },
         status:{
             type:Boolean
-        }
+        },
+        phoneNumber:{
+            type:Number
+        },
+        website:{
+            type:String
+        },
     }
 )
 

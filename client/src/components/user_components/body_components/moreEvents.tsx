@@ -35,8 +35,8 @@ const MoreEvents = () => {
   }, []);
   return (
     <>
-      <div className=" mt-5 w-full px-20">
-        <p>more events for you</p>
+      <div className=" mt-24  w-full px-20">
+        <h4 className="text-2xl pl-4 mb-10 font-bold dark:text-white">more events for you</h4>
         <Cards approvedEvents={approvedEvents} />
       </div>
     </>
@@ -96,7 +96,9 @@ const Cards: React.FC<CardProps> = ({ approvedEvents }) => {
                             5.0
                           </Typography>
                         </div>
+                        <div className="h-10 overflow-hidden">
                         <Typography color="gray">{item.description}</Typography>
+                        </div>
                       </CardBody>
                     </div>
                     <CardFooter className="pt-3">

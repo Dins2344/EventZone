@@ -1,5 +1,7 @@
 import { ticketBookingCreationInterface } from "../../types/userInterface";
 import api from "../itercepters/intercepter";
+import { ProfileContactInfo } from "../../types/userInterface";
+import { AddressFormData } from "../../components/user_components/profile_components/contactInfo";
 
 interface createOrganizerInterface {
   orgName: string;
@@ -30,6 +32,15 @@ export const getUserDetails = async () => {
     console.log(error);
   }
 };
+
+export const getUserDetailsById = async ()=>{
+  try{
+    const data = await api.get('http://localhost:4000/user/get-user-details-by-Id')
+    return data
+  }catch(error){
+    console.log(error)
+  }
+}
 
 export const getAllApprovedEvents =async ()=>{
   try{
@@ -81,6 +92,45 @@ export const cancelBooking = async(bookingId:string)=>{
   try{
     const res = await api.get(`http://localhost:4000/user/cancel-booking/${bookingId}`)
     return res
+  }catch(error){
+    console.log(error)
+  }
+}
+
+
+export const getAllOrganizers = async ()=>{
+  try{
+    const data = await api.get('http://localhost:4000/user/get-all-organizers')
+    return data
+  }catch(error){
+    console.log(error)
+  }
+}
+
+
+export const addProfileContactInfo = async(data:FormData)=>{
+  console.log(data)
+  try{
+    const res = await api.post('http://localhost:4000/user/add-profile-contact-info',data)
+    return res
+  }catch(error){
+    console.log(error)
+  }
+}
+
+export const addAddress = async(data:AddressFormData)=>{
+  try{
+    const res = await api.post('http://localhost:4000/user/add-address',data)
+    return res
+  }catch(error){
+    console.log(error)
+  }
+}
+
+export const getAddressInfo = async()=>{
+  try{
+    const data = await api.get('http://localhost:4000/user/get-address-info')
+    return data
   }catch(error){
     console.log(error)
   }

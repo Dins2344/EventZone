@@ -120,3 +120,11 @@ export const getOrganizersAllEvent = async(id:string,organizationRepository:Retu
   }
   return data
 }
+
+export const getOrganizersAllBookings =async (userId:string,organizationRepository:ReturnType<OrganizationDBInterface>)=>{
+  const data = await organizationRepository.getOrganizersAllBookings(userId)
+  if(!data){
+    throw new AppError('getting organizers all bookings failed',HttpStatus.BAD_REQUEST)
+  }
+  return data
+}
