@@ -135,3 +135,12 @@ export const getAddressInfo = async()=>{
     console.log(error)
   }
 }
+
+export const verifyPassword = async()=>{
+  try{
+    const res = await api.get('http://localhost:4000/user/verify-password')
+    return res
+  }catch(error){
+    console.log(error)
+  }
+}

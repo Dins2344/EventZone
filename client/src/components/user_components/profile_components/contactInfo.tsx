@@ -21,18 +21,6 @@ const ContactInfo: React.FC = () => {
     phoneNumber: userData?.phoneNumber || "",
     website: userData?.website || "",
     images: [],
-    // addressLine1: "",
-    // addressLine2: "",
-    // city: "",
-    // country: "",
-    // pin: "",
-    // state: "",
-    // wAddressLine1: "",
-    // wAddressLine2: "",
-    // wCity: "",
-    // wCountry: "",
-    // wPin: "",
-    // wState: "",
   });
   const [profilePicture, setProfilePicture] = useState<File | undefined>(
     undefined
@@ -57,20 +45,6 @@ const ContactInfo: React.FC = () => {
     lastName: Yup.string().required("Last name is required"),
     phoneNumber: Yup.string().required("Phone number is required"),
     website: Yup.string().url("Invalid website URL"),
-    // homeAddress: Yup.object().shape({
-    //   addressLine1: Yup.string().required('Address line 1 is required'),
-    //   city: Yup.string().required('City is required'),
-    //   country: Yup.string().required('Country is required'),
-    //   pin: Yup.string().required('Pin is required'),
-    //   state: Yup.string().required('State is required'),
-    // }),
-    // workAddress: Yup.object().shape({
-    //   addressLine1: Yup.string().required('Address line 1 is required'),
-    //   city: Yup.string().required('City is required'),
-    //   country: Yup.string().required('Country is required'),
-    //   pin: Yup.string().required('Pin is required'),
-    //   state: Yup.string().required('State is required'),
-    // }),
   });
 
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
@@ -109,7 +83,6 @@ const ContactInfo: React.FC = () => {
         const res = await addProfileContactInfo(data);
         setErrors({});
         if (res?.data.ok) {
-          console.log(res);
           setUpdated(!updated);
         }
       })
@@ -126,9 +99,6 @@ const ContactInfo: React.FC = () => {
         setErrors(newErrors);
       });
   };
-  if (!dataFetched) {
-    return <div>loading...</div>;
-  }
   return (
     <div className="px-5 md:px-10 lg:px-40 mt-5">
       <h3 className="font-semibold text-sm md:text-lg lg:text-xl">

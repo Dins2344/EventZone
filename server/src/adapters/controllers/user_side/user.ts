@@ -7,7 +7,7 @@ import {
   ticketBookingCreationInterface,
 } from "../../../types/userInterface";
 import {
-    addAddress,
+  addAddress,
   addProfileContactInfo,
   cancelBooking,
   createBooking,
