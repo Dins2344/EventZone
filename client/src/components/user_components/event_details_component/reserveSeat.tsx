@@ -1,10 +1,11 @@
-import {  useState } from "react";
+import {  useEffect, useState } from "react";
 import {
   Button,
   Input,
   Dialog,
   DialogHeader,
   DialogBody,
+  DialogFooter,
   Checkbox,
   Typography,
 } from "@material-tailwind/react";
@@ -27,6 +28,7 @@ type ReserveSeatProps = {
 const ReserveSeatComponent: React.FC<ReserveSeatProps> = ({
   eventDetails,
 }): JSX.Element => {
+  const [token,setToken] = useState('')
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -36,10 +38,16 @@ const ReserveSeatComponent: React.FC<ReserveSeatProps> = ({
   const [showPaypal, setShowPaypal] = useState(false);
   const [registerInfo, setRegisterInfo] =
     useState<ticketBookingCreationInterface>();
+    const [open, setOpen] = useState(false);
+ 
+    const handleLoginPrompt = () => setOpen(!open);
   const user = useSelector(selectUser);
   const navigate = useNavigate();
   
-  console.log(user)
+  useEffect(()=>{
+    const token = localStorage.getItem('token')
+    token && setToken(token)
+  },[])
 
   const handleOpen = (value: string | null) => setSize(value);
   const handleIncrement = () => {
@@ -48,6 +56,10 @@ const ReserveSeatComponent: React.FC<ReserveSeatProps> = ({
   const handleDecrement = () => {
     setTicketPass(ticketPass - 1);
   };
+  const handleLoggedIn = ()=>{
+    !token && handleLoginPrompt()
+    return token ?  true : false
+  }
   const handlePaidRegister = async () => {
     if (user) {
       const data: ticketBookingCreationInterface = {
@@ -160,7 +172,11 @@ const ReserveSeatComponent: React.FC<ReserveSeatProps> = ({
               </label>
               {eventDetails.ticketSold + ticketPass <=
               eventDetails.eventCapacity ? (
-                <Button onClick={() => handleOpen("xl")} color="deep-orange">
+                <Button onClick={() =>{
+                 const check =  handleLoggedIn()
+                  check && handleOpen("xl")}
+                }
+                 color="deep-orange">
                   Reserve a spot
                 </Button>
               ) : (
@@ -473,6 +489,17 @@ const ReserveSeatComponent: React.FC<ReserveSeatProps> = ({
             </>
           )}
         </DialogBody>
+      </Dialog>
+
+      <Dialog size="sm" open={open} handler={handleLoginPrompt}>
+        <DialogBody >
+        Unlock more amazing features by logging in! Embrace the full experience and unleash the possibilities!
+        </DialogBody>
+        <DialogFooter>
+          <Button size="sm" variant="gradient" color="green" onClick={handleLoginPrompt}>
+            <span>Ok</span>
+          </Button>
+        </DialogFooter>
       </Dialog>
     </>
   );

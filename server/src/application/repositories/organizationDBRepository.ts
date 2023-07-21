@@ -18,6 +18,11 @@ export const organizationDbRepository = (repository:ReturnType<OrganizationRepos
         return data
     }
 
+    const getOrganizationDetails = async(orgId:string)=>{
+        const data = await repository.getOrganizationDetails(orgId)
+        return data
+    }
+
     const addBasicEventInfo = async (data:BasicFormInterface)=>{
         const res = await repository.addBasicEventInfo(data)
         return res
@@ -57,10 +62,17 @@ export const organizationDbRepository = (repository:ReturnType<OrganizationRepos
         const data = await repository.getOrganizersAllBookings(userId)
         return data
     }
+
+    const getOrgOwnerDetails = async(ownerId:string)=>{
+        const data = await repository.getOrgOwnerDetails(ownerId)
+        return data
+    }
+
     return {
         addOrganization,
         getAllEventCategories,
         getUsersOrganizations,
+        getOrganizationDetails,
         addBasicEventInfo,
         addMediaEventInfo,
         addPublishEventInfo,
@@ -68,7 +80,8 @@ export const organizationDbRepository = (repository:ReturnType<OrganizationRepos
         publishEvent,
         getUsersAllEvents,
         getOrganizersAllEvent,
-        getOrganizersAllBookings
+        getOrganizersAllBookings,
+        getOrgOwnerDetails
     }
 }
 

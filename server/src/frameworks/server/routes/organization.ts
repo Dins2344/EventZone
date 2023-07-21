@@ -26,8 +26,9 @@ const organizationRouter = () => {
   );
 
   router.get(
-    '/get-organization-details/:id',orgController.getOrganizationDetailController
-  )
+    "/get-organization-details/:id",
+    orgController.getOrganizationDetailController
+  );
 
   router.post(
     "/add-event-basic-info",
@@ -51,10 +52,18 @@ const organizationRouter = () => {
     orgController.getUsersAllEventsController
   );
 
-  router.get('/get-organizers-all-events/:id',orgController.getOrganizersAllEventController)
+  router.get(
+    "/get-organizers-all-events/:id",
+    orgController.getOrganizersAllEventController
+  );
 
-  router.get('/get-organizers-all-bookings',orgController.getOrganizersAllBookingsController)
-  
+  router.get(
+    "/get-organizers-all-bookings",
+    orgController.getOrganizersAllBookingsController
+  );
+
+  router.get('/get-organization-owner/:id',orgController.getOrgOwnerDetailsController)
+
   return router;
 };
 

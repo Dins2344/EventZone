@@ -1,13 +1,20 @@
 import { ticketBookingCreationInterface } from "../../types/userInterface";
 import api from "../itercepters/intercepter";
-import { ProfileContactInfo } from "../../types/userInterface";
 import { AddressFormData } from "../../components/user_components/profile_components/contactInfo";
 
 interface createOrganizerInterface {
   orgName: string;
   orgType: string;
 }
-
+export const updateEmail = async(email:string)=>{
+  try{
+    const data = {email}
+    const res = api.post("http://localhost:4000/user/update-email",data)
+    return res
+  }catch(error){
+    console.log(error)
+  }
+}
 export const createOrganizer = async (OrgData: createOrganizerInterface) => {
   try {
     const response = await api.post(
@@ -136,9 +143,10 @@ export const getAddressInfo = async()=>{
   }
 }
 
-export const verifyPassword = async()=>{
+export const verifyPassword = async(password:string)=>{
   try{
-    const res = await api.get('http://localhost:4000/user/verify-password')
+    const data = {password}
+    const res = await api.post('http://localhost:4000/user/verify-password',data)
     return res
   }catch(error){
     console.log(error)

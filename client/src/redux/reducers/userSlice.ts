@@ -8,6 +8,9 @@ interface User {
   lastName: string;
   password: string;
   __v: number;
+  phoneNumber:number
+  profileImage:string
+  website:string
 }
 
 interface InitialState {
@@ -17,11 +20,14 @@ interface InitialState {
 const initialState: InitialState = {
   user: {
     email: "",
+    phoneNumber:0,
     _id: "",
     firstName: "",
     lastName: "",
     password: "",
     __v: 0,
+    profileImage:'',
+    website:''
   },
 };
 

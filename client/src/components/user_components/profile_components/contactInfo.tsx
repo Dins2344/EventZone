@@ -28,7 +28,6 @@ const ContactInfo: React.FC = () => {
   const fetchUserInfo = async () => {
     const data = await getUserDetailsById();
     if (data) {
-      console.log(data);
       const userData: RegisteredUserInterface = data.data.data;
       setUserData(userData);
       setFormData(userData);

@@ -5,6 +5,8 @@ import { organizationDbRepository } from "../../../application/repositories/orga
 import { organizationRepositoryMongoDB } from "../../database/mongoDB/repositories/organizationRepository";
 import { userDbRepository } from "../../../application/repositories/userDBRepository";
 import { userRepositoryMongoDB } from "../../database/mongoDB/repositories/userRepositoryMongoDB";
+import { authServiceInterface } from "../../../application/services/authServiceInterface";
+import { authService } from "../../service/authService";
 import jwtAuthMiddleware from "../middlewares/authJWT";
 import { userRoleChecking } from "../middlewares/roleChecking";
 import { upload } from "../middlewares/cloudinary";
@@ -15,13 +17,16 @@ const userRouter = () => {
     organizationRepositoryMongoDB,
     userDbRepository,
     userRepositoryMongoDB,
+    
   );
   const controller = userController(
     userDbRepository,
     userRepositoryMongoDB,
+    authServiceInterface,
+    authService,
   )
 
-  router.post("/register-organization", orgController.registerOrganization);
+  router.post("/register-organization",jwtAuthMiddleware, orgController.registerOrganization);
   router.get('/get-user-details',jwtAuthMiddleware,userRoleChecking,controller.getUserByEmail)
   router.get('/get-user-details-by-Id',jwtAuthMiddleware,controller.getUserByIdController)
   router.get('/get-all-approved-events',controller.getApprovedEventsController)
@@ -30,10 +35,12 @@ const userRouter = () => {
   router.get('/get-booking-details',jwtAuthMiddleware,userRoleChecking,controller.getBookingsController)
   router.get('/get-one-booking-details/:bookingId',jwtAuthMiddleware,userRoleChecking,controller.getOneBookingDetailsController)
   router.get('/cancel-booking/:id',jwtAuthMiddleware,userRoleChecking,controller.cancelBookingController)
-  router.get('/get-all-organizers',jwtAuthMiddleware,userRoleChecking,controller.getAllOrganizersController)
+  router.get('/get-all-organizers',controller.getAllOrganizersController)
   router.post('/add-profile-contact-info',upload,jwtAuthMiddleware,controller.addProfileContactInfoController)
   router.post('/add-address',jwtAuthMiddleware,controller.addAddressController)
   router.get('/get-address-info',jwtAuthMiddleware,controller.getAddressInfoController)
+  router.post('/verify-password',jwtAuthMiddleware,controller.verifyPasswordController)
+  router.post('/update-email',jwtAuthMiddleware,controller.updateEmailController)
 
   return router;
 };

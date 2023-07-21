@@ -1,9 +1,9 @@
 import express from "express";
 import authController from "../../../adapters/controllers/authController";
 import { authServiceInterface } from "../../../application/services/authServiceInterface";
+import { authService } from "../../service/authService";
 import { userDbRepository } from "../../../application/repositories/userDBRepository";
 import { userRepositoryMongoDB } from "../../database/mongoDB/repositories/userRepositoryMongoDB";
-import { authService } from "../../service/authService";
 import { adminDbRepository } from "../../../application/repositories/adminDBRepository";
 import { adminRepositoryMongoDB } from "../../database/mongoDB/repositories/adminRepositoryMongoDB";
 import { sendEmailService } from "../../service/sendMailService";

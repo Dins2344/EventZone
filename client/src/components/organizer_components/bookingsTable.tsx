@@ -128,7 +128,7 @@ const BookingTable: React.FC = () => {
                   <tr key={_id}>
                     <td className={classes}>
                       <div className="flex items-center gap-3">
-                        <Avatar src='https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-3.jpg' alt={user.firstName} size="sm" />
+                        <Avatar src={user.profileImage} alt="https://img.freepik.com/free-icon/user_318-159711.jpg" size="sm" />
                         <div className="flex flex-col">
                           <Typography
                             variant="small"

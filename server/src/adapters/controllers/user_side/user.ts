@@ -1,5 +1,7 @@
 import { UserDBInterface } from "../../../application/repositories/userDBRepository";
 import { UserRepositoryMongoDB } from "../../../frameworks/database/mongoDB/repositories/userRepositoryMongoDB";
+import { AuthServiceInterface } from "../../../application/services/authServiceInterface";
+import { AuthService } from "../../../frameworks/service/authService";
 import { Request, Response } from "express";
 import asyncHandler from "express-async-handler";
 import {
@@ -18,13 +20,33 @@ import {
   getCompleteEventDetails,
   getOneBookingDetails,
   getUserById,
+  updateEmail,
+  verifyPassword,
 } from "../../../application/usecases/user/userAuth";
 
 const userController = (
-  userDbRepository: UserDBInterface,
-  userDbRepositoryImpl: UserRepositoryMongoDB
+  userDbRepository: UserDBInterface, 
+  userDbRepositoryImpl: UserRepositoryMongoDB,
+  authServiceInterface: AuthServiceInterface,
+  authServiceImpl: AuthService,
 ) => {
   const dbRepositoryUser = userDbRepository(userDbRepositoryImpl());
+  const authService = authServiceInterface(authServiceImpl());
+
+  const verifyPasswordController = asyncHandler(async(req:CustomRequest,res:Response)=>{
+    const userId = req.user?.Id
+    const password = req.body.password
+    console.log(userId,password)
+    if(userId){
+      const response = await verifyPassword(userId,password,dbRepositoryUser,authService)
+      if(response){
+        res.json({message:'password verified',ok:true})
+      }else{
+        res.json({error:'password does not matched',ok:false})
+      }
+    }
+
+  })
 
   const getUserByEmail = asyncHandler(
     async (req: CustomRequest, res: Response) => {
@@ -173,7 +195,19 @@ const userController = (
         }
     }
   })
-
+  
+  const updateEmailController = asyncHandler(async(req:CustomRequest,res:Response)=>{
+    const userId = req.user?.Id
+    const {email} = req.body
+    if(userId){
+      const response = await updateEmail(email,userId,dbRepositoryUser)
+      if(response){
+        res.json({message:'email updated',ok:true,response})
+      }else{
+        res.json({error:'update email failed',ok:false})
+      }
+    }
+  })
 
   const getAddressInfoController = asyncHandler(async(req:CustomRequest,res:Response)=>{
     const userId = req.user?.Id
@@ -189,6 +223,7 @@ const userController = (
 
   return {
     getUserByEmail,
+    verifyPasswordController,
     getUserByIdController,
     getApprovedEventsController,
     getCompleteEventDetailsController,
@@ -199,6 +234,7 @@ const userController = (
     getAllOrganizersController,
     addProfileContactInfoController,
     addAddressController,
+    updateEmailController,
     getAddressInfoController
   };
 };

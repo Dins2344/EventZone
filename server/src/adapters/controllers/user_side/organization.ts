@@ -4,6 +4,8 @@ import { OrganizationRepositoryMongoDB } from "../../../frameworks/database/mong
 import asyncHandler from "express-async-handler";
 import { CreateOrganization } from "../../../types/userInterface";
 import {
+  getOrgOwnerDetails,
+  getOrganizationDetails,
   getOrganizersAllBookings,
   organizationRegister,
 } from "../../../application/usecases/organizatioin/organization";
@@ -48,14 +50,12 @@ const organizationController = (
         dbRepositoryOrganization
       );
       let added;
-      console.log(response);
       if (response) {
         added = await addOrganization(
           response._id.toString(),
           response.userId ?? "",
           dbRepositoryUser
         );
-        console.log(added);
       }
 
       res.json({
@@ -95,6 +95,16 @@ const organizationController = (
   const getOrganizationDetailController = asyncHandler(
     async (req: Request, res: Response) => {
       console.log(req.params.id);
+      const orgId = req.params.id;
+      const data = await getOrganizationDetails(
+        orgId,
+        dbRepositoryOrganization
+      );
+      if (data) {
+        res.json({ message: "organization data fetched", ok: true, data });
+      } else {
+        res.json({ error: "fetching organization data failed" });
+      }
     }
   );
 
@@ -201,7 +211,7 @@ const organizationController = (
     async (req: CustomRequest, res: Response) => {
       const user = req.user;
       if (user) {
-        console.log(user)
+        console.log(user);
         const { Id } = user;
         const data = await getOrganizersAllBookings(
           Id,
@@ -216,6 +226,16 @@ const organizationController = (
     }
   );
 
+  const getOrgOwnerDetailsController = asyncHandler(async(req:Request,res:Response)=>{
+    const ownerId = req.params.id
+    const data = await getOrgOwnerDetails(ownerId,dbRepositoryOrganization)
+    if(data){
+      res.json({message:'owner details fetched',ok:true,data})
+    }else{
+      res.json({error:'owner details fetching failed'})
+    }
+  })
+
   return {
     registerOrganization,
     getAllEventCategoriesController,
@@ -229,7 +249,8 @@ const organizationController = (
     publishEventController,
     getUsersAllEventsController,
     getOrganizersAllEventController,
-    getOrganizersAllBookingsController
+    getOrganizersAllBookingsController,
+    getOrgOwnerDetailsController
   };
 };
 

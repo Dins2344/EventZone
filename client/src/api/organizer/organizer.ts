@@ -107,3 +107,13 @@ export const getOrganizationBookings = async()=>{
     console.log(error)
   }
 }
+
+export const getOwnerDetails = async(ownerId:string)=>{
+  try{
+    const data = api.get(`http://localhost:4000/organization/get-organization-owner/${ownerId}`)
+    return data
+  }catch(error){
+    console.log(error)
+  }
+}
+

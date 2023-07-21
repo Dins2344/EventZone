@@ -1,6 +1,4 @@
-type FileArray = {
-  [index: number]: File;
-};
+
 export interface BasicFormInterface {
   eventName: string;
   organizer: string;

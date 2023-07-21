@@ -252,6 +252,11 @@ export const userRepositoryMongoDB = () => {
     }
   };
 
+  const updateEmail = async(email:string,userId:string)=>{
+    const res = await User.updateOne({_id: new ObjectId(userId)},{email:email})
+    return res
+  }
+
   const getAddressInfo = async (userId:string)=>{
    const data = await Address.findOne({userId:userId})
    return data
@@ -271,6 +276,7 @@ export const userRepositoryMongoDB = () => {
     getAllOrganizers,
     addProfileContactInfo,
     addAddress,
+    updateEmail,
     getAddressInfo
   };
 };

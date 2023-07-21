@@ -30,6 +30,8 @@ import ViewEvent from "./pages/organizer_pages/viewEvent.tsx";
 import ErrorElement from "./components/common/ErrorElement.tsx";
 import BookingHome from "./pages/organizer_pages/bookingHome.tsx";
 import EditProfile from "./pages/user_pages/profile_pages/editProfile.tsx";
+import OrganizationSettings from "./pages/organizer_pages/organizationSettings.tsx";
+import EditOrganization from "./pages/organizer_pages/editOrganization.tsx";
 
 const appRouter = createBrowserRouter([
   {
@@ -138,6 +140,14 @@ const appRouter = createBrowserRouter([
       {
         path: "/organization/events",
         element: <EventsHome />,
+      },
+      {
+        path: "/organization/settings",
+        element: <OrganizationSettings />,
+      },
+      {
+        path: "/organization/settings/edit-organization",
+        element: <EditOrganization />,
       },
       {
         path: "/organization/events/event",

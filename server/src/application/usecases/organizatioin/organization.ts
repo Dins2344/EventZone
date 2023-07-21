@@ -16,7 +16,6 @@ export const organizationRegister = async (
     throw new AppError("data not found", HttpStatus.BAD_REQUEST);
   }
   const response = await organizationRepository.addOrganization(organization);
-  console.log(response);
   return response;
 };
 
@@ -38,6 +37,20 @@ export const getUsersOrganizations = async (
   if (!data) {
     throw new AppError(
       "organization data fetching failed",
+      HttpStatus.BAD_REQUEST
+    );
+  }
+  return data;
+};
+
+export const getOrganizationDetails = async (
+  orgId: string,
+  organizationRepository: ReturnType<OrganizationDBInterface>
+) => {
+  const data = await organizationRepository.getOrganizationDetails(orgId);
+  if (!data) {
+    throw new AppError(
+      "fetching organization detail failed",
       HttpStatus.BAD_REQUEST
     );
   }
@@ -78,53 +91,78 @@ export const addPublishEventInfo = async (
   return res;
 };
 
-
-export const getEventDetails = async(
-  id:string,
-  organizationRepository:ReturnType<OrganizationDBInterface>
-)=>{
-  const data = await organizationRepository.getEventDetails(id)
-  if(!data){
-    throw new AppError('getting event data failed',HttpStatus.BAD_REQUEST)
+export const getEventDetails = async (
+  id: string,
+  organizationRepository: ReturnType<OrganizationDBInterface>
+) => {
+  const data = await organizationRepository.getEventDetails(id);
+  if (!data) {
+    throw new AppError("getting event data failed", HttpStatus.BAD_REQUEST);
   }
-  return data
-}
+  return data;
+};
 
-export const publishEvent = async(
-  id:string,
-  organizationRepository:ReturnType<OrganizationDBInterface>
-)=>{
-  const time = new Date().toDateString()
-  console.log(time)
-  const res = await organizationRepository.publishEvent(id,time)
-  if(!res){
-    throw new AppError('publishing event failed',HttpStatus.BAD_REQUEST)
+export const publishEvent = async (
+  id: string,
+  organizationRepository: ReturnType<OrganizationDBInterface>
+) => {
+  const time = new Date().toDateString();
+  console.log(time);
+  const res = await organizationRepository.publishEvent(id, time);
+  if (!res) {
+    throw new AppError("publishing event failed", HttpStatus.BAD_REQUEST);
   }
-  return res
-}
+  return res;
+};
 
-
-export const getUsersAllEvents = async(userId:string,organizationRepository:ReturnType<OrganizationDBInterface>)=>{
-  const data = await organizationRepository.getUsersAllEvents(userId)
-  if(!data){
-    throw new AppError('getting users all events failed',HttpStatus.BAD_REQUEST)
+export const getUsersAllEvents = async (
+  userId: string,
+  organizationRepository: ReturnType<OrganizationDBInterface>
+) => {
+  const data = await organizationRepository.getUsersAllEvents(userId);
+  if (!data) {
+    throw new AppError(
+      "getting users all events failed",
+      HttpStatus.BAD_REQUEST
+    );
   }
-  return data
-}
+  return data;
+};
 
-export const getOrganizersAllEvent = async(id:string,organizationRepository:ReturnType<OrganizationDBInterface>)=>{
-  console.log(id)
-  const data  = await organizationRepository.getOrganizersAllEvent(id)
-  if(!data){
-    throw new AppError('getting organizers all events has failed',HttpStatus.BAD_REQUEST)
+export const getOrganizersAllEvent = async (
+  id: string,
+  organizationRepository: ReturnType<OrganizationDBInterface>
+) => {
+  console.log(id);
+  const data = await organizationRepository.getOrganizersAllEvent(id);
+  if (!data) {
+    throw new AppError(
+      "getting organizers all events has failed",
+      HttpStatus.BAD_REQUEST
+    );
   }
-  return data
-}
+  return data;
+};
 
-export const getOrganizersAllBookings =async (userId:string,organizationRepository:ReturnType<OrganizationDBInterface>)=>{
-  const data = await organizationRepository.getOrganizersAllBookings(userId)
+export const getOrganizersAllBookings = async (
+  userId: string,
+  organizationRepository: ReturnType<OrganizationDBInterface>
+) => {
+  const data = await organizationRepository.getOrganizersAllBookings(userId);
+  if (!data) {
+    throw new AppError(
+      "getting organizers all bookings failed",
+      HttpStatus.BAD_REQUEST
+    );
+  }
+  return data;
+};
+
+
+export const getOrgOwnerDetails = async(ownerId:string,organizationRepository:ReturnType<OrganizationDBInterface>)=>{
+  const data = await organizationRepository.getOrgOwnerDetails(ownerId)
   if(!data){
-    throw new AppError('getting organizers all bookings failed',HttpStatus.BAD_REQUEST)
+    throw new AppError('fetching orgOwner details failed',HttpStatus.BAD_REQUEST)
   }
   return data
 }

@@ -268,6 +268,14 @@ export const addAddress = async (
   return res;
 };
 
+export const updateEmail = async(email:string,userId:string,userRepository:ReturnType<UserDBInterface>)=>{
+  const res = await userRepository.updateEmail(email,userId)
+  if(!res){
+    throw new AppError('updating email failed',HttpStatus.BAD_REQUEST)
+  }
+  return res
+}
+
 export const getAddressInfo = async (
   userId: string,
   userRepository: ReturnType<UserDBInterface>

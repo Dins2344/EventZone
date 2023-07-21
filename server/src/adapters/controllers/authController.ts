@@ -81,7 +81,7 @@ const authController = (
         res.json({error:'user exist'})
       }else{
         emailService.sendEmail(email)
-        res.json({message:'OTP has send'})
+        res.json({message:'OTP has send',ok:true})
       }
     }else if(mode === 'OTPLogin'){
       const user = await emailVerify(email, dbRepositoryUser);

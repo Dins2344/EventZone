@@ -1,16 +1,18 @@
 import { useSelector } from "react-redux";
 import { selectUser } from "../../../redux/reducers/userSlice";
+import { useNavigate } from "react-router-dom";
 
 const ProfileDetail: React.FC = () => {
   const user = useSelector(selectUser);
+  const navigate = useNavigate()
   return (
     <>
       <div className="w-full h-full px-2 bg-gradient-to-b from-blue-gray-300 pt-2">
         <div className="flex flex-wrap ">
           <img
             className="h-20 w-20 rounded-full"
-            src="https://images.unsplash.com/photo-1682407186023-12c70a4a35e0?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2832&q=80"
-            alt="nature image"
+            src={user.profileImage}
+            alt="https://img.freepik.com/free-icon/user_318-159711.jpg"
           />
           <div className="flex flex-col ml-4 justify-center">
             <div className="flex">
@@ -23,7 +25,8 @@ const ProfileDetail: React.FC = () => {
                 viewBox="0 0 24 24"
                 stroke-width="1.5"
                 stroke="currentColor"
-                className="w-6 h-6 ml-5"
+                className="w-6 h-6 ml-5 hover:cursor-pointer"
+                onClick={()=>navigate('/user/edit-profile')}
               >
                 <path
                   stroke-linecap="round"

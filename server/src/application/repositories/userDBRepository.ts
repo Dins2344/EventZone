@@ -59,6 +59,11 @@ export const userDbRepository = (repository:ReturnType<UserRepositoryMongoDB>)=>
         return res
     }
 
+    const updateEmail = async(email:string,userId:string)=>{
+        const res = await repository.updateEmail(email,userId)
+        return res
+    }
+
     const getAddressInfo = async(userId:string)=>{
         const data = await repository.getAddressInfo(userId)
         return data
@@ -78,6 +83,7 @@ export const userDbRepository = (repository:ReturnType<UserRepositoryMongoDB>)=>
         getAllOrganizers,
         addProfileContactInfo,
         addAddress,
+        updateEmail,
         getAddressInfo
 
     }

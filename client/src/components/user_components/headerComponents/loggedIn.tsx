@@ -6,7 +6,6 @@ import { LoggedUserInterface } from "../../../types/userInterface";
 import { useDispatch } from "react-redux";
 import { setUser } from "../../../redux/reducers/userSlice";
 import { useNavigate } from "react-router-dom";
-
 import {
   Navbar,
   Typography,
@@ -28,6 +27,8 @@ import {
   PowerIcon,
 } from "@heroicons/react/24/outline";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { selectUser } from "../../../redux/reducers/userSlice";
 
 const profileMenuItems = [
   {
@@ -55,6 +56,7 @@ const profileMenuItems = [
 function ProfileMenu() {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const navigate = useNavigate()
+  const user = useSelector(selectUser)
   
 
   const closeMenu = () => setIsMenuOpen(false);
@@ -91,9 +93,9 @@ function ProfileMenu() {
           <Avatar
             variant="circular"
             size="sm"
-            alt="candice wu"
+            alt="https://img.freepik.com/free-icon/user_318-159711.jpg"
             className="border border-blue-500 p-0.5"
-            src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1480&q=80"
+            src={user.profileImage}
           />
           <ChevronDownIcon
             strokeWidth={2.5}
@@ -176,7 +178,7 @@ export default function Example() {
           <OrgCreationModal />
         )}
       </Typography>
-      <Typography
+      {/* <Typography
         as="li"
         variant="small"
         color="blue-gray"
@@ -205,7 +207,7 @@ export default function Example() {
         <a href="#" className="flex items-center">
           Docs
         </a>
-      </Typography>
+      </Typography> */}
     </ul>
   );
 

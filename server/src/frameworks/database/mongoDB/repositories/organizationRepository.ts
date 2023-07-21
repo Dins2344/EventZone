@@ -10,8 +10,10 @@ import {
 } from "../../../../types/organizerInterface";
 import { ObjectId } from "mongodb";
 import Bookings from "../models/bookings";
+import User from "../models/userModel";
 
 export const organizationRepositoryMongoDB = () => {
+
   const addOrganization = async (orgData: CreateOrganization) => {
     const newOrganization = new Organization(orgData);
     return await newOrganization.save();
@@ -26,6 +28,11 @@ export const organizationRepositoryMongoDB = () => {
     const data = await Organization.find({ userId: id });
     return data;
   };
+
+  const getOrganizationDetails = async(orgId:string)=>{
+    const data = await Organization.findOne({_id:new ObjectId(orgId)})
+    return data
+  }
 
   const addBasicEventInfo = async (data: BasicFormInterface) => {
     data.status = "draft";
@@ -152,6 +159,7 @@ export const organizationRepositoryMongoDB = () => {
             firstName: "$user.firstName",
             lastName: "$user.lastName",
             email: "$user.email",
+            profileImage:'$user.profileImage'
             // Include other event fields as needed
           },
           event: {
@@ -180,10 +188,16 @@ export const organizationRepositoryMongoDB = () => {
     return data
   };
 
+  const getOrgOwnerDetails = async(ownerId:string)=>{
+    const data =  await User.findOne({_id: new ObjectId(ownerId)})
+    return data
+  }
+
   return {
     addOrganization,
     getAllEventCategories,
     getUsersOrganizations,
+    getOrganizationDetails,
     addBasicEventInfo,
     addMediaEventInfo,
     addPublishEventInfo,
@@ -191,7 +205,8 @@ export const organizationRepositoryMongoDB = () => {
     publishEvent,
     getUsersAllEvents,
     getOrganizersAllEvent,
-    getOrganizersAllBookings
+    getOrganizersAllBookings,
+    getOrgOwnerDetails
   };
 };
 

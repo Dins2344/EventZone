@@ -139,6 +139,7 @@ export interface Bookings {
     firstName: string;
     lastName: string;
     email: string;
+    profileImage:string
   };
 }
 

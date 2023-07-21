@@ -1,13 +1,19 @@
+import { useNavigate } from "react-router-dom";
+import BookingDetails from "../../../components/user_components/profile_components/bookingDetails";
+import { useEffect, useState } from "react";
 
-import BookingDetails from "../../../components/user_components/profile_components/bookingDetails"
+const BookingDetailsPage: React.FC = () => {
+  const [token, setToken] = useState("");
+  const navigate = useNavigate();
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    token && setToken(token);
+    if (!token) {
+      navigate("/");
+    }
+  }, []);
 
-const BookingDetailsPage:React.FC = ()=>{
+  return <>{token && <BookingDetails />}</>;
+};
 
-    return(
-        <>
-        <BookingDetails />
-        </>
-    )
-}
-
-export default BookingDetailsPage
+export default BookingDetailsPage;
