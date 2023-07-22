@@ -17,5 +17,6 @@ export interface OrganizationCategoriesInterface{
     subCategoryName:string
     description:string
     _id:string
-    __v:number
+    __v:number,
+    
 }

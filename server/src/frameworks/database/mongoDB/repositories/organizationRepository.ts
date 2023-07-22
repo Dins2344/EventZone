@@ -7,13 +7,14 @@ import {
   BasicFormInterface,
   MediaFormInterface,
   PublishFormInterface,
+  RegisteredOrganization,
 } from "../../../../types/organizerInterface";
 import { ObjectId } from "mongodb";
 import Bookings from "../models/bookings";
 import User from "../models/userModel";
+import OrganizationCategory from "../models/orgCategory";
 
 export const organizationRepositoryMongoDB = () => {
-
   const addOrganization = async (orgData: CreateOrganization) => {
     const newOrganization = new Organization(orgData);
     return await newOrganization.save();
@@ -29,10 +30,10 @@ export const organizationRepositoryMongoDB = () => {
     return data;
   };
 
-  const getOrganizationDetails = async(orgId:string)=>{
-    const data = await Organization.findOne({_id:new ObjectId(orgId)})
-    return data
-  }
+  const getOrganizationDetails = async (orgId: string) => {
+    const data = await Organization.findOne({ _id: new ObjectId(orgId) });
+    return data;
+  };
 
   const addBasicEventInfo = async (data: BasicFormInterface) => {
     data.status = "draft";
@@ -152,14 +153,14 @@ export const organizationRepositoryMongoDB = () => {
           contactInfo: 1,
           ticketCount: 1,
           status: 1,
-          QRCodeLink:1,
-          paymentType:1,
-          totalAmount:1,
+          QRCodeLink: 1,
+          paymentType: 1,
+          totalAmount: 1,
           user: {
             firstName: "$user.firstName",
             lastName: "$user.lastName",
             email: "$user.email",
-            profileImage:'$user.profileImage'
+            profileImage: "$user.profileImage",
             // Include other event fields as needed
           },
           event: {
@@ -175,7 +176,7 @@ export const organizationRepositoryMongoDB = () => {
             addressLine1: "$event.addressLine1",
             addressLine2: "$event.addressLine2",
             addressLine3: "$event.addressLine3",
-            orgName:'$event.orgName'
+            orgName: "$event.orgName",
             // Include other event fields as needed
           },
         },
@@ -183,15 +184,38 @@ export const organizationRepositoryMongoDB = () => {
       {
         $sort: { _id: -1 },
       },
-    ])
-      .exec()
-    return data
+    ]).exec();
+    return data;
   };
 
-  const getOrgOwnerDetails = async(ownerId:string)=>{
-    const data =  await User.findOne({_id: new ObjectId(ownerId)})
-    return data
-  }
+  const getOrgOwnerDetails = async (ownerId: string) => {
+    const data = await User.findOne({ _id: new ObjectId(ownerId) });
+    return data;
+  };
+
+  const getAllOrganizationCategories = async () => {
+    const data = await OrganizationCategory.find({});
+    return data;
+  };
+
+  const updateOrganizationInfo = async (data: RegisteredOrganization) => {
+    console.log(data)
+    try{
+      const res = await Organization.updateOne(
+        { _id: new ObjectId(data._id) },
+        {
+          orgName: data.orgName,
+          orgType: data.orgType,
+          country: data.country,
+          logo: data.logo,
+        }
+      );
+      return res;
+
+    }catch(error){
+      console.log(error)
+    }
+  };
 
   return {
     addOrganization,
@@ -206,7 +230,9 @@ export const organizationRepositoryMongoDB = () => {
     getUsersAllEvents,
     getOrganizersAllEvent,
     getOrganizersAllBookings,
-    getOrgOwnerDetails
+    getOrgOwnerDetails,
+    getAllOrganizationCategories,
+    updateOrganizationInfo
   };
 };
 

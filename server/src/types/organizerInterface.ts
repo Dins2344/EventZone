@@ -57,3 +57,16 @@ export interface EventDetailsInterface {
   videoURL: string;
   _id: string;
 }
+
+
+export interface RegisteredOrganization {
+  _id: string
+  userId: string;
+  orgName: string;
+  orgType: string;
+  ownerId: string;
+  admin: string[]; // Assuming admin is an array of user IDs (string)
+  logo:string,
+  __v: number;
+  country:string
+}

@@ -110,8 +110,25 @@ export const getOrganizationBookings = async()=>{
 
 export const getOwnerDetails = async(ownerId:string)=>{
   try{
-    const data = api.get(`http://localhost:4000/organization/get-organization-owner/${ownerId}`)
+    const data = await api.get(`http://localhost:4000/organization/get-organization-owner/${ownerId}`)
     return data
+  }catch(error){
+    console.log(error)
+  }
+}
+
+export const getAllOrgCategories = async()=>{
+  try{
+    const data = await api.get('http://localhost:4000/organization/get-all-organization-categories')
+    return data
+  }catch(error){
+    console.log(error)
+  }
+}
+export const updateOrganizationInfo = async(data:FormData)=>{
+  try{
+    const res = await api.post('http://localhost:4000/organization/update-organization-info',data)
+    return res
   }catch(error){
     console.log(error)
   }

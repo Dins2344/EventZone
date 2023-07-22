@@ -101,7 +101,9 @@ export interface RegisteredOrganization {
   orgType: string;
   ownerId: string;
   admin: string[]; // Assuming admin is an array of user IDs (string)
+  logo:string,
   __v: number;
+  country:string
 }
 
 export interface Bookings {

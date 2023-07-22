@@ -64,6 +64,10 @@ const organizationRouter = () => {
 
   router.get('/get-organization-owner/:id',orgController.getOrgOwnerDetailsController)
 
+  router.get('/get-all-organization-categories',orgController.getAllOrganizationCategoriesController)
+  
+  router.post('/update-organization-info',upload,orgController.updateOrganizationInfoController)
+
   return router;
 };
 

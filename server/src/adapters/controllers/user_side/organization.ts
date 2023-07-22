@@ -4,10 +4,12 @@ import { OrganizationRepositoryMongoDB } from "../../../frameworks/database/mong
 import asyncHandler from "express-async-handler";
 import { CreateOrganization } from "../../../types/userInterface";
 import {
+  getAllOrganizationCategories,
   getOrgOwnerDetails,
   getOrganizationDetails,
   getOrganizersAllBookings,
   organizationRegister,
+  updateOrganizationInfo,
 } from "../../../application/usecases/organizatioin/organization";
 import { CustomRequest } from "../../../types/userInterface";
 import { addOrganization } from "../../../application/usecases/user/userAuth";
@@ -236,6 +238,29 @@ const organizationController = (
     }
   })
 
+  const getAllOrganizationCategoriesController = asyncHandler(async(req:Request,res:Response)=>{
+    const data = await getAllOrganizationCategories(dbRepositoryOrganization)
+    if(data){
+      res.json({message:'orgCategory fetching done',ok:true,data})
+    }else{
+      res.json({error:'orgCategory fetching failed'})
+    }
+  })
+
+  const updateOrganizationInfoController = asyncHandler(async(req:Request,res:Response)=>{
+    const data = req.body
+    const logo = req.files  as Express.Multer.File[];
+    if(logo?.length){
+      data.logo = logo[0].path
+    }
+    const response = await updateOrganizationInfo(data,dbRepositoryOrganization)
+    if(response){
+      res.json({message:'updating orgInfo done',ok:true,response})
+    }else{
+      res.json({error:'updating failed'})
+    }
+  })
+
   return {
     registerOrganization,
     getAllEventCategoriesController,
@@ -250,7 +275,9 @@ const organizationController = (
     getUsersAllEventsController,
     getOrganizersAllEventController,
     getOrganizersAllBookingsController,
-    getOrgOwnerDetailsController
+    getOrgOwnerDetailsController,
+    getAllOrganizationCategoriesController,
+    updateOrganizationInfoController
   };
 };
 

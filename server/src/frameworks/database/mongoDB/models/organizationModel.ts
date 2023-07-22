@@ -23,7 +23,10 @@ const organizationSchema = new Schema({
     status:{
         type:Boolean
     },
-    imageURL:{
+    logo:{
+        type:String
+    },
+    country:{
         type:String
     }
 

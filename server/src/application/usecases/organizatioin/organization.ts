@@ -5,6 +5,7 @@ import {
   BasicFormInterface,
   MediaFormInterface,
   PublishFormInterface,
+  RegisteredOrganization,
 } from "../../../types/organizerInterface";
 import AppError from "../../../utils/appError";
 
@@ -163,6 +164,22 @@ export const getOrgOwnerDetails = async(ownerId:string,organizationRepository:Re
   const data = await organizationRepository.getOrgOwnerDetails(ownerId)
   if(!data){
     throw new AppError('fetching orgOwner details failed',HttpStatus.BAD_REQUEST)
+  }
+  return data
+}
+
+export const getAllOrganizationCategories = async(organizationRepository:ReturnType<OrganizationDBInterface>)=>{
+  const data = await organizationRepository.getAllOrganizationCategories()
+  if(!data){
+    throw new AppError('organizationCategory fetching failed',HttpStatus.BAD_REQUEST)
+  }
+  return data
+}
+
+export const updateOrganizationInfo = async(data:RegisteredOrganization,organizationRepository:ReturnType<OrganizationDBInterface>)=>{
+  const res = await organizationRepository.updateOrganizationInfo(data)
+  if(!res){
+    throw new AppError('updating organization info failed',HttpStatus.BAD_REQUEST)
   }
   return data
 }
