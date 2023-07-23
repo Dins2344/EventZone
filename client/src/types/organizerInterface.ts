@@ -64,4 +64,6 @@ export interface OrganizationInterface {
   admin: Array<string>;
   status: boolean;
   imageURL: string;
+  logo:string
+  country:string
 }

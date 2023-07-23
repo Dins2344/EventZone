@@ -43,7 +43,7 @@ const OrganizerProfile: React.FC = () => {
               >
                 <div className="flex items-center">
                   <img
-                    src="https://img.freepik.com/free-icon/user_318-159711.jpg"
+                    src={item.logo ? item.logo : 'https://img.freepik.com/free-icon/user_318-159711.jpg'}
                     alt="https://img.freepik.com/free-icon/user_318-159711.jpg"
                     className="w-16 h-16 rounded-full"
                   ></img>

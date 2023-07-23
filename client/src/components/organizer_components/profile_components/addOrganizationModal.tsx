@@ -1,7 +1,6 @@
 import React, { ChangeEvent, useEffect, } from "react";
 import { createOrganizer } from "../../../api/userAuth/userApis";
-import { useNavigate } from "react-router-dom";
-import { getAllOrgCategories } from "../../../api/adminAuth/admin";
+import { getAllOrgCategories } from "../../../api/organizer/organizer";
    
 import {
   Button,

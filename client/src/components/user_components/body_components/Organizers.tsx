@@ -45,7 +45,7 @@ const OrganizersCard: React.FC<OrganizersProps> = ({ organizations }) => {
               <div className="flex flex-col w-full items-center mt-10 pb-10">
                 <img
                   className="w-24 h-24 mb-3 rounded-full shadow-lg"
-                  src="https://cdn-icons-png.flaticon.com/512/149/149071.png"
+                  src= {item.logo? item.logo:"https://cdn-icons-png.flaticon.com/512/149/149071.png"}
                   alt="Bonnie image"
                 />
                 <h5 className="mb-1 text-xl font-medium text-gray-900 dark:text-white">

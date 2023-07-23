@@ -217,6 +217,120 @@ export const organizationRepositoryMongoDB = () => {
     }
   };
 
+
+  const getMonthlySales = async()=>{
+    const data = await Bookings.aggregate([
+      {
+        $addFields: {
+          // Convert the bookingTime string into a date object
+          bookingDate: { $dateFromString: { dateString: '$bookingTime' } }
+        }
+      },
+      {
+        $group: {
+          _id: { $dateToString: { format: '%Y-%m', date: '$bookingDate' } },
+          totalSales: { $sum: '$totalAmount' }
+        }
+      },
+      {
+        $project: {
+          _id: 0,
+          month: '$_id', // Rename _id field to month
+          totalSales: 1
+        }
+      },
+      {
+        $sort: {
+          month: 1
+        }
+      }
+    ])
+    return data
+  }
+
+  const getMonthlyTicketSales = async()=>{
+    const data = await Bookings.aggregate([
+      {
+        $addFields: {
+          // Convert the bookingTime string into a date object
+          bookingDate: { $dateFromString: { dateString: '$bookingTime' } }
+        }
+      },
+      {
+        $group: {
+          _id: { $dateToString: { format: '%Y-%m', date: '$bookingDate' } },
+          totalTickets: { $sum: '$ticketCount' }
+        }
+      },
+      {
+        $project: {
+          _id: 0,
+          month: '$_id', // Rename _id field to month
+          totalTickets: 1
+        }
+      },
+      {
+        $sort: {
+          month: 1
+        }
+      }
+    ])
+    return data
+  }
+
+  const getTicketTypeSold = async()=>{
+    const data = await Bookings.aggregate([
+    
+      {
+        $group: {
+          _id: '$paymentType',
+          totalTickets: { $sum: '$ticketCount' }
+        }
+      },
+      {
+        $project: {
+          _id: 0,
+          paymentType: '$_id', // Rename _id field to month
+          totalTickets: 1
+        }
+      },
+      {
+        $sort: {
+          month: 1
+        }
+      }
+    ])
+    return data
+  }
+
+  const getTicketsSoldByEvents = async(userId:string)=>{
+    const data = await Event.aggregate([
+      {
+        $match:{orgOwnerId:userId}
+      },
+    
+      {
+        $group: {
+          _id: '$eventName',
+          totalTickets: { $sum: '$ticketSold' }
+        }
+      },
+      {
+        $project: {
+          _id: 0,
+          eventName: '$_id', // Rename _id field to month
+          totalTickets: 1
+        }
+      },
+     
+    ])
+    console.log(data)
+    return data
+  }
+   
+
+
+
   return {
     addOrganization,
     getAllEventCategories,
@@ -232,7 +346,11 @@ export const organizationRepositoryMongoDB = () => {
     getOrganizersAllBookings,
     getOrgOwnerDetails,
     getAllOrganizationCategories,
-    updateOrganizationInfo
+    updateOrganizationInfo,
+    getMonthlySales,
+    getMonthlyTicketSales,
+    getTicketTypeSold,
+    getTicketsSoldByEvents
   };
 };
 

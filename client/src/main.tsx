@@ -32,6 +32,7 @@ import BookingHome from "./pages/organizer_pages/bookingHome.tsx";
 import EditProfile from "./pages/user_pages/profile_pages/editProfile.tsx";
 import OrganizationSettings from "./pages/organizer_pages/organizationSettings.tsx";
 import EditOrganization from "./pages/organizer_pages/editOrganization.tsx";
+import Reports from "./pages/organizer_pages/reports.tsx";
 
 const appRouter = createBrowserRouter([
   {
@@ -148,6 +149,10 @@ const appRouter = createBrowserRouter([
       {
         path: "/organization/settings/edit-organization",
         element: <EditOrganization />,
+      },
+      {
+        path: "/organization/reports",
+        element: <Reports />,
       },
       {
         path: "/organization/events/event",

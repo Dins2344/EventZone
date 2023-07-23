@@ -134,3 +134,38 @@ export const updateOrganizationInfo = async(data:FormData)=>{
   }
 }
 
+export const getMonthlySales = async ()=>{
+  try{
+    const data = await api.get('http://localhost:4000/organization/get-monthly-sales')
+    return data
+  }catch(error){
+    console.log(error)
+  }
+}
+
+export const getMonthlyTicketSales = async()=>{
+  try{
+    const data = await api.get('http://localhost:4000/organization/get-monthly-ticket-sales')
+    return data
+  }catch(error){
+    console.log(error)
+  }
+}
+
+export const getTicketTypeSold = async()=>{
+  try{
+    const data = await api.get('http://localhost:4000/organization/get-ticket-type-sold')
+    return data
+  }catch(error){
+    console.log(error)
+  }
+}
+
+export const getTicketsSoldByEvents = async()=>{
+  try{
+    const data = await api.get('http://localhost:4000/organization/get-tickets-sold-by-events')
+    return data
+  }catch(error){
+    console.log(error)
+  }
+}

@@ -36,7 +36,7 @@ const EditOrgComponent: React.FC = () => {
     const id = urlParams.get("id");
     id && fetchOrganization(id);
     fetchOrganizationCategories();
-    setChangeLogo(false)
+    setChangeLogo(false);
   }, [updated]);
 
   useEffect(() => {
@@ -101,6 +101,7 @@ const EditOrgComponent: React.FC = () => {
             data.append(`images`, image, `images${index}`);
           });
         }
+        console.log(formData);
         const res = await updateOrganizationInfo(data);
         setErrors({});
         if (res?.data.ok) {
@@ -139,7 +140,7 @@ const EditOrgComponent: React.FC = () => {
               <div className="flex flex-col w-52 items-center">
                 <img
                   className="rounded-full w-52 h-52"
-                  src={formData.logo}
+                  src={formData.logo ? formData.logo:"https://img.freepik.com/free-icon/user_318-159711.jpg"}
                   alt="image description"
                 />
                 <Button
@@ -211,7 +212,6 @@ const EditOrgComponent: React.FC = () => {
                   <select
                     onChange={handleChange}
                     name="orgType"
-                    id="countries"
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   >
                     <option value={formData?.orgType} selected>
@@ -231,6 +231,7 @@ const EditOrgComponent: React.FC = () => {
               <div className="flex flex-wrap mt-3 lg:pr-3">
                 <div className="w-full lg:w-1/2">
                   <select
+                    onChange={handleChange}
                     name="country"
                     id="countries"
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -242,11 +243,11 @@ const EditOrgComponent: React.FC = () => {
                     ) : (
                       <option selected>Choose a country</option>
                     )}
-                    <option value="IN">India</option>
-                    <option value="US">United States</option>
-                    <option value="CA">Canada</option>
-                    <option value="FR">France</option>
-                    <option value="DE">Germany</option>
+                    <option value="India">India</option>
+                    <option value="USA">United States</option>
+                    <option value="Canada">Canada</option>
+                    <option value="France">France</option>
+                    <option value="Germany">Germany</option>
                   </select>
                 </div>
               </div>

@@ -5,12 +5,16 @@ import asyncHandler from "express-async-handler";
 import { CreateOrganization } from "../../../types/userInterface";
 import {
   getAllOrganizationCategories,
+  getMonthlySales,
+  getMonthlyTicketSales,
   getOrgOwnerDetails,
   getOrganizationDetails,
   getOrganizersAllBookings,
+  getTicketTypeSold,
+  getTicketsSoldByEvents,
   organizationRegister,
   updateOrganizationInfo,
-} from "../../../application/usecases/organizatioin/organization";
+} from "../../../application/usecases/organization/organization";
 import { CustomRequest } from "../../../types/userInterface";
 import { addOrganization } from "../../../application/usecases/user/userAuth";
 import { UserDBInterface } from "../../../application/repositories/userDBRepository";
@@ -25,7 +29,7 @@ import {
   publishEvent,
   getUsersAllEvents,
   getOrganizersAllEvent,
-} from "../../../application/usecases/organizatioin/organization";
+} from "../../../application/usecases/organization/organization";
 import { MediaFormInterface } from "../../../types/organizerInterface";
 
 const organizationController = (
@@ -261,6 +265,47 @@ const organizationController = (
     }
   })
 
+  const getMonthlySalesController = asyncHandler(async(req:Request,res:Response)=>{
+    const data = await getMonthlySales(dbRepositoryOrganization)
+    if(data){
+      res.json({message:'fetching data done ',ok:true,data})
+    }else{
+      res.json({error:'monthly data fetching failed'})
+    }
+  })
+
+  const getMonthlyTicketSalesController = asyncHandler(async(req:Request,res:Response)=>{
+    const data = await getMonthlyTicketSales(dbRepositoryOrganization)
+    if(data){
+      res.json({message:'ticket sales data fetching done',ok:true,data})
+    }else{
+      res.json({error:'ticket sales data fetching error'})
+    }
+  })
+
+  const getTicketTypeSoldController = asyncHandler(async(req:Request,res:Response)=>{
+    const data = await getTicketTypeSold(dbRepositoryOrganization)
+    if(data){
+      res.json({message:'fetching ticket type sold done',ok:true,data})
+    }else{
+      res.json({error:'fetching ticket type sold failed ',ok:false})
+    }
+  })
+
+  const getTicketsSoldByEventsController = asyncHandler(async(req:CustomRequest,res:Response)=>{
+    const user = req?.user
+    if(user){
+      const data = await getTicketsSoldByEvents(user.Id,dbRepositoryOrganization)
+      if(data){
+        res.json({message:'fetching data done',ok:true,data})
+      }else{
+        res.json({error:'fetching data failed'})
+      }
+    }else{
+      res.json({error:'invalid token'})
+    }
+  })
+
   return {
     registerOrganization,
     getAllEventCategoriesController,
@@ -277,7 +322,11 @@ const organizationController = (
     getOrganizersAllBookingsController,
     getOrgOwnerDetailsController,
     getAllOrganizationCategoriesController,
-    updateOrganizationInfoController
+    updateOrganizationInfoController,
+    getMonthlySalesController,
+    getMonthlyTicketSalesController,
+    getTicketTypeSoldController,
+    getTicketsSoldByEventsController
   };
 };
 

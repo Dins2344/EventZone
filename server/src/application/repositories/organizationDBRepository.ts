@@ -87,6 +87,27 @@ export const organizationDbRepository = (
     return res
   }
 
+  const getMonthlySales = async()=>{
+    const data = await repository.getMonthlySales()
+    return data
+  }
+
+  const getMonthlyTicketSales = async()=>{
+    const data = await repository.getMonthlyTicketSales()
+    return data
+  }
+
+  const getTicketTypeSold = async()=>{
+    const data = await repository.getTicketTypeSold()
+    return data
+  }
+
+  const getTicketsSoldByEvents = async(userId:string)=>{
+    const data = await repository.getTicketsSoldByEvents(userId)
+    return data
+  }
+
+
   return {
     addOrganization,
     getAllEventCategories,
@@ -102,7 +123,11 @@ export const organizationDbRepository = (
     getOrganizersAllBookings,
     getOrgOwnerDetails,
     getAllOrganizationCategories,
-    updateOrganizationInfo
+    updateOrganizationInfo,
+    getMonthlySales,
+    getMonthlyTicketSales,
+    getTicketTypeSold,
+    getTicketsSoldByEvents
   };
 };
 

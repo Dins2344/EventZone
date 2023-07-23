@@ -68,6 +68,14 @@ const organizationRouter = () => {
   
   router.post('/update-organization-info',upload,orgController.updateOrganizationInfoController)
 
+  router.get('/get-monthly-sales',orgController.getMonthlySalesController)
+
+  router.get('/get-monthly-ticket-sales',orgController.getMonthlyTicketSalesController)
+
+  router.get('/get-ticket-type-sold',orgController.getTicketTypeSoldController)
+
+  router.get('/get-tickets-sold-by-events',orgController.getTicketsSoldByEventsController)
+
   return router;
 };
 

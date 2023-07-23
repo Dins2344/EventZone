@@ -66,7 +66,6 @@ const OrganizationDetails = () => {
     if (organizationDetails) {
       const data = await getOrganizersAllEvents(organizationDetails?._id);
       const event = data?.data.data;
-      console.log(event)
       const currentDate = new Date();
       
       const nextData: RegisteredEventInterface = event
@@ -100,10 +99,10 @@ const OrganizationDetails = () => {
     <>
       <div className="flex border p-3 rounded-md mb-8">
         <div className="flex md:w-2/3 lg:w-1/4">
-          <div className="w-20 h-20 mr-3">
+          <div className=" mr-3">
             <img
-              className="rounded-full "
-              src="https://cdn-icons-png.flaticon.com/512/149/149071.png"
+              className="rounded-full w-20 h-20 object-cover"
+              src={organizationDetails?.logo ? organizationDetails.logo :"https://cdn-icons-png.flaticon.com/512/149/149071.png"}
               alt="image description"
             />
           </div>
