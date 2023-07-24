@@ -1,6 +1,7 @@
 
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import DashboardComponents from "../../components/admin_components/dashboardComponents";
 
 const AdminLanding = ()=>{
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>();
@@ -15,8 +16,9 @@ const AdminLanding = ()=>{
     if (isLoggedIn) {
         return (
           <>
-           
-            <p>Admin landing page</p>
+           <div className="min-h-screen px-4">
+            <DashboardComponents />
+           </div>
           </>
         );
       } else {

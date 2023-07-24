@@ -58,6 +58,35 @@ export const adminDbRepository = (repository:AdminRepositoryDBReturn) =>{
         return await repository.rejectEvent(id)
     }
 
+    const getTotalEvents = async()=>{
+        return await repository.getTotalEvents()
+    }
+    const getTotalOrganization = async()=>{
+        return await repository.getTotalOrganization()
+    }
+    const getTotalUsers = async()=>{
+        return await repository.getTotalUsers()
+    }
+
+    const getTotalTicketsSold = async()=>{
+        return await repository.getTotalTicketsSold()
+    }
+
+    const getAdminMonthlySales = async()=>{
+        return await repository.getAdminMonthlySales()
+    }
+
+    const getAdminMonthlyTicketSales = async()=>{
+        return await repository.getAdminMonthlyTicketSales()
+    }
+
+    const getAdminTicketTypeSold = async()=>{
+        return await repository.getAdminTicketTypeSold()
+    }
+
+    const getMostSoldEvents = async()=>{
+        return await repository.getMostSoldEvents()
+    }
     return {
         getAdminByEmail,
         addEventCategory,
@@ -72,7 +101,15 @@ export const adminDbRepository = (repository:AdminRepositoryDBReturn) =>{
         getAllOrgCategory,
         getAllEvents,
         approveEvent,
-        rejectEvent
+        rejectEvent,
+        getTotalEvents,
+        getTotalOrganization,
+        getTotalUsers,
+        getTotalTicketsSold,
+        getAdminMonthlySales,
+        getAdminMonthlyTicketSales,
+        getAdminTicketTypeSold,
+        getMostSoldEvents
     }
 }
 

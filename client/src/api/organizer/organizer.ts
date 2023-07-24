@@ -1,4 +1,4 @@
-import api from "../itercepters/intercepter";
+import api from "../interceptors/userInterceptor";
 import { BasicFormInterface } from "../../types/organizerInterface";
 import { PublishFormDataInterface } from "../../types/organizerInterface";
 

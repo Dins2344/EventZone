@@ -1,5 +1,5 @@
 import { ticketBookingCreationInterface } from "../../types/userInterface";
-import api from "../itercepters/intercepter";
+import api from "../interceptors/userInterceptor";
 import { AddressFormData } from "../../components/user_components/profile_components/contactInfo";
 
 interface createOrganizerInterface {

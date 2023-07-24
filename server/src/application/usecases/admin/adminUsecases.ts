@@ -136,3 +136,68 @@ export const rejectEvent = async(id:string,adminRepository:ReturnType<AdminDbInt
   }
   return res
 }
+
+
+export const getTotalEvents = async(adminRepository:ReturnType<AdminDbInterface>)=>{
+  const data = await adminRepository.getTotalEvents()
+  if(!data){
+    throw new AppError('total events fetching failed',HttpStatus.BAD_REQUEST)
+  }
+  return data
+}
+
+export const getTotalOrganization = async(adminRepository:ReturnType<AdminDbInterface>)=>{
+  const data = await adminRepository.getTotalOrganization()
+  if(!data){
+    throw new AppError('total organization fetching failed',HttpStatus.BAD_REQUEST)
+  }
+  return data
+}
+
+export const getTotalUsers = async(adminRepository:ReturnType<AdminDbInterface>)=>{
+  const data = await adminRepository.getTotalUsers()
+  if(!data){
+    throw new AppError('total users fetching failed',HttpStatus.BAD_REQUEST)
+  }
+  return data
+}
+
+export const getTotalTicketsSold = async(adminRepository:ReturnType<AdminDbInterface>)=>{
+  const data = await adminRepository.getTotalTicketsSold()
+  if(!data){
+    throw new AppError('total tickets sold fetching failed',HttpStatus.BAD_REQUEST)
+  }
+  return data
+}
+
+export const getAdminMonthlySales = async(adminRepository:ReturnType<AdminDbInterface>)=>{
+  const data = await adminRepository.getAdminMonthlySales()
+  if(!data){
+    throw new AppError('monthly sales data failed',HttpStatus.BAD_REQUEST)
+  }
+  return data
+}
+
+export const getAdminMonthlyTicketSales = async(adminRepository:ReturnType<AdminDbInterface>)=>{
+  const data = await adminRepository.getAdminMonthlyTicketSales()
+  if(!data){
+    throw new AppError('monthly ticket sold data fetching failed',HttpStatus.BAD_REQUEST)
+  }
+  return data
+}
+
+export const getAdminTicketTypeSold = async(adminRepository:ReturnType<AdminDbInterface>)=>{
+  const data = await adminRepository.getAdminTicketTypeSold()
+  if(!data){
+    throw new AppError('monthly ticket type sold data fetching failed',HttpStatus.BAD_REQUEST)
+  }
+  return data
+}
+
+export const getMostSoldEvents = async(adminRepository:ReturnType<AdminDbInterface>)=>{
+  const data = await adminRepository.getMostSoldEvents()
+  if(!data){
+    throw new AppError('most sold events fetching failed',HttpStatus.BAD_REQUEST)
+  }
+  return data
+}

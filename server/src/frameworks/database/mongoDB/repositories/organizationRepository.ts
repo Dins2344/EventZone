@@ -294,11 +294,7 @@ export const organizationRepositoryMongoDB = () => {
           totalTickets: 1
         }
       },
-      {
-        $sort: {
-          month: 1
-        }
-      }
+      
     ])
     return data
   }

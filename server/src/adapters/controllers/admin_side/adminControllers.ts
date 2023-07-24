@@ -13,7 +13,15 @@ import {
   getAllOrgCategory,
   getAllEvents,
   approveEvent,
-  rejectEvent
+  rejectEvent,
+  getTotalEvents,
+  getTotalUsers,
+  getTotalOrganization,
+  getTotalTicketsSold,
+  getAdminMonthlySales,
+  getAdminMonthlyTicketSales,
+  getAdminTicketTypeSold,
+  getMostSoldEvents
 } from "../../../application/usecases/admin/adminUsecases";
 import { AdminDbInterface } from "../../../application/repositories/adminDBRepository";
 import { AdminRepositoryMongoDB } from "../../../frameworks/database/mongoDB/repositories/adminRepositoryMongoDB";
@@ -165,6 +173,77 @@ const adminController = (
     }
   })
 
+  const getTotalEventsController = asyncHandler(async(req:Request,res:Response)=>{
+    const data = await getTotalEvents(dbRepositoryAdmin)
+    if(data){
+      res.json({message:'total events fetching done',ok:true,data})
+    }else{
+      res.json({error:'total events fetching failed'})
+    }
+  })
+
+  const getTotalUsersController = asyncHandler(async(req:Request,res:Response)=>{
+    const data = await getTotalUsers(dbRepositoryAdmin)
+    if(data){
+      res.json({message:'total users fetching done',ok:true,data})
+    }else{
+      res.json({error:'total users fetching failed'})
+    }
+  })
+
+  const getTotalOrganizationsController = asyncHandler(async(req:Request,res:Response)=>{
+    const data = await getTotalOrganization(dbRepositoryAdmin)
+    if(data){
+      res.json({message:'total organization fetching done',ok:true,data})
+    }else{
+      res.json({error:'total organization fetching failed'})
+    }
+  })
+
+  const getTotalTicketsSoldController = asyncHandler(async(req:Request,res:Response)=>{
+    const data = await getTotalTicketsSold(dbRepositoryAdmin)
+    if(data){
+      res.json({message:'total ticket sold fetching done',ok:true,data})
+    }else{
+      res.json({error:'total ticket sold fetching failed'})
+    }
+  })
+
+  const getAdminMonthlySalesController = asyncHandler(async(req:Request,res:Response)=>{
+    const data = await getAdminMonthlySales(dbRepositoryAdmin)
+    if(data){
+      res.json({message:'monthly sales data fetched',ok:true,data})
+    }else{
+      res.json({error:'monthly sales data fetching failed',ok:false,})
+    }
+  })
+
+  const getAdminMonthlyTicketSalesController = asyncHandler(async(req:Request,res:Response)=>{
+    const data = await getAdminMonthlyTicketSales(dbRepositoryAdmin)
+    if(data){
+      res.json({message:'monthly ticket sales data fetched',ok:true,data})
+    }else{
+      res.json({error:'monthly ticket sales data failed'})
+    }
+  })
+
+  const getAdminTicketTypeSoldController = asyncHandler(async(req:Request,res:Response)=>{
+    const data = await getAdminTicketTypeSold(dbRepositoryAdmin)
+    if(data){
+      res.json({message:'monthly ticket type sold data fetched',ok:true,data})
+    }else{
+      res.json({error:'monthly ticket type sold data fetching failed'})
+    }
+  })
+
+  const getMostSoldEventsController = asyncHandler(async(req:Request,res:Response)=>{
+    const data = await getMostSoldEvents(dbRepositoryAdmin)
+    if(data){
+      res.json({message:'most sold events data fetched',ok:true,data})
+    }else{
+      res.json({error:'most sold events fetching failed'})
+    }
+  })
   return {
     addEventCategoryController,
     getEventCategoriesController,
@@ -178,7 +257,15 @@ const adminController = (
     getAllOrgCategoryController,
     getAllEventsController,
     approveEventController,
-    rejectEventController
+    rejectEventController,
+    getTotalEventsController,
+    getTotalUsersController,
+    getTotalOrganizationsController,
+    getTotalTicketsSoldController,
+    getAdminMonthlySalesController,
+    getAdminMonthlyTicketSalesController,
+    getAdminTicketTypeSoldController,
+    getMostSoldEventsController
   };
 };
 

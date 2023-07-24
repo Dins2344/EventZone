@@ -1,5 +1,4 @@
-import adminApi from "../itercepters/adminIterceptors";
-import { eventCategoryInterface } from "../../types/adminInterface";
+import adminApi from "../interceptors/interceptors";
 import { editEventCategoriesInterface } from "../../components/admin_components/editEventCategory";
 
 interface eventCategory {
@@ -122,6 +121,78 @@ export const rejectEvent = async(id:string)=>{
   try{
     const res = await adminApi.get(`http://localhost:4000/admin/reject-event/${id}`)
     return res
+  }catch(error){
+    console.log(error)
+  }
+}
+
+export const getTotalUsers = async()=>{
+  try{
+    const data = await adminApi.get('http://localhost:4000/admin/getTotalUsers')
+    return data
+  }catch(error){
+    console.log(error)
+  }
+}
+
+export const getTotalEvents = async()=>{
+  try{
+    const data = await adminApi.get('http://localhost:4000/admin/getTotalEvents')
+    return data
+  }catch(error){
+    console.log(error)
+  }
+}
+
+export const getTotalOrganizers = async()=>{
+  try{
+    const data = await adminApi.get('http://localhost:4000/admin/getTotalOrganizers')
+    return data
+  }catch(error){
+    console.log(error)
+  }
+}
+
+export const getTotalTicketsSold = async()=>{
+  try{
+    const data = await adminApi.get('http://localhost:4000/admin/getTotalTicketsSold')
+    return data
+  }catch(error){
+    console.log(error)
+  }
+}
+
+export const getMonthlySales = async()=>{
+  try{
+    const data = await adminApi.get('http://localhost:4000/admin/get-monthly-sales')
+    return data
+  }catch(error){
+    console.log(error)
+  }
+}
+
+export const getMonthlyTicketSales = async()=>{
+  try{
+    const data = await adminApi.get('http://localhost:4000/admin/get-monthly-ticket-sales')
+    return data
+  }catch(error){
+    console.log(error)
+  }
+}
+
+export const getMonthlyTicketTypeSales = async()=>{
+  try{
+    const data = await adminApi.get('http://localhost:4000/admin/get-monthly-ticket-type-sales')
+    return data
+  }catch(error){
+    console.log(error)
+  }
+}
+
+export const getMostSoldEvents = async()=>{
+  try{
+    const data = await adminApi.get('http://localhost:4000/admin/get-most-sold-events')
+    return data
   }catch(error){
     console.log(error)
   }
