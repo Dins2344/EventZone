@@ -11,7 +11,7 @@ export const AdminHome: React.FC = () => {
   return online ? (
     <>
       <HeaderWithSideBar />
-      <div className="p-4 sm:ml-64 mt-12">
+      <div className="px-4 py-8 sm:ml-64 mt-12 bg-blue-gray-50">
         <Outlet />
       </div>
       <Footer />

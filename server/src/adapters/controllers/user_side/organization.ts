@@ -7,6 +7,7 @@ import {
   getAllOrganizationCategories,
   getMonthlySales,
   getMonthlyTicketSales,
+  getOrgAllCities,
   getOrgOwnerDetails,
   getOrganizationDetails,
   getOrganizersAllBookings,
@@ -97,6 +98,15 @@ const organizationController = (
       }
     }
   );
+
+  const getOrgAllCitiesController = asyncHandler(async(req:Request,res:Response)=>{
+    const data = await getOrgAllCities(dbRepositoryOrganization)
+    if(data){
+      res.json({message:'fetching cities done',ok:true,data})
+    }else{
+      res.json({error:'fetching cities failed',ok:false})
+    }
+  })
 
   const getOrganizationDetailController = asyncHandler(
     async (req: Request, res: Response) => {
@@ -326,7 +336,8 @@ const organizationController = (
     getMonthlySalesController,
     getMonthlyTicketSalesController,
     getTicketTypeSoldController,
-    getTicketsSoldByEventsController
+    getTicketsSoldByEventsController,
+    getOrgAllCitiesController
   };
 };
 

@@ -7,24 +7,25 @@ import {
   getMonthlySales,
   getMonthlyTicketSales,
   getMonthlyTicketTypeSales,
-  getMostSoldEvents
+  getMostSoldEvents,
 } from "../../api/adminAuth/admin";
 import { RegisteredUserInterface } from "../../types/userInterface";
 import { RegisteredEventInterface } from "../../types/organizerInterface";
 import { RegisteredOrganization } from "../../types/userInterface";
 import Chart from "react-apexcharts";
-
-
+import AllBookingTable from "./bookingTable";
 
 type totalTicketSoldType = {
-    totalTickets:number 
-    eventName:string
-}
+  totalTickets: number;
+  eventName: string;
+};
 const DashboardComponents: React.FC = () => {
   const [totalUsers, setTotalUsers] = useState<RegisteredUserInterface[]>();
   const [totalEvents, setTotalEvents] = useState<RegisteredEventInterface[]>();
-  const [totalOrganizations, setTotalOrganizations] = useState<RegisteredOrganization[]>();
-  const [totalTicketsSold, setTotalTicketsSold] = useState<totalTicketSoldType[]>();
+  const [totalOrganizations, setTotalOrganizations] =
+    useState<RegisteredOrganization[]>();
+  const [totalTicketsSold, setTotalTicketsSold] =
+    useState<totalTicketSoldType[]>();
 
   useEffect(() => {
     fetchTotalCount();
@@ -40,7 +41,9 @@ const DashboardComponents: React.FC = () => {
     totalUsers && setTotalUsers(totalUsers?.data.data);
     totalTicketsSold && setTotalTicketsSold(totalTicketsSold?.data.data);
   };
-  const totalTicketsSum =totalTicketsSold && totalTicketsSold.reduce((acc, event) => acc + event.totalTickets, 0);
+  const totalTicketsSum =
+    totalTicketsSold &&
+    totalTicketsSold.reduce((acc, event) => acc + event.totalTickets, 0);
 
   return (
     <>
@@ -70,38 +73,39 @@ const DashboardComponents: React.FC = () => {
           </div>
         </div>
       </div>
-      <div className="flex flex-wrap mt-10 border shadow-md px-3 rounded-md">
-          <div className="flex flex-col justify-center w-full py-4 mb-3">
-            <h2 className="text-xl  font-extrabold text-black ">
-              Sales Summary
-            </h2>
-            <p>An overview of all ticket sales,</p>
-          </div>
-          <div className="flex flex-col w-full md:w-1/2 items-center">
-            <p>Monthly revenue</p>
-            <ChartComponent />
-          </div>
-          <div className="flex flex-col w-full md:w-1/2 items-center mt-3 md:mt-0">
-            <p>Tickets sold in a month</p>
-            <LineChartComponent />
-          </div>
+      <div className="flex flex-wrap mt-10 border shadow-md px-3 rounded-xl bg-white">
+        <div className="flex flex-col justify-center w-full py-4 mb-3">
+          <h2 className="text-xl  font-extrabold text-black ">Sales Summary</h2>
+          <p>An overview of all ticket sales,</p>
         </div>
-        <div className="flex flex-wrap mt-10 border shadow-md px-3 rounded-md">
-          <div className="flex flex-col justify-center w-full py-4 mb-3">
-            <h2 className="text-xl  font-extrabold text-black ">
-              Sales by Ticket Type
-            </h2>
-            <p>An overview of all ticket sales by ticket type</p>
-          </div>
-          <div className="flex flex-col w-full md:w-1/2 items-center">
-            <p className="mb-2">Ticket types sold</p>
-            <PieChartComponent />
-          </div>
-          <div className="flex flex-col w-full md:w-1/2 items-center mt-3 md:mt-0">
-            <p className="mb-2">Ticket sold by events</p>
-            <MostTicketSold />
-          </div>
+        <div className="flex flex-col w-full md:w-1/2 items-center">
+          <p>Monthly revenue</p>
+          <ChartComponent />
         </div>
+        <div className="flex flex-col w-full md:w-1/2 items-center mt-3 md:mt-0">
+          <p>Tickets sold in a month</p>
+          <LineChartComponent />
+        </div>
+      </div>
+      <div className="flex flex-wrap mt-10 border shadow-md px-3 rounded-xl bg-white">
+        <div className="flex flex-col justify-center w-full py-4 mb-3">
+          <h2 className="text-xl  font-extrabold text-black ">
+            Sales by Ticket Type
+          </h2>
+          <p>An overview of all ticket sales by ticket type</p>
+        </div>
+        <div className="flex flex-col w-full md:w-1/2 items-center">
+          <p className="mb-2">Ticket types sold</p>
+          <PieChartComponent />
+        </div>
+        <div className="flex flex-col w-full md:w-1/2 items-center mt-3 md:mt-0">
+          <p className="mb-3">Ticket sold by events</p>
+          <MostTicketSold />
+        </div>
+      </div>
+      <div className="mt-4">
+        <AllBookingTable />
+      </div>
     </>
   );
 };
@@ -187,132 +191,173 @@ export const ChartComponent: React.FC = () => {
 };
 
 type ticketSales = {
-  totalTickets:number
-  month:string
-}
+  totalTickets: number;
+  month: string;
+};
 
 export const LineChartComponent: React.FC = () => {
-  const [ticketSales,setTicketSales]=useState<ticketSales[]>()
-useEffect(() => {
-  fetchMonthlyTicketSale();
-}, []);
+  const [ticketSales, setTicketSales] = useState<ticketSales[]>();
+  useEffect(() => {
+    fetchMonthlyTicketSale();
+  }, []);
 
-const fetchMonthlyTicketSale = async () => {
-  const data = await getMonthlyTicketSales();
-  setTicketSales(data?.data.data)
-};
-const months = [
-  "Jan",
-  "Feb",
-  "Mar",
-  "Apr",
-  "May",
-  "Jun",
-  "Jul",
-  "Aug",
-  "Sep",
-  "Oct",
-  "Nov",
-  "Dec",
-];
-const allMonths = [
-  "2023-01",
-  "2023-02",
-  "2023-03",
-  "2023-04",
-  "2023-05",
-  "2023-06",
-  "2023-07",
-  "2023-08",
-  "2023-09",
-  "2023-10",
-  "2023-11",
-  "2023-12",
-];
+  const fetchMonthlyTicketSale = async () => {
+    const data = await getMonthlyTicketSales();
+    setTicketSales(data?.data.data);
+  };
+  const months = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
+  const allMonths = [
+    "2023-01",
+    "2023-02",
+    "2023-03",
+    "2023-04",
+    "2023-05",
+    "2023-06",
+    "2023-07",
+    "2023-08",
+    "2023-09",
+    "2023-10",
+    "2023-11",
+    "2023-12",
+  ];
 
-const monthlyTicketSalesArray = allMonths.map((month) => {
-  const dataForMonth =
-    ticketSales && ticketSales.find((item) => item.month === month);
+  const monthlyTicketSalesArray = allMonths.map((month) => {
+    const dataForMonth =
+      ticketSales && ticketSales.find((item) => item.month === month);
 
-  return dataForMonth ? dataForMonth.totalTickets : 0;
-});
-const state = {
-  options: {
-    chart: {
-      id: "basic-bar",
+    return dataForMonth ? dataForMonth.totalTickets : 0;
+  });
+  const state = {
+    options: {
+      chart: {
+        id: "basic-bar",
+      },
+      xaxis: {
+        categories: months,
+      },
     },
-    xaxis: {
-      categories: months,
-    },
-  },
-  series: [
-    {
-      name: "Ticket sold",
-      data: monthlyTicketSalesArray,
-    },
-  ],
-};
-return (
-  <>
-    <div className="w-full">
-      <Chart options={state.options} series={state.series} type="line" />
-    </div>
-  </>
-);
+    series: [
+      {
+        name: "Ticket sold",
+        data: monthlyTicketSalesArray,
+      },
+    ],
+  };
+  return (
+    <>
+      <div className="w-full">
+        <Chart options={state.options} series={state.series} type="line" />
+      </div>
+    </>
+  );
 };
 
 type ticketTypeSales = {
-  paymentType:string
-  totalTickets:number
-}
+  paymentType: string;
+  totalTickets: number;
+};
 
 export const PieChartComponent: React.FC = () => {
-  const  [ticketTypeSold,setTicketTypeSold]=useState<ticketTypeSales[]>()
+  const [ticketTypeSold, setTicketTypeSold] = useState<ticketTypeSales[]>();
 
-  useEffect(()=>{
-      fetchTicketSoldType ()
-  },[])
+  useEffect(() => {
+    fetchTicketSoldType();
+  }, []);
 
-  const fetchTicketSoldType = async () =>{
-      const data = await getMonthlyTicketTypeSales()
-      setTicketTypeSold(data?.data.data)
-  }
-  const ticketTypes = ['free','charged','donation']
+  const fetchTicketSoldType = async () => {
+    const data = await getMonthlyTicketTypeSales();
+    setTicketTypeSold(data?.data.data);
+  };
+  const ticketTypes = ["free", "charged", "donation"];
 
   const monthlyTicketSoldArray = ticketTypes.map((type) => {
-      const dataForMonth =
-        ticketTypeSold && ticketTypeSold.find((item) => item.paymentType === type);
-  
-      return dataForMonth ? dataForMonth.totalTickets : 0;
-    });
+    const dataForMonth =
+      ticketTypeSold &&
+      ticketTypeSold.find((item) => item.paymentType === type);
 
-const state = {
-  series: monthlyTicketSoldArray,
-  chartOptions: {
-    labels: ticketTypes,
-  },
-};
-return (
-  <>
-    <div className="w-full">
-      <Chart options={state.chartOptions} series={state.series} type="pie" />
-    </div>
-  </>
-);
-};
+    return dataForMonth ? dataForMonth.totalTickets : 0;
+  });
 
-
-export const MostTicketSold:React.FC = ()=>{
-  useEffect(()=>{
-    fetchMostSoldEvents()
-  },[])
-
-  const fetchMostSoldEvents = async()=>{
-    const data  = await getMostSoldEvents()
-    console.log(data)
-  }
+  const state = {
+    series: monthlyTicketSoldArray,
+    chartOptions: {
+      labels: ticketTypes,
+    },
+  };
   return (
     <>
+      <div className="w-full h-auto">
+        <Chart options={state.chartOptions} series={state.series} type="pie" />
+      </div>
     </>
-  )
-}
+  );
+};
+
+type MostTicketSold = {
+  eventName: string;
+  totalTickets: number;
+};
+export const MostTicketSold: React.FC = () => {
+  const [events, setEvents] = useState<MostTicketSold[]>();
+  useEffect(() => {
+    fetchMostSoldEvents();
+  }, []);
+
+  const fetchMostSoldEvents = async () => {
+    const data = await getMostSoldEvents();
+    setEvents(data?.data.data);
+  };
+  return (
+    <>
+      <div className="flex flex-col px-3 w-full">
+        <div className="relative overflow-x-auto">
+          <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400 border">
+            <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+              <tr>
+                <th scope="col" className="px-6 py-3">
+                  #
+                </th>
+                <th scope="col" className="px-6 py-3">
+                  Event name
+                </th>
+                <th scope="col" className="px-6 py-3">
+                  Tickets sold
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {events &&
+                events.map((item, index) => {
+                  return (
+                    <tr key={item.eventName} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                      <td className="px-6 py-4">{index + 1}</td>
+                      <th
+                        scope="row"
+                        className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                      >
+                        {item.eventName}
+                      </th>
+                      <td className="px-6 py-4">{item.totalTickets}</td>
+                    </tr>
+                  );
+                })}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </>
+  );
+};

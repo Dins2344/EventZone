@@ -13,6 +13,7 @@ import { ObjectId } from "mongodb";
 import Bookings from "../models/bookings";
 import User from "../models/userModel";
 import OrganizationCategory from "../models/orgCategory";
+import Cities from "../models/Cities";
 
 export const organizationRepositoryMongoDB = () => {
   const addOrganization = async (orgData: CreateOrganization) => {
@@ -29,6 +30,11 @@ export const organizationRepositoryMongoDB = () => {
     const data = await Organization.find({ userId: id });
     return data;
   };
+
+  const getAllCities = async()=>{
+    const data = await Cities.find({})
+    return data
+  }
 
   const getOrganizationDetails = async (orgId: string) => {
     const data = await Organization.findOne({ _id: new ObjectId(orgId) });
@@ -346,7 +352,8 @@ export const organizationRepositoryMongoDB = () => {
     getMonthlySales,
     getMonthlyTicketSales,
     getTicketTypeSold,
-    getTicketsSoldByEvents
+    getTicketsSoldByEvents,
+    getAllCities
   };
 };
 

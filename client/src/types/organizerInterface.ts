@@ -3,9 +3,11 @@ export interface BasicFormInterface {
   eventName: string;
   organizer: string;
   category: string;
+  agenda:string
   addressLine1: string;
   addressLine2: string;
-  addressLine3: string;
+  city: string;
+  state:string
   startDate: string;
   startTime: string;
   endDate: string;
@@ -18,6 +20,9 @@ export interface RegisteredEventInterface {
   category: string;
   addressLine1: string;
   addressLine2: string;
+  agenda:string
+  city: string;
+  state:string
   addressLine3: string;
   startDate: string;
   startTime: string;

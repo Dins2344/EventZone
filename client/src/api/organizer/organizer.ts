@@ -169,3 +169,12 @@ export const getTicketsSoldByEvents = async()=>{
     console.log(error)
   }
 }
+
+export const getAllCities = async()=>{
+  try{
+    const data = await api.get('http://localhost:4000/organization/get-all-cities')
+    return data
+  }catch(error){
+    console.log(error)
+  }
+}

@@ -1,7 +1,7 @@
 import Admin from "../models/adminModel";
 import EventCategory from "../models/eventCategory";
 import OrganizationCategory from "../models/orgCategory";
-import AdminInterface from "../../../../types/adminInterface";
+import AdminInterface, { CityInterface } from "../../../../types/adminInterface";
 import {
   EventCategoryInterface,
   EditEventCategoryInterface,
@@ -11,6 +11,7 @@ import Event from "../models/eventModel";
 import User from "../models/userModel";
 import Organization from "../models/organizationModel";
 import Bookings from "../models/bookings";
+import Cities from "../models/Cities";
 
 export const adminRepositoryMongoDB = () => {
   const getAdminByEmail = async (email: string) => {
@@ -220,19 +221,117 @@ export const adminRepositoryMongoDB = () => {
           _id: 0,
           eventName: '$_id', // Rename _id field to month
           totalTickets: 1,
-          imageURL:1,
-          category:1
         }
       },
       {
         $sort: {
           totalTickets: -1
         }
-      }
+      },
      
     ])
-    console.log(data)
     return data
+  }
+
+
+  const getAllBookings = async()=>{
+    const data = await Bookings.aggregate([
+      {
+        $addFields: {
+          userId: { $toObjectId: "$userId" },
+        },
+      },
+      // Lookup to join with the Event collection
+      {
+        $lookup: {
+          from: "users", // Name of the Event collection
+          localField: "userId",
+          foreignField: "_id",
+          as: "user",
+        },
+      },
+      // Unwind the event array
+      {
+        $unwind: "$user",
+      },
+      {
+        $addFields: {
+          eventId: { $toObjectId: "$eventId" },
+        },
+      },
+      // Lookup to join with the Event collection
+      {
+        $lookup: {
+          from: "events", // Name of the Event collection
+          localField: "eventId",
+          foreignField: "_id",
+          as: "event",
+        },
+      },
+      {
+        $unwind: "$event",
+      },
+      // Project the desired fields
+      {
+        $project: {
+          _id: 1,
+          eventId: 1,
+          userId: 1,
+          bookingTime: 1,
+          contactInfo: 1,
+          ticketCount: 1,
+          status: 1,
+          QRCodeLink: 1,
+          paymentType: 1,
+          totalAmount: 1,
+          user: {
+            firstName: "$user.firstName",
+            lastName: "$user.lastName",
+            email: "$user.email",
+            profileImage: "$user.profileImage",
+            // Include other event fields as needed
+          },
+          event: {
+            eventName: "$event.eventName",
+            organizer: "$event.organizer",
+            imageURL: "$event.imageURL",
+            startDate: "$event.startDate",
+            startTime: "$event.startTime",
+            ticketValue: "$event.ticketValue",
+            endDate: "$event.endDate",
+            endTime: "$event.endTime",
+            category: "$event.category",
+            addressLine1: "$event.addressLine1",
+            addressLine2: "$event.addressLine2",
+            addressLine3: "$event.addressLine3",
+            orgName: "$event.orgName",
+            // Include other event fields as needed
+          },
+        },
+      },
+      {
+        $sort: { _id: -1 },
+      },
+    ]).exec();
+    console.log(data.length)
+    return data
+  }
+
+  const addCities = async(data:CityInterface)=>{
+    console.log(data)
+    const cityModel = new Cities(data)
+    const res = await cityModel.save()
+    return res
+  }
+
+  const getAllCities = async()=>{
+    const data = await Cities.find({})
+    return data
+  }
+
+  const deleteCity = async(id:string)=>{
+    const res = await Cities.deleteOne({_id:new ObjectId(id)})
+    return res
   }
 
   return {
@@ -257,7 +356,11 @@ export const adminRepositoryMongoDB = () => {
     getAdminTicketTypeSold,
     getAdminMonthlyTicketSales,
     getAdminMonthlySales,
-    getMostSoldEvents
+    getMostSoldEvents,
+    getAllBookings,
+    addCities,
+    getAllCities,
+    deleteCity
   };
 };
 

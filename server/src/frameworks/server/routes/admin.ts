@@ -28,6 +28,11 @@ const adminRouter = () => {
   router.get('/get-monthly-ticket-sales',controller.getAdminMonthlyTicketSalesController)
   router.get('/get-monthly-ticket-type-sales',controller.getAdminTicketTypeSoldController)
   router.get('/get-most-sold-events',controller.getMostSoldEventsController)
+  router.get('/get-all-bookings',controller.getAllBookingsController)
+  router.route('/city-manage')
+  .post(controller.addCitiesController)
+  .get(controller.getAllCitiesController)
+  router.delete('/city-manage/:id',controller.deleteCityController)
 
   return router;
 };

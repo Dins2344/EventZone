@@ -2,6 +2,7 @@ import { Await } from "react-router-dom";
 import {
   EventCategoryInterface,
   EditEventCategoryInterface,
+  CityInterface,
 } from "../../../types/adminInterface";
 import { HttpStatus } from "../../../types/httpStatus";
 import AppError from "../../../utils/appError";
@@ -198,6 +199,38 @@ export const getMostSoldEvents = async(adminRepository:ReturnType<AdminDbInterfa
   const data = await adminRepository.getMostSoldEvents()
   if(!data){
     throw new AppError('most sold events fetching failed',HttpStatus.BAD_REQUEST)
+  }
+  return data
+}
+
+export const getAllBookings = async(adminRepository:ReturnType<AdminDbInterface>)=>{
+  const data = await adminRepository.getAllBookings()
+  if(!data){
+    throw new AppError('all booking details fetching failed',HttpStatus.BAD_REQUEST)
+  }
+  return data
+}
+
+export const addCities = async(data:CityInterface,adminRepository:ReturnType<AdminDbInterface>)=>{
+  const res = await adminRepository.addCities(data)
+  if(!res){
+    throw new AppError('adding city data failed',HttpStatus.BAD_REQUEST)
+  }
+  return res
+}
+
+export const getAllCities = async(adminRepository:ReturnType<AdminDbInterface>)=>{
+  const data = await adminRepository.getAllCities()
+  if(!data){
+    throw new AppError('getting cities failed',HttpStatus.BAD_REQUEST)
+  }
+  return data
+}
+
+export const deleteCity = async(id:string,adminRepository:ReturnType<AdminDbInterface>)=>{
+  const data = await adminRepository.deleteCity(id)
+  if(!data){
+    throw new AppError('deleting city failed',HttpStatus.BAD_REQUEST)
   }
   return data
 }

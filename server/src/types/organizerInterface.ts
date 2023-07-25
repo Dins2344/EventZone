@@ -12,6 +12,10 @@ export interface BasicFormInterface {
   status: string;
   orgOwnerId:string
   orgName:string
+  city: string;
+  state:string
+  agenda:string
+
 }
 
 export interface MediaFormInterface {

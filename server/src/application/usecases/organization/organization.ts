@@ -8,6 +8,7 @@ import {
   RegisteredOrganization,
 } from "../../../types/organizerInterface";
 import AppError from "../../../utils/appError";
+import { getAllCities } from "../admin/adminUsecases";
 
 export const organizationRegister = async (
   organization: CreateOrganization,
@@ -43,6 +44,14 @@ export const getUsersOrganizations = async (
   }
   return data;
 };
+
+export const getOrgAllCities  = async(organizationRepository:ReturnType<OrganizationDBInterface>)=>{
+  const data = await organizationRepository.getAllCities()
+  if(!data){
+    throw new AppError('fetching cities failed',HttpStatus.BAD_REQUEST)
+  }
+  return data
+}
 
 export const getOrganizationDetails = async (
   orgId: string,

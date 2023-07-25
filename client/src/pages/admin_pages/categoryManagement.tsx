@@ -3,8 +3,10 @@ import { EventCategory,OrgCategory } from "../../components/admin_components/cat
 const CategoryManagement = ()=>{
     return (
         <>
+        <div className="min-h-screen px-4">
         <EventCategory />
         <OrgCategory />
+        </div>
         </>
     )
 }

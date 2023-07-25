@@ -24,6 +24,11 @@ export const organizationDbRepository = (
     return data;
   };
 
+  const getAllCities   = async()=>{
+    const data = await repository.getAllCities()
+    return data
+  }
+
   const getOrganizationDetails = async (orgId: string) => {
     const data = await repository.getOrganizationDetails(orgId);
     return data;
@@ -127,7 +132,8 @@ export const organizationDbRepository = (
     getMonthlySales,
     getMonthlyTicketSales,
     getTicketTypeSold,
-    getTicketsSoldByEvents
+    getTicketsSoldByEvents,
+    getAllCities
   };
 };
 

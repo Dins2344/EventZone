@@ -21,7 +21,11 @@ import {
   getAdminMonthlySales,
   getAdminMonthlyTicketSales,
   getAdminTicketTypeSold,
-  getMostSoldEvents
+  getMostSoldEvents,
+  getAllBookings,
+  addCities,
+  getAllCities,
+  deleteCity
 } from "../../../application/usecases/admin/adminUsecases";
 import { AdminDbInterface } from "../../../application/repositories/adminDBRepository";
 import { AdminRepositoryMongoDB } from "../../../frameworks/database/mongoDB/repositories/adminRepositoryMongoDB";
@@ -244,6 +248,47 @@ const adminController = (
       res.json({error:'most sold events fetching failed'})
     }
   })
+
+  const getAllBookingsController = asyncHandler(async(req:Request,res:Response)=>{
+    const data = await getAllBookings(dbRepositoryAdmin)
+    if(data){
+      res.json({message:'getting booking data done',ok:true,data})
+    }else{
+      res.json({error:'fetching booking data failed'})
+    }
+  })
+
+  const addCitiesController = asyncHandler(async(req:Request,res:Response)=>{
+    const data = req.body
+    if(data){
+      const response = await addCities(data,dbRepositoryAdmin)
+      if(response){
+        res.json({message:'adding city done',ok:true,response})
+      }else{
+        res.json({error:'adding city failed',ok:false})
+      }
+    }
+  })
+
+  const getAllCitiesController = asyncHandler(async(req:Request,res:Response)=>{
+    const data = await getAllCities(dbRepositoryAdmin)
+    if(data){
+      res.json({message:'getting cities done',ok:true,data})
+    }else{
+      res.json({error:'getting cities failed',ok:false})
+    }
+  })
+
+  const deleteCityController = asyncHandler(async(req:Request,res:Response)=>{
+    const id = req.params.id
+    console.log(id)
+    const response = await deleteCity(id,dbRepositoryAdmin)
+    if(response){
+      res.json({message:'deleting city done',ok:true,response})
+    }else{
+      res.json({error:'deleting city failed'})
+    }
+  })
   return {
     addEventCategoryController,
     getEventCategoriesController,
@@ -265,7 +310,11 @@ const adminController = (
     getAdminMonthlySalesController,
     getAdminMonthlyTicketSalesController,
     getAdminTicketTypeSoldController,
-    getMostSoldEventsController
+    getMostSoldEventsController,
+    getAllBookingsController,
+    addCitiesController,
+    getAllCitiesController,
+    deleteCityController
   };
 };
 

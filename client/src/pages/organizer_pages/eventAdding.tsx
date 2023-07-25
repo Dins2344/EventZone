@@ -79,14 +79,7 @@ const EventAddingPage = () => {
 
         {/* <BasicForm className =  {activeStep !== 0 && 'hidden' }></BasicForm> */}
       </div>
-      <div className="mt-32 flex justify-between">
-        <Button onClick={handlePrev} disabled={isFirstStep}>
-          Prev
-        </Button>
-        <Button onClick={handleNext} disabled={isLastStep}>
-          Next
-        </Button>
-      </div>
+      
     </div>
   );
 };

@@ -16,4 +16,9 @@ export interface EditEventCategoryInterface{
     description:string
 }
 
+export interface CityInterface{
+    cityName:string
+    state:string
+}
+
 export default AdminInterface;

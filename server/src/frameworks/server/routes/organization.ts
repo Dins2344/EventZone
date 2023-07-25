@@ -25,6 +25,8 @@ const organizationRouter = () => {
     orgController.getUsersOrganizationsController
   );
 
+  router.get('/get-all-cities',orgController.getOrgAllCitiesController)
+
   router.get(
     "/get-organization-details/:id",
     orgController.getOrganizationDetailController

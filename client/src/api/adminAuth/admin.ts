@@ -1,5 +1,6 @@
 import adminApi from "../interceptors/interceptors";
 import { editEventCategoriesInterface } from "../../components/admin_components/editEventCategory";
+import { CityInterface } from "../../types/adminInterface";
 
 interface eventCategory {
   categoryName: string;
@@ -193,6 +194,43 @@ export const getMostSoldEvents = async()=>{
   try{
     const data = await adminApi.get('http://localhost:4000/admin/get-most-sold-events')
     return data
+  }catch(error){
+    console.log(error)
+  }
+}
+
+
+export const getAllBookings = async()=>{
+  try{
+    const data = await adminApi.get('http://localhost:4000/admin/get-all-bookings')
+    return data
+  }catch(error){
+    console.log(error)
+  }
+}
+
+export const addCities = async(data:CityInterface)=>{
+  try{
+    const res = await adminApi.post('http://localhost:4000/admin/city-manage',data)
+    return res
+  }catch(error){
+    console.log(error)
+  }
+}
+
+export const getAllCities = async()=>{
+  try{
+    const data = await adminApi.get('http://localhost:4000/admin/city-manage')
+    return data
+  }catch(error){
+    console.log(error)
+  }
+}
+
+export const deleteCity = async(id:string)=>{
+  try{
+    const res = await adminApi.delete(`http://localhost:4000/admin/city-manage/${id}`)
+    return res
   }catch(error){
     console.log(error)
   }

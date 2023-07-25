@@ -33,6 +33,8 @@ import EditProfile from "./pages/user_pages/profile_pages/editProfile.tsx";
 import OrganizationSettings from "./pages/organizer_pages/organizationSettings.tsx";
 import EditOrganization from "./pages/organizer_pages/editOrganization.tsx";
 import Reports from "./pages/organizer_pages/reports.tsx";
+import AddCities from "./pages/admin_pages/addCities.tsx";
+import CityAddingForm from "./components/admin_components/CityAddingForm.tsx";
 
 const appRouter = createBrowserRouter([
   {
@@ -67,6 +69,14 @@ const appRouter = createBrowserRouter([
       {
         path: "/admin/request-management",
         element: <RequestManagement />,
+      },
+      {
+        path: "/admin/add-cities",
+        element: <AddCities />,
+      },
+      {
+        path: "/admin/add-cities/add-event-city",
+        element: <CityAddingForm />,
       },
     ],
   },

@@ -38,6 +38,9 @@ export interface EventDetailsInterface {
   addressLine1: string;
   addressLine2: string;
   addressLine3: string;
+  city:string
+  state:string
+  agenda:string
   category: string;
   description: string;
   endDate: string;

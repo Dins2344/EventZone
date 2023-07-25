@@ -20,3 +20,13 @@ export interface OrganizationCategoriesInterface{
     __v:number,
     
 }
+
+export interface RegisteredCityInterface {
+    _id:string
+    cityName:string
+    state:string
+}
+export interface CityInterface {
+    cityName:string
+    state:string
+}

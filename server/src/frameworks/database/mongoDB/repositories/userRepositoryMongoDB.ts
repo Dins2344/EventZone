@@ -116,6 +116,8 @@ export const userRepositoryMongoDB = () => {
             startDate: "$event.startDate",
             startTime: "$event.startTime",
             ticketValue: "$event.ticketValue",
+            city:"$event.city",
+            state:'$event.state'
             // Include other event fields as needed
           },
         },

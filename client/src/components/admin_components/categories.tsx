@@ -19,7 +19,6 @@ export const EventCategory = () => {
 
   const fetchData = async () => {
     const data = await getAllEventCategories();
-    console.log(data?.data.data);
     setCategories(data?.data.data);
   };
   useEffect(() => {
@@ -39,8 +38,8 @@ export const EventCategory = () => {
   };
   return (
     <>
-      <footer className="bg-white rounded-lg shadow m-4 dark:bg-gray-800">
-        <div className="w-full mx-auto max-w-screen-xl p-4 md:flex md:items-center md:justify-between">
+      <footer className="bg-white rounded-lg shadow my-4 dark:bg-gray-800">
+        <div className="w-full mx-auto max-w-screen-xl py-4 md:flex md:items-center md:justify-between">
           <span className="text-lg text-gray-500 sm:text-center dark:text-gray-400">
             Categories for events
           </span>
@@ -140,7 +139,6 @@ export const EventCategory = () => {
                    </Button>
                  </Modal>
                   </tr>
-                  
                 );
               })}
           </tbody>
@@ -157,7 +155,6 @@ export const OrgCategory = () => {
 
   const fetchData = async () => {
     const data = await getAllOrgCategories();
-    console.log(data?.data.data);
     setCategories(data?.data.data);
   };
   useEffect(() => {
@@ -176,8 +173,8 @@ export const OrgCategory = () => {
 
   return (
     <>
-      <footer className="bg-white rounded-lg shadow m-4 dark:bg-gray-800">
-        <div className="w-full mx-auto max-w-screen-xl p-4 md:flex md:items-center md:justify-between">
+      <footer className="bg-white rounded-lg shadow my-4 dark:bg-gray-800">
+        <div className="w-full mx-auto max-w-screen-xl py-4 md:flex md:items-center md:justify-between">
           <span className="text-lg text-gray-500 sm:text-center dark:text-gray-400">
             Categories for organizations
           </span>

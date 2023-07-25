@@ -1,5 +1,5 @@
 import { AdminRepositoryDBReturn } from "../../frameworks/database/mongoDB/repositories/adminRepositoryMongoDB"
-import { EventCategoryInterface,EditEventCategoryInterface } from "../../types/adminInterface"
+import { EventCategoryInterface,EditEventCategoryInterface, CityInterface } from "../../types/adminInterface"
 
 export const adminDbRepository = (repository:AdminRepositoryDBReturn) =>{
     const getAdminByEmail = async(email:string)=>{
@@ -87,6 +87,21 @@ export const adminDbRepository = (repository:AdminRepositoryDBReturn) =>{
     const getMostSoldEvents = async()=>{
         return await repository.getMostSoldEvents()
     }
+
+    const getAllBookings = async()=>{
+        return await repository.getAllBookings()
+    }
+
+    const addCities = async(data:CityInterface)=>{
+        return await repository.addCities(data)
+    }
+    const getAllCities = async()=>{
+        return await repository.getAllCities()
+    }
+
+    const deleteCity = async(id:string)=>{
+        return await repository.deleteCity(id)
+    }
     return {
         getAdminByEmail,
         addEventCategory,
@@ -109,7 +124,11 @@ export const adminDbRepository = (repository:AdminRepositoryDBReturn) =>{
         getAdminMonthlySales,
         getAdminMonthlyTicketSales,
         getAdminTicketTypeSold,
-        getMostSoldEvents
+        getMostSoldEvents,
+        getAllBookings,
+        addCities,
+        getAllCities,
+        deleteCity
     }
 }
 

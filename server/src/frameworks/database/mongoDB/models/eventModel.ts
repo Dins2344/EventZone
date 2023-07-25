@@ -15,6 +15,9 @@ const eventSchema = new Schema(
             type:String,
             required:[true,'please add description']
         },
+        agenda:{
+            type:String
+        },
         addressLine1:{
             type:String,
             required:[true,'please add description']
@@ -22,8 +25,11 @@ const eventSchema = new Schema(
         addressLine2:{
             type:String,
         },
-        addressLine3:{
+        city:{
             type:String,
+        },
+        state:{
+            type:String
         },
         startDate:{
             type:String,

@@ -113,7 +113,7 @@ const EventInfo: React.FC<EventDetailsProps> = ({ event }) => {
                 <p className="mb-3">
                   {event?.addressLine1} {event?.addressLine2}
                 </p>
-                <p>{event?.addressLine3}</p>
+                <p>{event?.city},{event?.state}</p>
               </div>
             </div>
           </div>
@@ -127,6 +127,12 @@ const EventInfo: React.FC<EventDetailsProps> = ({ event }) => {
               </h5>
               <p className="mb-3 text-gray-500 dark:text-gray-400">
                 {event?.description}
+              </p>
+              <h5 className="text-xl font-bold dark:text-white mt-3 mb-3">
+                Event agenda
+              </h5>
+              <p className="mb-3 text-gray-500 dark:text-gray-400">
+                {event?.agenda}
               </p>
               <p>
                 event category:{" "}
@@ -145,7 +151,7 @@ const EventInfo: React.FC<EventDetailsProps> = ({ event }) => {
           <div className="mt-3 overflow-scroll no-scrollbar">
             <VideoPlayer videoId={videoId} />
           </div>
-          <div className="flex flex-col mt-3">
+          <div className="flex flex-col mt-8">
             <h3 className="text-3xl font-bold dark:text-white block mb-3">
               About the organizer
             </h3>

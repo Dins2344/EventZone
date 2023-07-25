@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
-import navLogo from '../../assets/logos/svg/logo-no-background.svg'
+import navLogo from "../../assets/logos/svg/logo-no-background.svg";
 const HeaderWithSideBar = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   return (
     <>
       <nav className="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
@@ -30,12 +30,8 @@ const HeaderWithSideBar = () => {
                   ></path>
                 </svg>
               </button>
-              <Link to={'/admin'} className="flex ml-2 md:mr-24">
-                <img
-                  src={navLogo}
-                  className="h-8 mr-3"
-                  alt="FlowBite Logo"
-                />
+              <Link to={"/admin"} className="flex ml-2 md:mr-24">
+                <img src={navLogo} className="h-8 mr-3" alt="FlowBite Logo" />
                 <span className="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-white">
                   Admin panel
                 </span>
@@ -106,9 +102,9 @@ const HeaderWithSideBar = () => {
                     </li>
                     <li>
                       <button
-                        onClick={()=>{
-                          localStorage.removeItem('adminToken')
-                          navigate('/admin/login')
+                        onClick={() => {
+                          localStorage.removeItem("adminToken");
+                          navigate("/admin/login");
                         }}
                         className="block w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
                         role="menuitem"
@@ -133,7 +129,7 @@ const HeaderWithSideBar = () => {
           <ul className="space-y-2 font-medium">
             <li>
               <Link
-                to={'/admin'}
+                to={"/admin"}
                 className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
               >
                 <svg
@@ -151,7 +147,7 @@ const HeaderWithSideBar = () => {
             </li>
             <li>
               <Link
-                to={'/admin/category-management'}
+                to={"/admin/category-management"}
                 className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
               >
                 <svg
@@ -163,13 +159,14 @@ const HeaderWithSideBar = () => {
                 >
                   <path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path>
                 </svg>
-                <span className="flex-1 ml-3 whitespace-nowrap">Category management</span>
-                
+                <span className="flex-1 ml-3 whitespace-nowrap">
+                  Category management
+                </span>
               </Link>
             </li>
             <li>
               <Link
-                to={'/admin/request-management'}
+                to={"/admin/request-management"}
                 className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
               >
                 <svg
@@ -208,6 +205,31 @@ const HeaderWithSideBar = () => {
                 </svg>
                 <span className="flex-1 ml-3 whitespace-nowrap">Users</span>
               </a>
+            </li>
+            <li>
+              <Link
+                to={"/admin/add-cities"}
+                className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  className="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21M3 3h12m-.75 4.5H21m-3.75 3.75h.008v.008h-.008v-.008zm0 3h.008v.008h-.008v-.008zm0 3h.008v.008h-.008v-.008z"
+                  />
+                </svg>
+
+                <span className="flex-1 ml-3 whitespace-nowrap">
+                  Add cities
+                </span>
+              </Link>
             </li>
             <li>
               <a
@@ -275,8 +297,6 @@ const HeaderWithSideBar = () => {
           </ul>
         </div>
       </aside>
-
-      
     </>
   );
 };

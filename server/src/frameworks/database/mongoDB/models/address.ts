@@ -12,15 +12,13 @@ const addressSchema = new Schema({
   country: { type: String, required: [true, "please add country"] },
   pin: { type: String, required: [true, "please add pin"] },
   state: { type: String, required: [true, "please add state"] },
-  //   };
-  //   workAddress: {
   wAddressLine1: { type: String },
   wAddressLine2: { type: String },
   wCity: { type: String },
   wCountry: { type: String },
   wPin: { type: String },
   wState: { type: String },
-  userId:{type:String}
+  userId: { type: String },
 });
 
 const Address = model("Address", addressSchema, "address");
