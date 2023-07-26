@@ -4,9 +4,11 @@ import MoreEvents from "../../components/user_components/body_components/moreEve
 const Body = ()=>{
     return(
         <>
+        <div className="mb-10">
         <HeroComponent />
         <MoreEvents />
         <Organizers />
+        </div>
         </>
     )
 }

@@ -45,7 +45,7 @@ const EventInfo: React.FC<EventDetailsProps> = ({ event }) => {
   const organization = event?.organizerInfo;
   return (
     <>
-      <div className=" mt-5">
+      <div className=" mt-5 mb-10">
         <div className="flex flex-col">
           <p className="font-bold">Date : {event?.startDate}</p>
           <h1 className="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white">
@@ -129,7 +129,7 @@ const EventInfo: React.FC<EventDetailsProps> = ({ event }) => {
                 {event?.description}
               </p>
               <h5 className="text-xl font-bold dark:text-white mt-3 mb-3">
-                Event agenda
+               Agenda
               </h5>
               <p className="mb-3 text-gray-500 dark:text-gray-400">
                 {event?.agenda}

@@ -27,7 +27,6 @@ export default function OrgCreationModal() {
     const data = await getAllOrgCategories()
     
     if(data){
-      console.log(data.data.data)
       setCategories(data.data.data)
     }
 

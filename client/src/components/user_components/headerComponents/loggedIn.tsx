@@ -29,6 +29,7 @@ import {
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { selectUser } from "../../../redux/reducers/userSlice";
+import SearchBoxComponents from "./searchBox";
 
 const profileMenuItems = [
   {
@@ -146,7 +147,6 @@ export default function Example() {
   const fetchUserData = async () => {
     const res = await getUserDetails();
     if(res?.data){
-      console.log(res.data.data)
       setUserData(res?.data.data);
       dispatch(setUser(res.data.data))
     }
@@ -215,9 +215,12 @@ export default function Example() {
     <>
       <Navbar className="sticky top z-10 h-max max-w-full rounded-none py-2 px-4 lg:px-8 lg:py-4 ">
         <div className="flex items-center justify-between text-blue-gray-900">
-          <Link to={"/"}>
+          <div className="flex">
+          <Link className="mr-3 md:mr-10" to={"/"}>
             <img className="w-32" src={navLogo}></img>
           </Link>
+          <SearchBoxComponents />
+          </div>
           <div className="flex items-center gap-4">
             <div className="mr-4 hidden lg:block">{navList}</div>
             <IconButton

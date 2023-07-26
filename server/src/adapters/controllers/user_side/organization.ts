@@ -77,7 +77,6 @@ const organizationController = (
   const getAllEventCategoriesController = asyncHandler(
     async (req: Request, res: Response) => {
       const data = await getAllEventCategories(dbRepositoryOrganization);
-      console.log(data);
       if (data) {
         res.json({ message: "data received", data });
       } else {

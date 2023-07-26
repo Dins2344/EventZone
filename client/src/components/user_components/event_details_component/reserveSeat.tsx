@@ -1,4 +1,4 @@
-import {  useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Button,
   Input,
@@ -20,6 +20,8 @@ import {
 } from "../../../types/userInterface";
 import { ticketBooking } from "../../../api/userAuth/userApis";
 import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 type ReserveSeatProps = {
   eventDetails: EventDetailsInterface;
@@ -28,7 +30,7 @@ type ReserveSeatProps = {
 const ReserveSeatComponent: React.FC<ReserveSeatProps> = ({
   eventDetails,
 }): JSX.Element => {
-  const [token,setToken] = useState('')
+  const [token, setToken] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -38,16 +40,16 @@ const ReserveSeatComponent: React.FC<ReserveSeatProps> = ({
   const [showPaypal, setShowPaypal] = useState(false);
   const [registerInfo, setRegisterInfo] =
     useState<ticketBookingCreationInterface>();
-    const [open, setOpen] = useState(false);
- 
-    const handleLoginPrompt = () => setOpen(!open);
+  const [open, setOpen] = useState(false);
+
+  const handleLoginPrompt = () => setOpen(!open);
   const user = useSelector(selectUser);
   const navigate = useNavigate();
-  
-  useEffect(()=>{
-    const token = localStorage.getItem('token')
-    token && setToken(token)
-  },[])
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    token && setToken(token);
+  }, []);
 
   const handleOpen = (value: string | null) => setSize(value);
   const handleIncrement = () => {
@@ -56,10 +58,10 @@ const ReserveSeatComponent: React.FC<ReserveSeatProps> = ({
   const handleDecrement = () => {
     setTicketPass(ticketPass - 1);
   };
-  const handleLoggedIn = ()=>{
-    !token && handleLoginPrompt()
-    return token ?  true : false
-  }
+  const handleLoggedIn = () => {
+    !token && handleLoginPrompt();
+    return token ? true : false;
+  };
   const handlePaidRegister = async () => {
     if (user) {
       const data: ticketBookingCreationInterface = {
@@ -97,15 +99,40 @@ const ReserveSeatComponent: React.FC<ReserveSeatProps> = ({
       const res = await ticketBooking(data);
       console.log(res);
       if (res?.data.message === "booking confirmed") {
+        notify();
         setBookingRes(res.data.response);
       }
     }
   };
-
+  const notify = () => {
+    toast.success("successfully booked tickets!", {
+      position: "bottom-right",
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+    });
+  };
   const total = ticketPass * eventDetails?.ticketPrice;
 
   return (
     <>
+      <ToastContainer
+      className='z-50'
+        position="bottom-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      />
       <div className=" w-full pt-5 lg:p-5  sticky md:top-0 bg-white">
         <div className="flex flex-col border-2 p-5 rounded-md ">
           <div className="flex mb-3">
@@ -115,6 +142,7 @@ const ReserveSeatComponent: React.FC<ReserveSeatProps> = ({
               variant="text"
               className="w-6 h-6 p-0 "
               onClick={handleDecrement}
+              disabled={ticketPass <= 1 && true}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -164,7 +192,7 @@ const ReserveSeatComponent: React.FC<ReserveSeatProps> = ({
                 Ticket type : {eventDetails?.ticketValue}
               </label>
               <label className="mb-3">
-                Ticket price : {eventDetails?.ticketPrice}
+                Ticket price : &#8377; {eventDetails?.ticketPrice}
               </label>
               <label className="mb-3">
                 Ticket sold : {eventDetails?.ticketSold} /{" "}
@@ -172,11 +200,13 @@ const ReserveSeatComponent: React.FC<ReserveSeatProps> = ({
               </label>
               {eventDetails.ticketSold + ticketPass <=
               eventDetails.eventCapacity ? (
-                <Button onClick={() =>{
-                 const check =  handleLoggedIn()
-                  check && handleOpen("xl")}
-                }
-                 color="deep-orange">
+                <Button
+                  onClick={() => {
+                    const check = handleLoggedIn();
+                    check && handleOpen("xl");
+                  }}
+                  color="deep-orange"
+                >
                   Reserve a spot
                 </Button>
               ) : (
@@ -385,6 +415,67 @@ const ReserveSeatComponent: React.FC<ReserveSeatProps> = ({
                           }
                         />
                       </div>
+                      <div className="md:w-4/12 md:hidden p-3 mb-4 ">
+                        <div className="flex flex-col">
+                          <h5 className="text-xl font-bold dark:text-white mt-1 mb-5">
+                            Order summary
+                          </h5>
+                          <div className="flex justify-between px-2 mt-1 mb-5 border-b-2">
+                            <p className="flex">
+                              1{"  "}
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke-width="1.5"
+                                stroke="currentColor"
+                                className="w-4 h-4 mt-1"
+                              >
+                                <path
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                  d="M6 18L18 6M6 6l12 12"
+                                />
+                              </svg>
+                              {"  "}
+                              {eventDetails && eventDetails?.eventName}
+                            </p>
+                            <p>
+                              &#8377;{eventDetails && eventDetails?.ticketPrice}
+                            </p>
+                          </div>
+                          <div className="flex justify-between px-2 mb-5 border-b-2">
+                            <p className="flex">
+                              {ticketPass}
+                              {"  "}
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke-width="1.5"
+                                stroke="currentColor"
+                                className="w-4 h-4 mt-1"
+                              >
+                                <path
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                  d="M6 18L18 6M6 6l12 12"
+                                />
+                              </svg>
+                              {"  "}e-ticket
+                            </p>
+                            <p>
+                              &#8377;
+                              {eventDetails &&
+                                ticketPass * eventDetails?.ticketPrice}
+                            </p>
+                          </div>
+                          <div className="flex justify-between px-2">
+                            <p className="font-bold">Total</p>
+                            <p className="font-bold">&#8377;{total}</p>
+                          </div>
+                        </div>
+                      </div>
                       <div className="px-3">
                         {eventDetails?.ticketValue === "free" && (
                           <Button
@@ -411,7 +502,7 @@ const ReserveSeatComponent: React.FC<ReserveSeatProps> = ({
                               <div>
                                 <PaypalPayment
                                   setBookingRes={setBookingRes}
-                                  registerInfo={registerInfo}
+                                  registerInfo={registerInfo && registerInfo}
                                   total={total}
                                   eventName={eventDetails.eventName}
                                 />
@@ -453,7 +544,7 @@ const ReserveSeatComponent: React.FC<ReserveSeatProps> = ({
                         {"  "}
                         {eventDetails && eventDetails?.eventName}
                       </p>
-                      <p>{eventDetails && eventDetails?.ticketPrice}</p>
+                      <p>&#8377;{eventDetails && eventDetails?.ticketPrice}</p>
                     </div>
                     <div className="flex justify-between px-2 mb-5 border-b-2">
                       <p className="flex">
@@ -476,12 +567,13 @@ const ReserveSeatComponent: React.FC<ReserveSeatProps> = ({
                         {"  "}e-ticket
                       </p>
                       <p>
+                        &#8377;
                         {eventDetails && ticketPass * eventDetails?.ticketPrice}
                       </p>
                     </div>
                     <div className="flex justify-between px-2">
                       <p className="font-bold">Total</p>
-                      <p className="font-bold">{total}</p>
+                      <p className="font-bold">&#8377;{total}</p>
                     </div>
                   </div>
                 </div>
@@ -492,11 +584,17 @@ const ReserveSeatComponent: React.FC<ReserveSeatProps> = ({
       </Dialog>
 
       <Dialog size="sm" open={open} handler={handleLoginPrompt}>
-        <DialogBody >
-        Unlock more amazing features by logging in! Embrace the full experience and unleash the possibilities!
+        <DialogBody>
+          Unlock more amazing features by logging in! Embrace the full
+          experience and unleash the possibilities!
         </DialogBody>
         <DialogFooter>
-          <Button size="sm" variant="gradient" color="green" onClick={handleLoginPrompt}>
+          <Button
+            size="sm"
+            variant="gradient"
+            color="green"
+            onClick={handleLoginPrompt}
+          >
             <span>Ok</span>
           </Button>
         </DialogFooter>

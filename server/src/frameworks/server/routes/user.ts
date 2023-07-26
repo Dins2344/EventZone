@@ -41,6 +41,7 @@ const userRouter = () => {
   router.get('/get-address-info',jwtAuthMiddleware,controller.getAddressInfoController)
   router.post('/verify-password',jwtAuthMiddleware,controller.verifyPasswordController)
   router.post('/update-email',jwtAuthMiddleware,controller.updateEmailController)
+  router.get('/search',jwtAuthMiddleware,controller.searchEventsController)
 
   return router;
 };

@@ -221,6 +221,10 @@ const userController = (
     }
   })
 
+  const searchEventsController = asyncHandler(async(req:Request,res:Response)=>{
+    const query = req.query
+    console.log(query)
+  })
   return {
     getUserByEmail,
     verifyPasswordController,
@@ -235,7 +239,8 @@ const userController = (
     addProfileContactInfoController,
     addAddressController,
     updateEmailController,
-    getAddressInfoController
+    getAddressInfoController,
+    searchEventsController
   };
 };
 

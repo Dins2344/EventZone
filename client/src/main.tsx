@@ -35,6 +35,7 @@ import EditOrganization from "./pages/organizer_pages/editOrganization.tsx";
 import Reports from "./pages/organizer_pages/reports.tsx";
 import AddCities from "./pages/admin_pages/addCities.tsx";
 import CityAddingForm from "./components/admin_components/CityAddingForm.tsx";
+import SearchPage from "./pages/user_pages/searchPage.tsx";
 
 const appRouter = createBrowserRouter([
   {
@@ -132,6 +133,10 @@ const appRouter = createBrowserRouter([
       {
         path: "/show-booking",
         element: <BookingDetailsPage />,
+      },
+      {
+        path: "/search-events",
+        element: <SearchPage />,
       },
     ],
   },

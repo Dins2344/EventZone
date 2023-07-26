@@ -18,7 +18,7 @@ const Organizers = () => {
 
   return (
     <>
-      <div className=" mt-24  w-full px-20">
+      <div className=" mt-24  w-full px-20 ">
         <h4 className="text-2xl pl-4 mb-10 font-bold dark:text-white">
           Organizers to follow
         </h4>
