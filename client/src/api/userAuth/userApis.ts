@@ -153,9 +153,9 @@ export const verifyPassword = async(password:string)=>{
   }
 }
 
-export const getSearchData = async(searchText:string,city:string,price:string,category:string)=>{
+export const getSearchData = async(searchFor:string,searchText:string,city:string,price:string,category:string)=>{
   try{
-    const data = await api.get(`http://localhost:4000/user/search`, { params: { searchText, city, price, category },})
+    const data = await api.get(`http://localhost:4000/user/search`, { params: {searchFor, searchText, city, price, category },})
     return data
   }catch(error){
     console.log(error)

@@ -1,5 +1,5 @@
 import { UserRepositoryMongoDB } from "../../frameworks/database/mongoDB/repositories/userRepositoryMongoDB";
-import { AddressFormDataCreateInterface, BookingCreationInterface, CreateUserInterface, ProfileContactInfo } from "../../types/userInterface";
+import { AddressFormDataCreateInterface, BookingCreationInterface, CreateUserInterface, ProfileContactInfo, searchDataInterface } from "../../types/userInterface";
 
 
 export const userDbRepository = (repository:ReturnType<UserRepositoryMongoDB>)=>{
@@ -69,6 +69,15 @@ export const userDbRepository = (repository:ReturnType<UserRepositoryMongoDB>)=>
         return data
     }
 
+    const searchEvents = async(searchQuery:searchDataInterface)=>{
+        const data = await repository.searchEvents(searchQuery)
+        return data
+    }
+
+    const searchOrganizer = async(searchText :string)=>{
+        const data = await repository.searchOrganizer(searchText)
+        return data
+    }
     return {
         addUser,
         getUserByEmail,
@@ -84,8 +93,9 @@ export const userDbRepository = (repository:ReturnType<UserRepositoryMongoDB>)=>
         addProfileContactInfo,
         addAddress,
         updateEmail,
-        getAddressInfo
-
+        getAddressInfo,
+        searchEvents,
+        searchOrganizer
     }
 }
 

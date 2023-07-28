@@ -6,6 +6,7 @@ import { Request, Response } from "express";
 import asyncHandler from "express-async-handler";
 import {
   CustomRequest,
+  SearchQueryInterface,
   ticketBookingCreationInterface,
 } from "../../../types/userInterface";
 import {
@@ -20,33 +21,40 @@ import {
   getCompleteEventDetails,
   getOneBookingDetails,
   getUserById,
+  searchAnything,
   updateEmail,
   verifyPassword,
 } from "../../../application/usecases/user/userAuth";
 
 const userController = (
-  userDbRepository: UserDBInterface, 
+  userDbRepository: UserDBInterface,
   userDbRepositoryImpl: UserRepositoryMongoDB,
   authServiceInterface: AuthServiceInterface,
-  authServiceImpl: AuthService,
+  authServiceImpl: AuthService
 ) => {
   const dbRepositoryUser = userDbRepository(userDbRepositoryImpl());
   const authService = authServiceInterface(authServiceImpl());
 
-  const verifyPasswordController = asyncHandler(async(req:CustomRequest,res:Response)=>{
-    const userId = req.user?.Id
-    const password = req.body.password
-    console.log(userId,password)
-    if(userId){
-      const response = await verifyPassword(userId,password,dbRepositoryUser,authService)
-      if(response){
-        res.json({message:'password verified',ok:true})
-      }else{
-        res.json({error:'password does not matched',ok:false})
+  const verifyPasswordController = asyncHandler(
+    async (req: CustomRequest, res: Response) => {
+      const userId = req.user?.Id;
+      const password = req.body.password;
+      console.log(userId, password);
+      if (userId) {
+        const response = await verifyPassword(
+          userId,
+          password,
+          dbRepositoryUser,
+          authService
+        );
+        if (response) {
+          res.json({ message: "password verified", ok: true });
+        } else {
+          res.json({ error: "password does not matched", ok: false });
+        }
       }
     }
-
-  })
+  );
 
   const getUserByEmail = asyncHandler(
     async (req: CustomRequest, res: Response) => {
@@ -63,17 +71,19 @@ const userController = (
       }
     }
   );
-  const getUserByIdController = asyncHandler(async(req:CustomRequest,res:Response)=>{
-    const userId = req.user?.Id
-    if(userId){
-        const data = await getUserById(userId,dbRepositoryUser)
-        if(data){
-            res.json({message:'fetching user data done',data,ok:true})
-        }else{
-            res.json({error:'fetching user data failed'})
+  const getUserByIdController = asyncHandler(
+    async (req: CustomRequest, res: Response) => {
+      const userId = req.user?.Id;
+      if (userId) {
+        const data = await getUserById(userId, dbRepositoryUser);
+        if (data) {
+          res.json({ message: "fetching user data done", data, ok: true });
+        } else {
+          res.json({ error: "fetching user data failed" });
         }
+      }
     }
-  })
+  );
 
   const getApprovedEventsController = asyncHandler(
     async (req: Request, res: Response) => {
@@ -166,8 +176,8 @@ const userController = (
       const profileImage = req.files as Express.Multer.File[];
       const userId = req.user?.Id;
       if (userId) {
-        if(profileImage.length){
-            data.imageURL = profileImage[0].path
+        if (profileImage.length) {
+          data.imageURL = profileImage[0].path;
         }
         const response = await addProfileContactInfo(
           data,
@@ -175,7 +185,7 @@ const userController = (
           dbRepositoryUser
         );
         if (response) {
-          res.json({ok:true, message: "data added to user db", response });
+          res.json({ ok: true, message: "data added to user db", response });
         } else {
           res.json({ error: "data adding failed" });
         }
@@ -183,48 +193,64 @@ const userController = (
     }
   );
 
-  const addAddressController = asyncHandler(async(req:CustomRequest,res:Response)=>{
-    const userId = req.user?.Id
-    const data = req.body
-    if(userId){
-        const response = await addAddress(data,userId,dbRepositoryUser)
-        if(response){
-            res.json({message:'adding address done',ok:true,response})
-        }else{
-            res.json({error:'adding address failed'})
+  const addAddressController = asyncHandler(
+    async (req: CustomRequest, res: Response) => {
+      const userId = req.user?.Id;
+      const data = req.body;
+      if (userId) {
+        const response = await addAddress(data, userId, dbRepositoryUser);
+        if (response) {
+          res.json({ message: "adding address done", ok: true, response });
+        } else {
+          res.json({ error: "adding address failed" });
         }
-    }
-  })
-  
-  const updateEmailController = asyncHandler(async(req:CustomRequest,res:Response)=>{
-    const userId = req.user?.Id
-    const {email} = req.body
-    if(userId){
-      const response = await updateEmail(email,userId,dbRepositoryUser)
-      if(response){
-        res.json({message:'email updated',ok:true,response})
-      }else{
-        res.json({error:'update email failed',ok:false})
       }
     }
-  })
+  );
 
-  const getAddressInfoController = asyncHandler(async(req:CustomRequest,res:Response)=>{
-    const userId = req.user?.Id
-    if(userId){
-      const data = await getAddressInfo(userId,dbRepositoryUser)
-      if(data){
-        res.json({message:'fetching address data done',ok:true,data})
-      }else{
-        res.json({error:'fetching address details failed'})
+  const updateEmailController = asyncHandler(
+    async (req: CustomRequest, res: Response) => {
+      const userId = req.user?.Id;
+      const { email } = req.body;
+      if (userId) {
+        const response = await updateEmail(email, userId, dbRepositoryUser);
+        if (response) {
+          res.json({ message: "email updated", ok: true, response });
+        } else {
+          res.json({ error: "update email failed", ok: false });
+        }
       }
     }
-  })
+  );
 
-  const searchEventsController = asyncHandler(async(req:Request,res:Response)=>{
-    const query = req.query
-    console.log(query)
-  })
+  const getAddressInfoController = asyncHandler(
+    async (req: CustomRequest, res: Response) => {
+      const userId = req.user?.Id;
+      if (userId) {
+        const data = await getAddressInfo(userId, dbRepositoryUser);
+        if (data) {
+          res.json({ message: "fetching address data done", ok: true, data });
+        } else {
+          res.json({ error: "fetching address details failed" });
+        }
+      }
+    }
+  );
+
+  const searchEventsController = asyncHandler(
+    async (req: SearchQueryInterface, res: Response) => {
+      if (req.query) {
+        const { searchFor, searchText, city, price, category } = req.query;
+        const searchQuery = {searchFor, searchText, city, price, category} 
+        const data = await searchAnything(searchQuery, dbRepositoryUser);
+        if(data){
+          res.json({message:'search data fetching done',ok:true,data})
+        }else{
+          res.json({error:'fetching search data failed',ok:false})
+        }
+      }
+    }
+  );
   return {
     getUserByEmail,
     verifyPasswordController,
@@ -240,7 +266,7 @@ const userController = (
     addAddressController,
     updateEmailController,
     getAddressInfoController,
-    searchEventsController
+    searchEventsController,
   };
 };
 

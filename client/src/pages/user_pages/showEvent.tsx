@@ -10,14 +10,12 @@ const EventDetails = () => {
   const fetchEventDetails = async (id: string) => {
     const data = await getCompleteEventDetails(id);
     const details = data?.data.data[0];
-    console.log(details)
     details && setEventDetails(details);
   };
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const id = urlParams.get("id");
-    console.log(id);
     id && fetchEventDetails(id);
   }, []);
   return (

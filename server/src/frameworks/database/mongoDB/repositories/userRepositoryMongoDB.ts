@@ -2,7 +2,9 @@ import {
   AddressFormDataCreateInterface,
   BookingCreationInterface,
   ProfileContactInfo,
+  SearchQueryInterface,
   UserInterface,
+  searchDataInterface,
 } from "../../../../types/userInterface";
 import User from "../models/userModel";
 import { CreateUserInterface } from "../../../../types/userInterface";
@@ -116,8 +118,8 @@ export const userRepositoryMongoDB = () => {
             startDate: "$event.startDate",
             startTime: "$event.startTime",
             ticketValue: "$event.ticketValue",
-            city:"$event.city",
-            state:'$event.state'
+            city: "$event.city",
+            state: "$event.state",
             // Include other event fields as needed
           },
         },
@@ -254,14 +256,58 @@ export const userRepositoryMongoDB = () => {
     }
   };
 
-  const updateEmail = async(email:string,userId:string)=>{
-    const res = await User.updateOne({_id: new ObjectId(userId)},{email:email})
-    return res
-  }
+  const updateEmail = async (email: string, userId: string) => {
+    const res = await User.updateOne(
+      { _id: new ObjectId(userId) },
+      { email: email }
+    );
+    return res;
+  };
 
-  const getAddressInfo = async (userId:string)=>{
-   const data = await Address.findOne({userId:userId})
-   return data
+  const getAddressInfo = async (userId: string) => {
+    const data = await Address.findOne({ userId: userId });
+    return data;
+  };
+
+  const searchEvents = async (searchQuery: searchDataInterface) => {
+    const { searchText, city, price, category } = searchQuery;
+    try {
+      // Build the search query using Mongoose
+      const query: any = {status:'approved'};
+
+      if (searchText) {
+        query.eventName = { $regex: new RegExp(searchText as string, "i") };
+      }
+
+      // Apply filters for location and category
+      if (city) {
+        query.city = { $regex: new RegExp(city as string, "i") };
+      }
+      if (price) {
+        query.ticketValue = { $regex: new RegExp(price as string, "i") };
+      }
+      if (category) {
+        query.category = { $regex: new RegExp(category as string, "i") };
+      }
+
+      // Perform the search using the constructed query
+      const events = await Event.find(query);
+
+      // Return the search results
+      return events;
+    } catch (error) {
+      console.error("Error searching events:", error);
+    }
+  };
+
+  const searchOrganizer = async(searchText:string)=>{
+    const query :any = {}
+    if(searchText){
+      query.orgName = {$regex:new RegExp(searchText as string,'i')}
+    }
+
+    const data = await Organization.find(query)
+    return data
   }
 
   return {
@@ -279,7 +325,9 @@ export const userRepositoryMongoDB = () => {
     addProfileContactInfo,
     addAddress,
     updateEmail,
-    getAddressInfo
+    getAddressInfo,
+    searchEvents,
+    searchOrganizer
   };
 };
 

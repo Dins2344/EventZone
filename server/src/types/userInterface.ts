@@ -34,6 +34,35 @@ export interface CustomRequest extends Request{
     }
 }
 
+export interface RegisteredEventInterface {
+    _id: string;
+    eventName: string;
+    organizer: string;
+    category: string;
+    addressLine1: string;
+    addressLine2: string;
+    agenda:string
+    city: string;
+    state:string
+    addressLine3: string;
+    startDate: string;
+    startTime: string;
+    endDate: string;
+    endTime: string;
+    __v: number;
+    videoURL: string;
+    description: string;
+    imageURL:Array<string>;
+    eventCapacity: string;
+    ticketPrice: number;
+    ticketValue: string;
+    status:string
+    orgOwnerId:string
+    registeredTime:string
+    orgName:string
+    ticketSold:number
+  }
+
 export interface BookingCreationInterface {
     eventId:string,
     userId:string,
@@ -88,3 +117,24 @@ export interface AddressFormDataCreateInterface {
     wState: string;
     //   };
   }
+
+  export interface SearchQueryInterface extends Request {
+    query:{
+        searchFor:string 
+        searchText:string
+        city:string
+        price:string
+        category:string
+    }
+  }
+
+  export interface  searchDataInterface {
+    searchFor:string 
+    searchText:string 
+    city:string
+    price:string
+    category:string
+  }
+
+
+  

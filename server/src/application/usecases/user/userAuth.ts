@@ -2,7 +2,10 @@ import { HttpStatus } from "../../../types/httpStatus";
 import {
   AddressFormDataCreateInterface,
   ProfileContactInfo,
+  RegisteredEventInterface,
+  SearchQueryInterface,
   UserInterface,
+  searchDataInterface,
   ticketBookingCreationInterface,
 } from "../../../types/userInterface";
 import { UserDBInterface } from "../../repositories/userDBRepository";
@@ -11,6 +14,7 @@ import { AuthServiceInterface } from "../../services/authServiceInterface";
 import AppError from "../../../utils/appError";
 import QRCode from "qrcode";
 import { EventDetailsInterface } from "../../../types/organizerInterface";
+import { Request } from "express";
 
 export const userRegister = async (
   user: UserRegisterInterface,
@@ -289,3 +293,17 @@ export const getAddressInfo = async (
   }
   return data;
 };
+
+
+export const searchAnything = async(searchQuery:searchDataInterface,userRepository:ReturnType<UserDBInterface>)=>{
+  if(searchQuery.searchFor === 'event'){
+    const data = await userRepository.searchEvents(searchQuery)
+    return data
+  }
+  if(searchQuery.searchFor === 'organizer'){
+    const data = await userRepository.searchOrganizer(searchQuery.searchText)
+    return data
+  }
+  
+  }
+

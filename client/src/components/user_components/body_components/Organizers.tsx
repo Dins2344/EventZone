@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { getAllOrganizers } from "../../../api/userAuth/userApis";
 import { RegisteredOrganization } from "../../../types/userInterface";
 import { Button } from "@material-tailwind/react";
+import { useNavigate } from "react-router-dom";
 
 const Organizers = () => {
   const [organizations, setOrganizations] =
@@ -37,6 +38,7 @@ type OrganizersProps = {
 };
 
 const OrganizersCard: React.FC<OrganizersProps> = ({ organizations }) => {
+  const navigate = useNavigate()
   return (
     <>
       {organizations.map((item) => {
@@ -56,7 +58,10 @@ const OrganizersCard: React.FC<OrganizersProps> = ({ organizations }) => {
                 </span>
                 <div className="flex mt-4 space-x-3 md:mt-6">
                   <Button size="sm">Follow</Button>
-                  <Button size="sm" variant="outlined">View</Button>
+                  <Button onClick={() => {
+                        const id = item._id;
+                        navigate(`/show-organizer/?id=${id}`);
+                      }} size="sm" variant="outlined">View</Button>
                 </div>
               </div>
             </div>

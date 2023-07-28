@@ -39,7 +39,7 @@ const MoreEvents = () => {
         <h4 className="text-2xl pl-4 mb-10 font-bold dark:text-white">
           More events for you
         </h4>
-        <Cards approvedEvents={approvedEvents} />
+        <EventCards approvedEvents={approvedEvents} />
       </div>
     </>
   );
@@ -51,7 +51,7 @@ interface CardProps {
   approvedEvents?: RegisteredEventInterface[];
 }
 
-const Cards: React.FC<CardProps> = ({ approvedEvents }) => {
+export const EventCards: React.FC<CardProps> = ({ approvedEvents }) => {
   const navigate = useNavigate();
   return (
     <>
@@ -59,8 +59,8 @@ const Cards: React.FC<CardProps> = ({ approvedEvents }) => {
         {approvedEvents &&
           approvedEvents.map((item) => {
             return (
-              <>
-                <div className="lg:w-1/4 px-2 md:w-1/2 w-full mt-2 ">
+              
+                <div key={item._id} className="lg:w-1/4 px-2 md:w-1/2 w-full mt-2 ">
                   <Card className="w-full max-w-[26rem] shadow-lg ">
                     <div
                       className="hover:cursor-pointer"
@@ -134,7 +134,7 @@ const Cards: React.FC<CardProps> = ({ approvedEvents }) => {
                     </CardFooter>
                   </Card>
                 </div>
-              </>
+              
             );
           })}
       </div>

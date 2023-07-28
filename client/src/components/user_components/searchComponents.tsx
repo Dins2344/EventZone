@@ -13,6 +13,9 @@ import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { clearSearchData } from "../../redux/reducers/searchData";
 import { getSearchData } from "../../api/userAuth/userApis";
+import { RegisteredOrganization } from "../../types/userInterface";
+import { RegisteredEventInterface } from "../../types/organizerInterface";
+import { useNavigate } from "react-router-dom";
 
 const SearchComponents: React.FC = () => {
   const [cities, setCities] = useState<RegisteredCityInterface[]>();
@@ -20,8 +23,10 @@ const SearchComponents: React.FC = () => {
   const [city, setCity] = useState("");
   const [price, setPrice] = useState("");
   const [category, setCategory] = useState("");
-  const [searchFor,setSearchFor] = useState('')
-  const [event,setEvent] = useState('')
+  const [searchFor, setSearchFor] = useState("event");
+  const [searchedData, setSearchedData] = useState<
+    RegisteredEventInterface[] | RegisteredOrganization[]
+  >();
   const searchData = useSelector(selectSearchData);
   const dispatch = useDispatch();
 
@@ -32,7 +37,7 @@ const SearchComponents: React.FC = () => {
 
   useEffect(() => {
     fetchSearchData();
-  }, [searchText, city,price,category]);
+  }, [searchText, city, price, category, searchFor]);
 
   const setSearchInput = () => {
     if (searchData) {
@@ -47,12 +52,15 @@ const SearchComponents: React.FC = () => {
   };
 
   const fetchSearchData = async () => {
-    const input = {searchText,city,price,category}
-    console.log(input)
-    const data = await getSearchData(searchText,city,price,category)
-    console.log(data?.data.data)
+    const data = await getSearchData(
+      searchFor,
+      searchText,
+      city,
+      price,
+      category
+    );
+    setSearchedData(data?.data.data);
   };
-
 
   return (
     <>
@@ -123,7 +131,7 @@ const SearchComponents: React.FC = () => {
         </div>
       </div>
 
-      <div className="flex">
+      <div className="flex mt-4">
         <div className="w-4/12 flex flex-col">
           <FilterElements
             setPrice={setPrice}
@@ -135,7 +143,11 @@ const SearchComponents: React.FC = () => {
           />
         </div>
         <div className="w-8/12 flex flex-col">
-          <MyRadioButtonComponent />
+          {searchedData ? (
+            <SearchedEvents data={searchedData} searchFor={searchFor} />
+          ) : (
+            <></>
+          )}
         </div>
       </div>
     </>
@@ -149,9 +161,8 @@ interface FilterChildProps {
   setPrice: React.Dispatch<React.SetStateAction<string>>;
   category: string;
   setCategory: React.Dispatch<React.SetStateAction<string>>;
-  searchFor:string 
-  setSearchFor : React.Dispatch<React.SetStateAction<string>>;
- 
+  searchFor: string;
+  setSearchFor: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const FilterElements: React.FC<FilterChildProps> = ({
@@ -159,12 +170,13 @@ const FilterElements: React.FC<FilterChildProps> = ({
   category,
   setPrice,
   setCategory,
-  searchFor,setSearchFor
+  searchFor,
+  setSearchFor,
 }) => {
   const [eventCategories, setEventCategories] =
     useState<eventCategoryInterface[]>();
 
-    const [orgMode,setOrgMode]=useState(false)
+  const [orgMode, setOrgMode] = useState(false);
   useEffect(() => {
     fetchEventCategories();
   }, []);
@@ -187,22 +199,24 @@ const FilterElements: React.FC<FilterChildProps> = ({
       setCategory(e.target.value);
     }
   };
-  const handleSearchFor = (e:any)=>{
-    if(e.target.value === searchFor){
-        setSearchFor('')
-    }else{
-        setSearchFor(e.target.value)
+  const handleSearchFor = (e: any) => {
+    if (e.target.value === searchFor) {
+      setSearchFor("");
+    } else {
+      setSearchFor(e.target.value);
     }
-    e.target.value === 'organizer'&& setOrgMode(true)
-    if(e.target.value === 'event' || e.target.value === '') setOrgMode(false)
-  }
+    e.target.value === "organizer" && setOrgMode(true);
+    if (e.target.value === "event" || e.target.value === "") setOrgMode(false);
+    setCategory("");
+    setPrice("");
+  };
 
   return (
     <>
-      <h3 className="text-3xl font-bold">Filters</h3>
-      <div className="flex flex-col">
-      <h5 className="text-xl font-semibold">Search for</h5>
-      <label className="w-16">
+      <h3 className="text-xl md:text-3xl font-bold">Filters</h3>
+      <div className="flex flex-col mt-3">
+        <h5 className="text-lg md:text-xl font-semibold">Search for</h5>
+        <label className="w-auto mt-1 mb-1">
           <input
             type="radio"
             onClick={handleSearchFor}
@@ -213,7 +227,7 @@ const FilterElements: React.FC<FilterChildProps> = ({
           />
           Organizer
         </label>
-        <label className="w-16">
+        <label className="w-auto">
           <input
             type="radio"
             onClick={handleSearchFor}
@@ -225,106 +239,128 @@ const FilterElements: React.FC<FilterChildProps> = ({
           Event
         </label>
       </div>
-      {!orgMode &&
-      <div>
-      <div className="flex flex-col">
-        <h5 className="text-xl font-semibold">Price</h5>
-        <label className="w-16">
-          <input
-            type="radio"
-            onClick={handlePrice}
-            checked={price === "free"}
-            value="free"
-            name="Price"
-            className="mr-3"
-          />
-          Free
-        </label>
-        <label className="w-16">
-          <input
-            type="radio"
-            onClick={handlePrice}
-            checked={price === "charged"}
-            value="charged"
-            name="Price"
-            className="mr-3"
-          />
-          Paid
-        </label>
-      </div>
-      <div className="flex flex-col">
-        <h5 className="text-xl font-semibold">Categories</h5>
-        {eventCategories &&
-          eventCategories.map((item) => {
-            return (
-              
-                <label key={item._id} className="w-auto">
-                  <input
-                    type="radio"
-                    onClick={handleCategory}
-                    checked={category === item.categoryName}
-                    value={item.categoryName}
-                    name="Category"
-                    className="mr-3"
-                  />
-                  {item.categoryName}
-                </label>
-              
-            );
-          })}
-      </div>
-      </div>
-      }
+      {!orgMode && (
+        <div>
+          <div className="flex flex-col mt-3">
+            <h5 className="text-lg md:text-xl font-semibold">Price</h5>
+            <label className="w-auto mt-1 mb-1">
+              <input
+                type="radio"
+                onClick={handlePrice}
+                checked={price === "free"}
+                value="free"
+                name="Price"
+                className="mr-3"
+              />
+              Free
+            </label>
+            <label className="w-16">
+              <input
+                type="radio"
+                onClick={handlePrice}
+                checked={price === "charged"}
+                value="charged"
+                name="Price"
+                className="mr-3"
+              />
+              Paid
+            </label>
+          </div>
+          <div className="flex flex-col mt-3">
+            <h5 className="text-lg md:text-xl font-semibold">Categories</h5>
+            {eventCategories &&
+              eventCategories.map((item) => {
+                return (
+                  <label key={item._id} className="w-auto mt-1 mb-1">
+                    <input
+                      type="radio"
+                      onClick={handleCategory}
+                      checked={category === item.categoryName}
+                      value={item.categoryName}
+                      name="Category"
+                      className="mr-3"
+                    />
+                    {item.categoryName}
+                  </label>
+                );
+              })}
+          </div>
+        </div>
+      )}
     </>
   );
 };
 
-const SearchedEvents: React.FC = () => {
-  return <></>;
+type SearchedEventsProps = {
+  data: RegisteredOrganization[] | RegisteredEventInterface[];
+  searchFor: string;
 };
 
-const MyRadioButtonComponent: React.FC = () => {
-  const [selectedOption, setSelectedOption] = useState("");
-
-  const handleOptionChange = (e: any) => {
-    if (e.target.value === selectedOption) {
-      setSelectedOption("");
-    } else {
-      setSelectedOption(e.target.value);
-    }
-  };
-
+const SearchedEvents: React.FC<SearchedEventsProps> = ({ data, searchFor }) => {
+  const navigate = useNavigate()
+  useEffect(() => {
+    console.log(data);
+    console.log(searchFor);
+  });
   return (
-    <div>
-      <label>
-        <input
-          type="radio"
-          value="option1"
-          checked={selectedOption === "option1"}
-          onClick={handleOptionChange}
-        />
-        Option 1
-      </label>
+    <>
+      <div className="w-full px-4">
+        {searchFor === "organizer" ? (
+          <>
+            {data.map((item) => {
+              return (
+                <div
+                  key={item._id}
+                  className="w-full flex flex-wrap p-3 hover:shadow-md border-2 rounded-md mt-3"
+                >
+                  <img
+                    className=" w-full md:w-48 rounded-md"
+                    src={item.logo}
+                  ></img>
+                  <div className="flex flex-col pt-2 md:pt-0 md:pl-2">
+                    <h3 className="text-lg md:text-2xl font-bold dark:text-white mb-3">
+                      {item.orgName}
+                    </h3>
+                    <p>category: {item.orgType}</p>
 
-      <label>
-        <input
-          type="radio"
-          value="option2"
-          checked={selectedOption === "option2"}
-          onChange={handleOptionChange}
-        />
-        Option 2
-      </label>
-
-      <label>
-        <input
-          type="radio"
-          value="option3"
-          checked={selectedOption === "option3"}
-          onChange={handleOptionChange}
-        />
-        Option 3
-      </label>
-    </div>
+                    <p>Country: {item.country}</p>
+                  </div>
+                </div>
+              );
+            })}
+          </>
+        ) : (
+          <>
+            {data && data.map((item) => {
+              return (
+                <div
+                onClick={()=>navigate(`/show-event/?id=${item._id}`)}
+                  key={item._id}
+                  className="w-full flex flex-wrap p-3 hover:shadow-md border-2 rounded-md mt-3"
+                >
+                  <img
+                    className=" w-full md:w-48 rounded-md"
+                    src={item.imageURL[0]}
+                  ></img>
+                  <div className="flex flex-col pt-2 md:pt-0 md:pl-2">
+                    <h3 className="text-lg md:text-2xl font-bold dark:text-white mb-3">
+                      {item.eventName}
+                    </h3>
+                    <p>
+                      on: {item.startDate},{item.startTime}
+                    </p>
+                    {item.ticketValue === "free" ? (
+                      <p>{item.ticketValue}</p>
+                    ) : (
+                      <p>Price: {item.ticketPrice}</p>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+          </>
+        )}
+      </div>
+    </>
   );
 };
