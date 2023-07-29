@@ -1,6 +1,9 @@
+import { userRepositoryMongoDB } from './../../../frameworks/database/mongoDB/repositories/userRepositoryMongoDB';
 import { HttpStatus } from "../../../types/httpStatus";
 import {
   AddressFormDataCreateInterface,
+  CreateChatInterface,
+  NewMessageInterface,
   ProfileContactInfo,
   RegisteredEventInterface,
   SearchQueryInterface,
@@ -298,6 +301,9 @@ export const getAddressInfo = async (
 export const searchAnything = async(searchQuery:searchDataInterface,userRepository:ReturnType<UserDBInterface>)=>{
   if(searchQuery.searchFor === 'event'){
     const data = await userRepository.searchEvents(searchQuery)
+    if (!data) {
+      throw new AppError('fetching event search data failed',HttpStatus.BAD_REQUEST)
+    }
     return data
   }
   if(searchQuery.searchFor === 'organizer'){
@@ -305,5 +311,49 @@ export const searchAnything = async(searchQuery:searchDataInterface,userReposito
     return data
   }
   
-  }
+}
+  
 
+export const getChat = async (userId: string, secondUser: string, userRepository: ReturnType<UserDBInterface>) => {
+  const data = await userRepository.getChat(userId, secondUser)
+  if (!data) {
+    throw new AppError('finding chat exist failed',HttpStatus.BAD_REQUEST)
+  }
+  return data
+}
+
+export const createChat = async (
+  chatData: CreateChatInterface,
+  userRepository: ReturnType<UserDBInterface>
+) => {
+  const data = await userRepository.createChat(chatData);
+  if (!data) {
+    throw new AppError('creating chat failed',HttpStatus.BAD_REQUEST)
+  }
+  return data;
+};
+
+export const getUsersChat = async (userId: string, userRepository: ReturnType<UserDBInterface>) => {
+  const data = await userRepository.getUsersChat(userId)
+  if (!data) {
+    throw new AppError('fetching users chats failed',HttpStatus.BAD_REQUEST)
+  }
+  return data
+}
+
+export const sendMessage = async (newMessage: NewMessageInterface, userRepository: ReturnType<UserDBInterface>) => {
+  const res = await userRepository.sendMessage(newMessage)
+  if (!res) {
+    throw new AppError('sending new message failed',HttpStatus.BAD_REQUEST)
+  }
+  return res
+}
+
+
+export const getAllMessage = async (chatId: string,userRepository:ReturnType<UserDBInterface>) => {
+  const data = await userRepository.getAllMessage(chatId)
+  if (!data) {
+    throw new AppError('all message fetching failed',HttpStatus.BAD_REQUEST)
+  }
+  return data
+}

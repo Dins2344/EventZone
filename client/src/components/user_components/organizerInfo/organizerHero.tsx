@@ -1,11 +1,17 @@
 import { Button } from "@material-tailwind/react";
 import { RegisteredOrganization } from "../../../types/userInterface";
+import { accessChat } from "../../../api/userAuth/userApis";
 
 type OrganizerHeroProps = {
   organization: RegisteredOrganization;
 };
 
+
+
 const OrganizerHero: React.FC<OrganizerHeroProps> = ({ organization }) => {
+  const handleContact = async () => {
+    const res = await accessChat(organization.ownerId,organization.orgName,organization.logo)
+  }
   return (
     <>
       <div className="w-full flex justify-center items-center">
@@ -18,7 +24,7 @@ const OrganizerHero: React.FC<OrganizerHeroProps> = ({ organization }) => {
           <h1 className="text-2xl md:text-3xl lg:text-4xl font-extrabold dark:text-white mb-3">{organization.orgName}</h1>
             <div className="flex mb-3">
                 <Button className="mr-2 rounded-sm" size="sm" variant="outlined" color="blue">Follow</Button>
-                <Button className="ml-2 rounded-sm" size="sm" color="blue">Contact</Button>
+                <Button onClick={handleContact} className="ml-2 rounded-sm" size="sm" color="blue">Contact</Button>
             </div>
             <div className="flex mb-8">
                 <div className="flex flex-col items-center px-3 border-r-2">

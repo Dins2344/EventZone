@@ -20,7 +20,6 @@ const ShowOrganizer: React.FC = () => {
 
   const fetchOrganization = async (id: string) => {
     const data = await getOrganizationDetails(id);
-    console.log(data);
     setOrganization(data?.data.data);
   };
 
@@ -37,10 +36,10 @@ const ShowOrganizer: React.FC = () => {
   return (
     <>
       <div className="w-full min-h-screen">
-        <div>
+        <div className="">
           {organization && <OrganizerHero organization={organization} />}
         </div>
-        <div className="lg:px-28 md:px-20 px-4">
+        <div className="lg:px-36 md:px-20 px-4">
           {approvedEvents && <EventsSection events={approvedEvents} />}
         </div>
       </div>

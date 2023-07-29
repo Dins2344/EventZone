@@ -154,3 +154,15 @@ export interface ProfileContactInfo{
   phoneNumber:string
   images:File|undefined[]
 }
+
+
+export interface CompleteRegisteredChatInterface{
+  chatName: string
+  createdAt: string
+  orgName: string
+  updatedAt: string
+  logo:string
+  users: RegisteredUserInterface[]
+  __v: number
+  _id:string
+}

@@ -161,3 +161,22 @@ export const getSearchData = async(searchFor:string,searchText:string,city:strin
     console.log(error)
   }
 }
+
+export const accessChat = async (secondUserId:string,orgName:string,logo:string) => {
+  const data = { secondUserId, orgName,logo }
+  try {
+    const res = await api.post('http://localhost:4000/user/chat', data)
+    return res
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+export const getUsersChat = async () => {
+  try {
+    const data = await api.get("http://localhost:4000/user/chat/get-chats");
+    return data
+  } catch (error) {
+    console.log(error)
+}
+}

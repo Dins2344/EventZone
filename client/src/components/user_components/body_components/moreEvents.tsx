@@ -53,6 +53,15 @@ interface CardProps {
 
 export const EventCards: React.FC<CardProps> = ({ approvedEvents }) => {
   const navigate = useNavigate();
+  if(approvedEvents?.length === 0){
+    return (
+      <>
+      <div className="w-full flex justify-center h-80 items-center">
+        <h4 className="text-2xl md:text-4xl">Apologies, but it seems that there are currently no events available.</h4>
+      </div>
+      </>
+    )
+  }
   return (
     <>
       <div className="flex flex-wrap">

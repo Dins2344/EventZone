@@ -1,6 +1,9 @@
+import { getChat } from "./../../../../application/usecases/user/userAuth";
 import {
   AddressFormDataCreateInterface,
   BookingCreationInterface,
+  CreateChatInterface,
+  NewMessageInterface,
   ProfileContactInfo,
   SearchQueryInterface,
   UserInterface,
@@ -13,6 +16,8 @@ import Event from "../models/eventModel";
 import Organization from "../models/organizationModel";
 import Bookings from "../models/bookings";
 import Address from "../models/address";
+import Chat from "../models/chats";
+import Message from "../models/message";
 
 export const userRepositoryMongoDB = () => {
   const getUserByEmail = async (email: string) => {
@@ -273,7 +278,7 @@ export const userRepositoryMongoDB = () => {
     const { searchText, city, price, category } = searchQuery;
     try {
       // Build the search query using Mongoose
-      const query: any = {status:'approved'};
+      const query: any = { status: "approved" };
 
       if (searchText) {
         query.eventName = { $regex: new RegExp(searchText as string, "i") };
@@ -300,16 +305,80 @@ export const userRepositoryMongoDB = () => {
     }
   };
 
-  const searchOrganizer = async(searchText:string)=>{
-    const query :any = {}
-    if(searchText){
-      query.orgName = {$regex:new RegExp(searchText as string,'i')}
+  const searchOrganizer = async (searchText: string) => {
+    const query: any = {};
+    if (searchText) {
+      query.orgName = { $regex: new RegExp(searchText as string, "i") };
     }
 
-    const data = await Organization.find(query)
-    return data
-  }
+    const data = await Organization.find(query);
+    return data;
+  };
 
+  const getChat = async (userId: string, secondUser: string) => {
+    let data = await Chat.find({
+      $and: [
+        { users: { $elemMatch: { $eq: userId } } },
+        { users: { $elemMatch: { $eq: secondUser } } },
+      ],
+    })
+      .populate("users", "-password")
+      .populate("latestMessages");
+
+    const fullChat = await User.populate(data, {
+      path: "latestMessages.sender",
+      select: "firsName email profileImage",
+    });
+    return fullChat;
+  };
+
+  const createChat = async (chatData: CreateChatInterface) => {
+    console.log(chatData);
+    const res = await Chat.create(chatData);
+    const fullChat = await Chat.find({ _id: res._id }).populate(
+      "users",
+      "-password"
+    );
+    return fullChat;
+  };
+
+  const getUsersChat = async (userId: string) => {
+    try {
+      const data = await Chat.find({ users: { $elemMatch: { $eq: userId } } })
+        .populate("users", "-password")
+        .populate("latestMessages")
+        .sort({ updatedAt: -1 });
+      const result = await User.populate(data, {
+        path: "latestMessages.sender",
+        select: "firstName email profileImage",
+      });
+      return result;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const sendMessage = async (newMessage: NewMessageInterface) => {
+    const res = await Message.create(newMessage);
+    const resSender = await res.populate(
+      "sender",
+      "firstName email profileImage"
+    );
+    const resChat = await resSender.populate("chat");
+    const resUser = await User.populate(resSender, {
+      path: "chat.users",
+      select: "firstName email profileImage",
+    });
+    await Chat.findByIdAndUpdate(newMessage.chat, { latestMessages: resUser });
+    return resChat;
+  };
+
+  const getAllMessage = async (chatId: string) => {
+    const messages = await Message.find({ chat: chatId })
+      .populate("sender", "firstName email profileImage")
+      .populate("chat");
+    return messages;
+  };
   return {
     addUser,
     getUserByEmail,
@@ -327,7 +396,12 @@ export const userRepositoryMongoDB = () => {
     updateEmail,
     getAddressInfo,
     searchEvents,
-    searchOrganizer
+    searchOrganizer,
+    getChat,
+    createChat,
+    getUsersChat,
+    sendMessage,
+    getAllMessage,
   };
 };
 

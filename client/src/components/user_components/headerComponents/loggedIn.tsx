@@ -30,6 +30,7 @@ import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { selectUser } from "../../../redux/reducers/userSlice";
 import SearchBoxComponents from "./searchBox";
+import ChatBox from "./chatBox";
 
 const profileMenuItems = [
   {
@@ -178,6 +179,8 @@ export default function Example() {
           <OrgCreationModal />
         )}
       </Typography>
+
+      <ChatBox />
       {/* <Typography
         as="li"
         variant="small"

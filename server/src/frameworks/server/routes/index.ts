@@ -7,6 +7,7 @@ import paypalRouter from "./paypal";
 import jwtAuthMiddleware from "../middlewares/authJWT";
 import { adminRoleChecking } from "../middlewares/roleChecking";
 import { userRoleChecking } from "../middlewares/roleChecking";
+import chatRouter from "./chat";
 
 
 
@@ -16,7 +17,8 @@ const routes = (app:Application)=>{
     app.use('/admin',jwtAuthMiddleware,adminRoleChecking,adminRouter())
     app.use('/user',userRouter())
     app.use('/organization',jwtAuthMiddleware,userRoleChecking,organizationRouter())
-    app.use('/my-server',paypalRouter())
+    app.use('/my-server', paypalRouter())
+    app.use('/user/chat',chatRouter())
 }
 
 

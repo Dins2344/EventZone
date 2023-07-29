@@ -7,7 +7,7 @@ import {
   RegisteredCityInterface,
   eventCategoryInterface,
 } from "../../types/adminInterface";
-import { Input, Radio } from "@material-tailwind/react";
+import { Input } from "@material-tailwind/react";
 import { selectSearchData } from "../../redux/reducers/searchData";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
@@ -310,8 +310,9 @@ const SearchedEvents: React.FC<SearchedEventsProps> = ({ data, searchFor }) => {
             {data.map((item) => {
               return (
                 <div
+                  onClick={()=>navigate(`/show-organizer/?id=${item._id}`)}
                   key={item._id}
-                  className="w-full flex flex-wrap p-3 hover:shadow-md border-2 rounded-md mt-3"
+                  className="w-full flex flex-wrap p-3 hover:cursor-pointer hover:shadow-md border-2 rounded-md mt-3"
                 >
                   <img
                     className=" w-full md:w-48 rounded-md"

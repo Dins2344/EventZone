@@ -136,5 +136,17 @@ export interface AddressFormDataCreateInterface {
     category:string
   }
 
+export interface CreateChatInterface {
+    users: string[],
+    chatName: string,
+    orgName: string
+    logo:string
+}
+  
+export interface NewMessageInterface{
+    sender: string
+    content: string
+    chat:string
+  }
 
   

@@ -1,5 +1,6 @@
+import { getChat } from './../usecases/user/userAuth';
 import { UserRepositoryMongoDB } from "../../frameworks/database/mongoDB/repositories/userRepositoryMongoDB";
-import { AddressFormDataCreateInterface, BookingCreationInterface, CreateUserInterface, ProfileContactInfo, searchDataInterface } from "../../types/userInterface";
+import { AddressFormDataCreateInterface, BookingCreationInterface, CreateChatInterface, CreateUserInterface, NewMessageInterface, ProfileContactInfo, searchDataInterface } from "../../types/userInterface";
 
 
 export const userDbRepository = (repository:ReturnType<UserRepositoryMongoDB>)=>{
@@ -78,25 +79,54 @@ export const userDbRepository = (repository:ReturnType<UserRepositoryMongoDB>)=>
         const data = await repository.searchOrganizer(searchText)
         return data
     }
-    return {
-        addUser,
-        getUserByEmail,
-        getUserById,
-        addOrganization,
-        getApprovedEvents,
-        getCompleteEventDetails,
-        createBooking,
-        getBookings,
-        getOneBookingDetails,
-        cancelBooking,
-        getAllOrganizers,
-        addProfileContactInfo,
-        addAddress,
-        updateEmail,
-        getAddressInfo,
-        searchEvents,
-        searchOrganizer
+    const getChat = async (userId: string, secondUser: string) => {
+        const data = await repository.getChat(userId, secondUser)
+        return data
     }
+
+    const createChat = async (chatData: CreateChatInterface) => {
+      const data = await repository.createChat(chatData);
+      return data;
+    };
+
+    const getUsersChat = async (userId: string) => {
+        const data = await repository.getUsersChat(userId)
+        return data
+    }
+
+    const sendMessage = async (newMessage: NewMessageInterface) => {
+        const data = await repository.sendMessage(newMessage)
+        return data
+    }
+
+    const getAllMessage = async (chatId: string) => {
+        const data = await repository.getAllMessage(chatId)
+        return data
+    }
+    return {
+      addUser,
+      getUserByEmail,
+      getUserById,
+      addOrganization,
+      getApprovedEvents,
+      getCompleteEventDetails,
+      createBooking,
+      getBookings,
+      getOneBookingDetails,
+      cancelBooking,
+      getAllOrganizers,
+      addProfileContactInfo,
+      addAddress,
+      updateEmail,
+      getAddressInfo,
+      searchEvents,
+      searchOrganizer,
+      getChat,
+      createChat,
+      getUsersChat,
+      sendMessage,
+      getAllMessage,
+    };
 }
 
 export type UserDBInterface = typeof userDbRepository

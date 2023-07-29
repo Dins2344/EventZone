@@ -1,3 +1,4 @@
+import { getAllMessage } from './../../../application/usecases/user/userAuth';
 import { UserDBInterface } from "../../../application/repositories/userDBRepository";
 import { UserRepositoryMongoDB } from "../../../frameworks/database/mongoDB/repositories/userRepositoryMongoDB";
 import { AuthServiceInterface } from "../../../application/services/authServiceInterface";
@@ -14,14 +15,18 @@ import {
   addProfileContactInfo,
   cancelBooking,
   createBooking,
+  createChat,
   getAddressInfo,
   getAllOrganizers,
   getApprovedEvents,
   getBookings,
+  getChat,
   getCompleteEventDetails,
   getOneBookingDetails,
   getUserById,
+  getUsersChat,
   searchAnything,
+  sendMessage,
   updateEmail,
   verifyPassword,
 } from "../../../application/usecases/user/userAuth";
@@ -241,16 +246,101 @@ const userController = (
     async (req: SearchQueryInterface, res: Response) => {
       if (req.query) {
         const { searchFor, searchText, city, price, category } = req.query;
-        const searchQuery = {searchFor, searchText, city, price, category} 
+        const searchQuery = { searchFor, searchText, city, price, category };
         const data = await searchAnything(searchQuery, dbRepositoryUser);
-        if(data){
-          res.json({message:'search data fetching done',ok:true,data})
-        }else{
-          res.json({error:'fetching search data failed',ok:false})
+        if (data) {
+          res.json({ message: "search data fetching done", ok: true, data });
+        } else {
+          res.json({ error: "fetching search data failed", ok: false });
         }
       }
     }
   );
+
+  const accessChatController = asyncHandler(
+    async (req: CustomRequest, res: Response) => {
+      const userId = req.user?.Id;
+      const body = req.body;
+      if (userId && body) {
+        const isChat = await getChat(
+          userId,
+          body.secondUserId,
+          dbRepositoryUser
+        );
+        if (isChat.length > 0) {
+          res.json({
+            message: "chat with this user already exist",
+            ok: true,
+            isChat,
+          });
+        } else {
+          const chatData = {
+            chatName: "sample",
+            users: [userId, body.secondUserId],
+            orgName: body.orgName,
+            logo: body.logo,
+          };
+          const chat = await createChat(chatData, dbRepositoryUser);
+          if (chat) {
+            res.json({
+              message: "created new chat for this user",
+              chat,
+              ok: true,
+            });
+          } else {
+            res.json({ error: "creating chat for this user failed" });
+          }
+        }
+      } else {
+        res.json({ error: "no data in req.body" });
+      }
+    }
+  );
+
+  const getUsersChatController = asyncHandler(
+    async (req: CustomRequest, res: Response) => {
+      const userId = req.user?.Id;
+      if (userId) {
+        const data = await getUsersChat(userId, dbRepositoryUser);
+        if (data) {
+          res.json({ message: "fetching users chats done", ok: true, data });
+        } else {
+          res.json({ error: "fetching users chat failed", ok: false });
+        }
+      }
+    }
+  );
+
+  const sendMessageController = asyncHandler(
+    async (req: CustomRequest, res: Response) => {
+      if (req.body && req.user) {
+        const newMessage = {
+          chat: req.body.chatId,
+          content: req.body.content,
+          sender: req.user.Id,
+        };
+        const response = await sendMessage(newMessage, dbRepositoryUser);
+        if (response) {
+          res.json({ message: "sending message done", ok: true, response });
+        } else {
+          res.json({ error: "sending message failed" });
+        }
+      }
+    }
+  );
+
+  const getAllMessageController = asyncHandler(async (req: Request, res: Response) => {
+    const chatId = req.params.id
+    if (chatId) {
+      const data = await getAllMessage(chatId, dbRepositoryUser)
+      if (data) {
+        res.json({message:'fetching all messages done',ok:true,data})
+      } else {
+        res.json({error:'fetching all messages failed'})
+      }
+    }
+  })
+
   return {
     getUserByEmail,
     verifyPasswordController,
@@ -267,6 +357,10 @@ const userController = (
     updateEmailController,
     getAddressInfoController,
     searchEventsController,
+    accessChatController,
+    getUsersChatController,
+    sendMessageController,
+    getAllMessageController,
   };
 };
 
