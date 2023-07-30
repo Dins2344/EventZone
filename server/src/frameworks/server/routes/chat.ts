@@ -18,7 +18,7 @@ const chatRouter = () => {
 
     router.post("/", jwtAuthMiddleware, controller.accessChatController);
     router.get('/get-chats', jwtAuthMiddleware, controller.getUsersChatController)
-    router.get('/send-message', jwtAuthMiddleware, controller.sendMessageController)
+    router.post('/send-message', jwtAuthMiddleware, controller.sendMessageController)
     router.get('/get-chat-messages/:id',jwtAuthMiddleware,controller.getAllMessageController)
 
   

@@ -166,3 +166,27 @@ export interface CompleteRegisteredChatInterface{
   __v: number
   _id:string
 }
+
+export interface CompleteMessageInterface {
+  chat: {
+    chatName: string;
+    createdAt: string;
+    orgName: string;
+    updatedAt: string;
+    logo: string;
+    users: string[];
+    __v: number;
+    _id: string;
+  },
+  content: string
+  createdAt: string
+  sender: {
+    _id: string
+    firstName: string
+    email: string
+    profileImage: string
+  },
+  updatedAt: string
+  __v: number
+  _id:string
+}

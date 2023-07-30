@@ -1,4 +1,4 @@
-import { Input, Button } from "@material-tailwind/react";
+import { Input, Button, Spinner } from "@material-tailwind/react";
 import { useState, useEffect } from "react";
 import * as Yup from "yup";
 import {
@@ -25,6 +25,8 @@ const ContactInfo: React.FC = () => {
   const [profilePicture, setProfilePicture] = useState<File | undefined>(
     undefined
   );
+  const [isLoading, setIsLoading] = useState(false)
+  
   const fetchUserInfo = async () => {
     const data = await getUserDetailsById();
     if (data) {
@@ -79,10 +81,12 @@ const ContactInfo: React.FC = () => {
             data.append(`images`, image, `images${index}`);
           });
         }
+        setIsLoading(true)
         const res = await addProfileContactInfo(data);
         setErrors({});
         if (res?.data.ok) {
           setUpdated(!updated);
+          setIsLoading(false)
         }
       })
       .catch((err: Yup.ValidationError) => {
@@ -100,6 +104,12 @@ const ContactInfo: React.FC = () => {
   };
   return (
     <div className="px-5 md:px-10 lg:px-40 mt-5">
+      {isLoading ?
+        <div className="w-full h-screen flex justify-center items-center">
+          <Spinner className="w-12 h-12" /> 
+        </div>
+        :
+        <>
       <h3 className="font-semibold text-sm md:text-lg lg:text-xl">
         Account Information
       </h3>
@@ -228,6 +238,8 @@ const ContactInfo: React.FC = () => {
         </form>
       )}
       {address && <AddressForm />}
+        </>
+      }
     </div>
   );
 };

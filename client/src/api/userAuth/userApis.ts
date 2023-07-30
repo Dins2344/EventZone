@@ -180,3 +180,24 @@ export const getUsersChat = async () => {
     console.log(error)
 }
 }
+
+export const sendMessage = async (chatId: string, content: string) => {
+  const data = {chatId,content}
+  try {
+    const res = await api.post('http://localhost:4000/user/chat/send-message', data)
+    return res
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+export const getMessages = async (chatId:string) => {
+  try {
+    const data = api.get(
+      `http://localhost:4000/user/chat/get-chat-messages/${chatId}`
+    );
+    return data
+  } catch (error) {
+    console.log(error)
+  }
+}
