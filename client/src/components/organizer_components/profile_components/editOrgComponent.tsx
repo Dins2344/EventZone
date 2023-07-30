@@ -10,6 +10,7 @@ import { RegisteredUserInterface } from "../../../types/userInterface";
 import { getAllOrgCategories } from "../../../api/organizer/organizer";
 import { OrganizationCategoriesInterface } from "../../../types/adminInterface";
 import * as Yup from "yup";
+import SpinnerComponent from "../../common/Spinner";
 
 const EditOrgComponent: React.FC = () => {
   const [organization, setOrganizations] = useState<RegisteredOrganization>();
@@ -30,6 +31,7 @@ const EditOrgComponent: React.FC = () => {
   });
   const [logo, setLogo] = useState<File | undefined>(undefined);
   const [updated, setUpdated] = useState(false);
+  const [isLoading,setIsLoading] = useState(false)
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -102,9 +104,11 @@ const EditOrgComponent: React.FC = () => {
           });
         }
         console.log(formData);
+        setIsLoading(true)
         const res = await updateOrganizationInfo(data);
         setErrors({});
         if (res?.data.ok) {
+          setIsLoading(false)
           setUpdated(!updated);
         }
       })
@@ -123,6 +127,8 @@ const EditOrgComponent: React.FC = () => {
   };
   return (
     <>
+      {isLoading ? <SpinnerComponent /> :
+        <>
       <h2 className="text-4xl font-extrabold text-black mt-10">
         Organization Settings
       </h2>
@@ -260,6 +266,8 @@ const EditOrgComponent: React.FC = () => {
           </Button>
         </div>
       </form>
+        </>
+      }
     </>
   );
 };

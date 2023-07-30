@@ -190,6 +190,7 @@ const userController = (
           dbRepositoryUser
         );
         if (response) {
+          console.log(response)
           res.json({ ok: true, message: "data added to user db", response });
         } else {
           res.json({ error: "data adding failed" });

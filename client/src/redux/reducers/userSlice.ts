@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../store";
+import { RegisteredUserInterface } from "../../types/userInterface";
 
 interface User {
   email: string;
@@ -14,13 +15,13 @@ interface User {
 }
 
 interface InitialState {
-  user: User;
+  user: RegisteredUserInterface;
 }
 
 const initialState: InitialState = {
   user: {
     email: "",
-    phoneNumber:0,
+    phoneNumber:'',
     _id: "",
     firstName: "",
     lastName: "",
@@ -35,7 +36,7 @@ const userSlice = createSlice({
   name: "userData",
   initialState,
   reducers: {
-    setUser(state, action: PayloadAction<User>) {
+    setUser(state, action: PayloadAction<RegisteredUserInterface>) {
       state.user = action.payload;
     },
     clearUser(state) {

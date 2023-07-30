@@ -1,4 +1,4 @@
-import { Input, Button, Spinner } from "@material-tailwind/react";
+import { Input, Button } from "@material-tailwind/react";
 import { useState, useEffect } from "react";
 import * as Yup from "yup";
 import {
@@ -8,6 +8,9 @@ import {
   getUserDetailsById,
 } from "../../../api/userAuth/userApis";
 import { RegisteredUserInterface } from "../../../types/userInterface";
+import SpinnerComponent from "../../common/Spinner";
+import { useDispatch } from "react-redux";
+import { setUser } from "../../../redux/reducers/userSlice";
 
 const ContactInfo: React.FC = () => {
   const [address, setAddress] = useState(false);
@@ -26,6 +29,7 @@ const ContactInfo: React.FC = () => {
     undefined
   );
   const [isLoading, setIsLoading] = useState(false)
+  const dispatch = useDispatch()
   
   const fetchUserInfo = async () => {
     const data = await getUserDetailsById();
@@ -33,6 +37,7 @@ const ContactInfo: React.FC = () => {
       const userData: RegisteredUserInterface = data.data.data;
       setUserData(userData);
       setFormData(userData);
+     userData && dispatch(setUser(userData))
       setDataFetched(true);
     }
   };
@@ -85,6 +90,7 @@ const ContactInfo: React.FC = () => {
         const res = await addProfileContactInfo(data);
         setErrors({});
         if (res?.data.ok) {
+          console.log(res.data)
           setUpdated(!updated);
           setIsLoading(false)
         }
@@ -105,9 +111,7 @@ const ContactInfo: React.FC = () => {
   return (
     <div className="px-5 md:px-10 lg:px-40 mt-5">
       {isLoading ?
-        <div className="w-full h-screen flex justify-center items-center">
-          <Spinner className="w-12 h-12" /> 
-        </div>
+          <SpinnerComponent  /> 
         :
         <>
       <h3 className="font-semibold text-sm md:text-lg lg:text-xl">

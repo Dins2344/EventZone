@@ -14,7 +14,7 @@ export interface RegisteredUserInterface{
   phoneNumber:string
   profileImage?:string
   website:string
-  images:[]
+  images?:[]
   __v?:number
 
 }
@@ -189,4 +189,5 @@ export interface CompleteMessageInterface {
   updatedAt: string
   __v: number
   _id:string
+
 }

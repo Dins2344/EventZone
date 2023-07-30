@@ -322,10 +322,10 @@ export const MostTicketSold: React.FC = () => {
   };
   return (
     <>
-      <div className="flex flex-col px-3 w-full">
+      <div className="flex flex-col h-96 overflow-y-scroll no-scrollbar px-3 w-full">
         <div className="relative overflow-x-auto">
           <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400 border">
-            <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 sticky top-0">
               <tr>
                 <th scope="col" className="px-6 py-3">
                   #
@@ -342,7 +342,10 @@ export const MostTicketSold: React.FC = () => {
               {events &&
                 events.map((item, index) => {
                   return (
-                    <tr key={item.eventName} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                    <tr
+                      key={item.eventName}
+                      className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
+                    >
                       <td className="px-6 py-4">{index + 1}</td>
                       <th
                         scope="row"
