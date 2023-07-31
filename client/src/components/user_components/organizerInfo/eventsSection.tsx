@@ -75,7 +75,21 @@ const EventsSection: React.FC<EventsSectionProps> = ({ events }) => {
             Past events
           </Button>
         </div>
-        <EventCards approvedEvents={eventsArray} />
+        {eventsArray?.length === 0 ? (
+          <div className="w-full flex justify-center h-80 items-center">
+            <h4 className="text-2xl md:text-4xl">
+              Apologies, but it seems that there are currently no events
+              available.
+            </h4>
+          </div>
+        ) : (
+          <div className="flex flex-wrap">
+            {eventsArray &&
+              eventsArray.map((item) => {
+                return <EventCards approvedEvent={item} />;
+              })}
+          </div>
+        )}
       </div>
     </>
   );

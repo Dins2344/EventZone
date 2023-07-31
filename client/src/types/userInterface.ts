@@ -16,7 +16,8 @@ export interface RegisteredUserInterface{
   website:string
   images?:[]
   __v?:number
-
+  following?: string[]
+  likedEvents:string[]
 }
 
 export interface loginUserInterface {
@@ -57,6 +58,8 @@ export interface EventDetailsInterface {
     orgType: string;
     ownerId: string;
     userId: string;
+    logo: string
+    followers:[]
   };
   registeredTime: string;
   startDate: string;
@@ -106,7 +109,8 @@ export interface RegisteredOrganization {
   admin: string[]; // Assuming admin is an array of user IDs (string)
   logo:string,
   __v: number;
-  country:string
+  country: string
+  followers:string[]
 }
 
 export interface Bookings {

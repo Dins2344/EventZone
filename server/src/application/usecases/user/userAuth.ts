@@ -1,4 +1,4 @@
-import { userRepositoryMongoDB } from './../../../frameworks/database/mongoDB/repositories/userRepositoryMongoDB';
+import { userRepositoryMongoDB } from "./../../../frameworks/database/mongoDB/repositories/userRepositoryMongoDB";
 import { HttpStatus } from "../../../types/httpStatus";
 import {
   AddressFormDataCreateInterface,
@@ -51,7 +51,7 @@ export const verifyPassword = async (
       password,
       user?.password
     );
-    return isPasswordMatch
+    return isPasswordMatch;
   }
 };
 
@@ -275,13 +275,17 @@ export const addAddress = async (
   return res;
 };
 
-export const updateEmail = async(email:string,userId:string,userRepository:ReturnType<UserDBInterface>)=>{
-  const res = await userRepository.updateEmail(email,userId)
-  if(!res){
-    throw new AppError('updating email failed',HttpStatus.BAD_REQUEST)
+export const updateEmail = async (
+  email: string,
+  userId: string,
+  userRepository: ReturnType<UserDBInterface>
+) => {
+  const res = await userRepository.updateEmail(email, userId);
+  if (!res) {
+    throw new AppError("updating email failed", HttpStatus.BAD_REQUEST);
   }
-  return res
-}
+  return res;
+};
 
 export const getAddressInfo = async (
   userId: string,
@@ -297,30 +301,37 @@ export const getAddressInfo = async (
   return data;
 };
 
-
-export const searchAnything = async(searchQuery:searchDataInterface,userRepository:ReturnType<UserDBInterface>)=>{
-  if(searchQuery.searchFor === 'event'){
-    const data = await userRepository.searchEvents(searchQuery)
+export const searchAnything = async (
+  searchQuery: searchDataInterface,
+  userRepository: ReturnType<UserDBInterface>
+) => {
+  if (searchQuery.searchFor === "event") {
+    const data = await userRepository.searchEvents(searchQuery);
     if (!data) {
-      throw new AppError('fetching event search data failed',HttpStatus.BAD_REQUEST)
+      throw new AppError(
+        "fetching event search data failed",
+        HttpStatus.BAD_REQUEST
+      );
     }
-    return data
+    return data;
   }
-  if(searchQuery.searchFor === 'organizer'){
-    const data = await userRepository.searchOrganizer(searchQuery.searchText)
-    return data
+  if (searchQuery.searchFor === "organizer") {
+    const data = await userRepository.searchOrganizer(searchQuery.searchText);
+    return data;
   }
-  
-}
-  
+};
 
-export const getChat = async (userId: string, secondUser: string, userRepository: ReturnType<UserDBInterface>) => {
-  const data = await userRepository.getChat(userId, secondUser)
+export const getChat = async (
+  userId: string,
+  secondUser: string,
+  userRepository: ReturnType<UserDBInterface>
+) => {
+  const data = await userRepository.getChat(userId, secondUser);
   if (!data) {
-    throw new AppError('finding chat exist failed',HttpStatus.BAD_REQUEST)
+    throw new AppError("finding chat exist failed", HttpStatus.BAD_REQUEST);
   }
-  return data
-}
+  return data;
+};
 
 export const createChat = async (
   chatData: CreateChatInterface,
@@ -328,32 +339,96 @@ export const createChat = async (
 ) => {
   const data = await userRepository.createChat(chatData);
   if (!data) {
-    throw new AppError('creating chat failed',HttpStatus.BAD_REQUEST)
+    throw new AppError("creating chat failed", HttpStatus.BAD_REQUEST);
   }
   return data;
 };
 
-export const getUsersChat = async (userId: string, userRepository: ReturnType<UserDBInterface>) => {
-  const data = await userRepository.getUsersChat(userId)
+export const getUsersChat = async (
+  userId: string,
+  userRepository: ReturnType<UserDBInterface>
+) => {
+  const data = await userRepository.getUsersChat(userId);
   if (!data) {
-    throw new AppError('fetching users chats failed',HttpStatus.BAD_REQUEST)
+    throw new AppError("fetching users chats failed", HttpStatus.BAD_REQUEST);
   }
-  return data
-}
+  return data;
+};
 
-export const sendMessage = async (newMessage: NewMessageInterface, userRepository: ReturnType<UserDBInterface>) => {
-  const res = await userRepository.sendMessage(newMessage)
+export const sendMessage = async (
+  newMessage: NewMessageInterface,
+  userRepository: ReturnType<UserDBInterface>
+) => {
+  const res = await userRepository.sendMessage(newMessage);
   if (!res) {
-    throw new AppError('sending new message failed',HttpStatus.BAD_REQUEST)
+    throw new AppError("sending new message failed", HttpStatus.BAD_REQUEST);
   }
-  return res
-}
+  return res;
+};
 
-
-export const getAllMessage = async (chatId: string,userRepository:ReturnType<UserDBInterface>) => {
-  const data = await userRepository.getAllMessage(chatId)
+export const getAllMessage = async (
+  chatId: string,
+  userRepository: ReturnType<UserDBInterface>
+) => {
+  const data = await userRepository.getAllMessage(chatId);
   if (!data) {
-    throw new AppError('all message fetching failed',HttpStatus.BAD_REQUEST)
+    throw new AppError("all message fetching failed", HttpStatus.BAD_REQUEST);
   }
-  return data
-}
+  return data;
+};
+
+export const addFollow = async (
+  userId: string,
+  orgId: string,
+  userRepository: ReturnType<UserDBInterface>
+) => {
+  const res = await userRepository.addFollow(userId, orgId);
+  if (!res) {
+    throw new AppError("adding following failed", HttpStatus.BAD_REQUEST);
+  }
+  return res;
+};
+
+export const unFollow = async (
+  userId: string,
+  orgId: string,
+  userRepository: ReturnType<UserDBInterface>
+) => {
+  const res = await userRepository.unFollow(userId, orgId);
+  if (!res) {
+    throw new AppError("removing from following filed", HttpStatus.BAD_REQUEST);
+  }
+  return res;
+};
+
+export const likeEvent = async (
+  userId: string,
+  eventId: string,
+  userRepository: ReturnType<UserDBInterface>
+) => {
+  const res = await userRepository.likeEvent(userId, eventId);
+  if (res.ok) {
+    return res;
+  } else {
+    throw new AppError(
+      "adding event to liked list failed",
+      HttpStatus.BAD_REQUEST
+    );
+  }
+};
+
+export const unLikeEvent = async (
+  userId: string,
+  eventId: string,
+  userRepository: ReturnType<UserDBInterface>
+) => {
+  const res = await userRepository.unLikeEvent(userId, eventId);
+  if (res.ok) {
+    return res;
+  } else {
+    throw new AppError(
+      "removing event from liked list failed",
+      HttpStatus.BAD_REQUEST
+    );
+  }
+};

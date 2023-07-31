@@ -2,17 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../store";
 import { RegisteredUserInterface } from "../../types/userInterface";
 
-interface User {
-  email: string;
-  _id: string;
-  firstName: string;
-  lastName: string;
-  password: string;
-  __v: number;
-  phoneNumber:number
-  profileImage:string
-  website:string
-}
+
 
 interface InitialState {
   user: RegisteredUserInterface;
@@ -28,7 +18,9 @@ const initialState: InitialState = {
     password: "",
     __v: 0,
     profileImage:'',
-    website:''
+    website: '',
+    following: [''],
+    likedEvents:['']
   },
 };
 

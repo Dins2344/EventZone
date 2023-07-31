@@ -103,6 +103,27 @@ export const userDbRepository = (repository:ReturnType<UserRepositoryMongoDB>)=>
         const data = await repository.getAllMessage(chatId)
         return data
     }
+
+    const addFollow = async (userId: string, orgId: string) => {
+        const res = await repository.addFollow(userId, orgId)
+        return res
+    }
+
+    const unFollow = async (userId: string, orgId: string) => {
+        const res = await repository.unFollow(userId, orgId)
+        return res
+    }
+
+    const likeEvent = async (userId: string, eventId: string) => {
+        const res = await repository.likeEvent(userId, eventId)
+        return res
+    }
+
+    const unLikeEvent = async (userId: string, eventId: string) => {
+        const res = await repository.unLikeEvent(userId, eventId)
+        return res
+    }
+
     return {
       addUser,
       getUserByEmail,
@@ -126,6 +147,10 @@ export const userDbRepository = (repository:ReturnType<UserRepositoryMongoDB>)=>
       getUsersChat,
       sendMessage,
       getAllMessage,
+      addFollow,
+      unFollow,
+      likeEvent,
+      unLikeEvent,
     };
 }
 

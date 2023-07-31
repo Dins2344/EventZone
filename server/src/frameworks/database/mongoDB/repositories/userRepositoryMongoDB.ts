@@ -18,6 +18,7 @@ import Bookings from "../models/bookings";
 import Address from "../models/address";
 import Chat from "../models/chats";
 import Message from "../models/message";
+import { Types } from "mongoose";
 
 export const userRepositoryMongoDB = () => {
   const getUserByEmail = async (email: string) => {
@@ -379,6 +380,58 @@ export const userRepositoryMongoDB = () => {
       .populate("chat");
     return messages;
   };
+
+  const addFollow = async (userId: string, orgId: string) => {
+    const user = await User.findById(userId)
+    const orgId_id =new Types.ObjectId(orgId)
+    if (user?.following.includes(orgId_id)) {
+      return {message:'this organizer is already in the list',ok:false}
+    }
+    const userAdded = await Organization.updateOne(
+      { _id: new ObjectId(orgId) },
+      { $push: { followers: userId } }
+    );
+    const organizationAdded = await User.updateOne(
+      { _id: new ObjectId(userId) },
+      { $push: { following: orgId } }
+    );
+    if (userAdded && organizationAdded) {
+      return { message: "successfully added to following",ok:true };
+    }
+  };
+
+  const unFollow = async (userId: string, orgId: string) => {
+    const userRemoved = await Organization.updateOne(
+      { _id: new ObjectId(orgId) },
+      { $pull: { followers: userId } }
+    );
+    const organizationRemoved = await User.updateOne(
+      { _id: new ObjectId(userId) },
+      { $pull: { following: orgId } }
+    );
+    if (userRemoved && organizationRemoved) {
+      return { message: "successfully removed from following list", ok:true };
+    }
+  };
+
+  const likeEvent = async (userId:string,eventId: string) => {
+    const res = await User.updateOne({ _id: new ObjectId(userId) }, { $push: { likedEvents: eventId } })
+    console.log(res)
+    if (res) {
+      return {message:'successfully added to like list',ok:true}
+    } else {
+      return {error:'adding like list failed',ok:false}
+    }
+  }
+
+  const unLikeEvent = async (userId: string, eventId: string) => {
+    const res = await User.updateOne({ _id: new ObjectId(userId) }, { $pull: { likedEvents: eventId } })
+    if (res) {
+      return {message:'successfully removed event form like list',ok:true}
+    } else {
+      return {error:'removing event from liked list failed',ok:false}
+    }
+  }
   return {
     addUser,
     getUserByEmail,
@@ -402,6 +455,10 @@ export const userRepositoryMongoDB = () => {
     getUsersChat,
     sendMessage,
     getAllMessage,
+    addFollow,
+    unFollow,
+    likeEvent,
+    unLikeEvent,
   };
 };
 

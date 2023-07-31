@@ -152,21 +152,21 @@ const EventInfo: React.FC<EventDetailsProps> = ({ event }) => {
             <VideoPlayer videoId={videoId} />
           </div>
           <div className="flex flex-col mt-8">
-            <h3 className="text-3xl font-bold dark:text-white block mb-3">
+            <h3 className="text-3xl  font-bold dark:text-white block mb-3">
               About the organizer
             </h3>
-            <div className="flex flex-col place-items-center border rounded-md shadow-md p-5">
+            <div className="flex flex-col place-items-center border mt-3 rounded-md shadow-md p-5">
               <img
-                className="rounded-full w-20 h-20"
-                src="https://img.freepik.com/free-icon/user_318-159711.jpg"
+                className="rounded-full w-20 h-20 mb-5 mt-10"
+                src={organization.logo ? organization.logo : "https://img.freepik.com/free-icon/user_318-159711.jpg"}
                 alt="image description"
               />
               <p>Organized by</p>
-              <h3 className="text-3xl font-bold dark:text-white">
+              <h3 className="text-3xl mb-5 font-bold dark:text-white">
                 {organization?.orgName}
               </h3>
-              <p>followers count</p>
-              <p className="font-bold">Followers</p>
+              <p>{organization.followers.length}</p>
+              <p className="font-bold mb-4">Followers</p>
               <div className="flex mt-3">
                 <Button className="mr-3" size="sm" color="blue" variant="outlined">Contact</Button>
                 <Button size="sm">Follow</Button>

@@ -28,7 +28,13 @@ const organizationSchema = new Schema({
     },
     country:{
         type:String
-    }
+    },
+    followers: [
+        {
+            type: Schema.Types.ObjectId,
+            ref:'User'
+        }
+    ]
 
 })
 

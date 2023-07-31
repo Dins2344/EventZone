@@ -16,32 +16,100 @@ const userRouter = () => {
     organizationDbRepository,
     organizationRepositoryMongoDB,
     userDbRepository,
-    userRepositoryMongoDB,
-    
+    userRepositoryMongoDB
   );
   const controller = userController(
     userDbRepository,
     userRepositoryMongoDB,
     authServiceInterface,
-    authService,
-  )
+    authService
+  );
 
-  router.post("/register-organization",jwtAuthMiddleware, orgController.registerOrganization);
-  router.get('/get-user-details',jwtAuthMiddleware,userRoleChecking,controller.getUserByEmail)
-  router.get('/get-user-details-by-Id',jwtAuthMiddleware,controller.getUserByIdController)
-  router.get('/get-all-approved-events',controller.getApprovedEventsController)
-  router.get('/get-complete-event-details/:id',controller.getCompleteEventDetailsController)
-  router.post('/ticket-booking',jwtAuthMiddleware,userRoleChecking,controller.createBookingController)
-  router.get('/get-booking-details',jwtAuthMiddleware,userRoleChecking,controller.getBookingsController)
-  router.get('/get-one-booking-details/:bookingId',jwtAuthMiddleware,userRoleChecking,controller.getOneBookingDetailsController)
-  router.get('/cancel-booking/:id',jwtAuthMiddleware,userRoleChecking,controller.cancelBookingController)
-  router.get('/get-all-organizers',controller.getAllOrganizersController)
-  router.post('/add-profile-contact-info',upload,jwtAuthMiddleware,controller.addProfileContactInfoController)
-  router.post('/add-address',jwtAuthMiddleware,controller.addAddressController)
-  router.get('/get-address-info',jwtAuthMiddleware,controller.getAddressInfoController)
-  router.post('/verify-password',jwtAuthMiddleware,controller.verifyPasswordController)
-  router.post('/update-email',jwtAuthMiddleware,controller.updateEmailController)
-  router.get('/search',jwtAuthMiddleware,controller.searchEventsController)
+  router.post(
+    "/register-organization",
+    jwtAuthMiddleware,
+    orgController.registerOrganization
+  );
+  router.get(
+    "/get-user-details",
+    jwtAuthMiddleware,
+    userRoleChecking,
+    controller.getUserByEmail
+  );
+  router.get(
+    "/get-user-details-by-Id",
+    jwtAuthMiddleware,
+    controller.getUserByIdController
+  );
+  router.get(
+    "/get-all-approved-events",
+    controller.getApprovedEventsController
+  );
+  router.get(
+    "/get-complete-event-details/:id",
+    controller.getCompleteEventDetailsController
+  );
+  router.post(
+    "/ticket-booking",
+    jwtAuthMiddleware,
+    userRoleChecking,
+    controller.createBookingController
+  );
+  router.get(
+    "/get-booking-details",
+    jwtAuthMiddleware,
+    userRoleChecking,
+    controller.getBookingsController
+  );
+  router.get(
+    "/get-one-booking-details/:bookingId",
+    jwtAuthMiddleware,
+    userRoleChecking,
+    controller.getOneBookingDetailsController
+  );
+  router.get(
+    "/cancel-booking/:id",
+    jwtAuthMiddleware,
+    userRoleChecking,
+    controller.cancelBookingController
+  );
+  router.get("/get-all-organizers", controller.getAllOrganizersController);
+  router.post(
+    "/add-profile-contact-info",
+    upload,
+    jwtAuthMiddleware,
+    controller.addProfileContactInfoController
+  );
+  router.post(
+    "/add-address",
+    jwtAuthMiddleware,
+    controller.addAddressController
+  );
+  router.get(
+    "/get-address-info",
+    jwtAuthMiddleware,
+    controller.getAddressInfoController
+  );
+  router.post(
+    "/verify-password",
+    jwtAuthMiddleware,
+    controller.verifyPasswordController
+  );
+  router.post(
+    "/update-email",
+    jwtAuthMiddleware,
+    controller.updateEmailController
+  );
+  router.get("/search", jwtAuthMiddleware, controller.searchEventsController);
+  router
+    .route("/update-following/:id")
+    .get(jwtAuthMiddleware, controller.addFollowController)
+    .put(jwtAuthMiddleware, controller.unFollowController);
+
+  router
+    .route("/update-like-list/:id")
+    .get(jwtAuthMiddleware, controller.likeEventController)
+    .put(jwtAuthMiddleware, controller.unLikeEventController);
 
   return router;
 };

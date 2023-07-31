@@ -1,4 +1,10 @@
-import { getAllMessage } from './../../../application/usecases/user/userAuth';
+import {
+  getAllMessage,
+  addFollow,
+  unFollow,
+  likeEvent,
+  unLikeEvent,
+} from "./../../../application/usecases/user/userAuth";
 import { UserDBInterface } from "../../../application/repositories/userDBRepository";
 import { UserRepositoryMongoDB } from "../../../frameworks/database/mongoDB/repositories/userRepositoryMongoDB";
 import { AuthServiceInterface } from "../../../application/services/authServiceInterface";
@@ -190,7 +196,7 @@ const userController = (
           dbRepositoryUser
         );
         if (response) {
-          console.log(response)
+          console.log(response);
           res.json({ ok: true, message: "data added to user db", response });
         } else {
           res.json({ error: "data adding failed" });
@@ -330,18 +336,92 @@ const userController = (
     }
   );
 
-  const getAllMessageController = asyncHandler(async (req: Request, res: Response) => {
-    const chatId = req.params.id
-    if (chatId) {
-      const data = await getAllMessage(chatId, dbRepositoryUser)
-      if (data) {
-        res.json({message:'fetching all messages done',ok:true,data})
-      } else {
-        res.json({error:'fetching all messages failed'})
+  const getAllMessageController = asyncHandler(
+    async (req: Request, res: Response) => {
+      const chatId = req.params.id;
+      if (chatId) {
+        const data = await getAllMessage(chatId, dbRepositoryUser);
+        if (data) {
+          res.json({ message: "fetching all messages done", ok: true, data });
+        } else {
+          res.json({ error: "fetching all messages failed" });
+        }
       }
+    }
+  );
+
+  const addFollowController = asyncHandler(
+    async (req: CustomRequest, res: Response) => {
+      const user = req?.user;
+      const orgId = req.params.id;
+      if (user && orgId) {
+        const response = await addFollow(user.Id, orgId, dbRepositoryUser);
+        if (response) {
+          res.json({
+            response,
+          });
+        } else {
+          res.json({
+            message: "adding to following list failed",
+            ok: false,
+            response,
+          });
+        }
+      }
+    }
+  );
+
+  const unFollowController = asyncHandler(
+    async (req: CustomRequest, res: Response) => {
+      const user = req?.user;
+      const orgId = req?.params.id;
+      if (user && orgId) {
+        const response = await unFollow(user.Id, orgId, dbRepositoryUser);
+        if (response) {
+          res.json({
+            response,
+          });
+        } else {
+          res.json({
+            message: "removing from following list not done",
+            ok: false,
+            response,
+          });
+        }
+      }
+    }
+  );
+
+  const likeEventController = asyncHandler(async (req: CustomRequest, res: Response) => {
+    const userId = req.user?.Id
+    const eventId = req.params.id
+    if (userId && eventId) {
+      const response = await likeEvent(userId, eventId, dbRepositoryUser)
+      if (response.ok) {
+        res.json({response})
+      } else {
+        res.json({response})
+      }
+      
+    } else {
+      res.json({error:'params not find'})
     }
   })
 
+  const unLikeEventController = asyncHandler(async (req: CustomRequest, res: Response) => {
+    const userId = req.user?.Id
+    const eventId = req.params.id 
+    if (userId && eventId) {
+      const response = await unLikeEvent(userId, eventId, dbRepositoryUser)
+      if (response.ok) {
+        res.json({response})
+      } else {
+        res.json({response})
+      }
+    } else {
+      res.json({error:'params not find'})
+    }
+  })
   return {
     getUserByEmail,
     verifyPasswordController,
@@ -362,6 +442,10 @@ const userController = (
     getUsersChatController,
     sendMessageController,
     getAllMessageController,
+    addFollowController,
+    unFollowController,
+    likeEventController,
+    unLikeEventController,
   };
 };
 

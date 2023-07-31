@@ -24,7 +24,7 @@ const EventDetails = () => {
       <EventImageSection images={eventDetails.imageURL} />
       <div className="flex md:mx-14 px-3 lg:px-10">
         <div className="flex flex-wrap w-full">
-        <div className="md:w-8/12 w-full lg:px-5">
+        <div className="md:w-8/12 w-full px-8 lg:px-14">
           <EventInfo event={eventDetails} />
         </div>
         <div className="md:w-4/12 w-full sticky bottom-0 lg:px-5">
