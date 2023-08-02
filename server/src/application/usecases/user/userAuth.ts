@@ -432,3 +432,19 @@ export const unLikeEvent = async (
     );
   }
 };
+
+export const getLikedEvents = async (userId: string, userRepository: ReturnType<UserDBInterface>) => {
+  const data = await userRepository.getLikedEvents(userId)
+  if (!data) {
+    throw new AppError('getting liked events failed',HttpStatus.BAD_REQUEST)
+  }
+  return data
+}
+
+export const getFollowing = async (userId: string, userRepository: ReturnType<UserDBInterface>) => {
+  const data = await userRepository.getFollowing(userId)
+  if (!data) {
+    throw new AppError('getting following organizers failed',HttpStatus.BAD_REQUEST)
+  }
+  return data
+}

@@ -39,7 +39,8 @@ export interface RegisteredEventInterface {
   orgOwnerId:string
   registeredTime:string
   orgName:string
-  ticketSold:number
+  ticketSold: number
+  isPromoted:boolean
 }
 export interface mediaFormInterface {
   videoURL: string;

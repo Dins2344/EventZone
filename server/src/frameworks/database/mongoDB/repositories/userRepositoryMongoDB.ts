@@ -432,6 +432,20 @@ export const userRepositoryMongoDB = () => {
       return {error:'removing event from liked list failed',ok:false}
     }
   }
+
+  const getLikedEvents = async (userId: string) => {
+    try {
+      const data = await User.findById({ _id: userId }).populate('likedEvents')
+      return data
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  const getFollowingOrgs = async (userId: string) => {
+    const data = await User.findById({ _id: userId }).populate("following");
+    console.log(data)
+    return data
+  }
   return {
     addUser,
     getUserByEmail,
@@ -459,6 +473,8 @@ export const userRepositoryMongoDB = () => {
     unFollow,
     likeEvent,
     unLikeEvent,
+    getLikedEvents,
+    getFollowingOrgs,
   };
 };
 

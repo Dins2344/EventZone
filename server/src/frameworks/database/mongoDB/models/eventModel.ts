@@ -79,6 +79,9 @@ const eventSchema = new Schema(
         },
         ticketSold:{
             type:Number
+        },
+        isPromoted: {
+            type:Boolean
         }
     }
 )

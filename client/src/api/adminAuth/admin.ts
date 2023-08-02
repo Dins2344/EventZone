@@ -235,3 +235,47 @@ export const deleteCity = async(id:string)=>{
     console.log(error)
   }
 }
+
+export const promoteEvent = async (eventId: string) => {
+  try {
+    const res = await adminApi.get(
+      `http://localhost:4000/admin/update-promoted-events/${eventId}`
+    );
+    return res
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+export const removeFromPromote = async (eventId: string) => {
+  try {
+    const res = await adminApi.delete(
+      `http://localhost:4000/admin/update-promoted-events/${eventId}`
+    );
+    return res
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+export const blockUser = async(userId: string) => {
+  try {
+    const res = await adminApi.get(
+      `http://localhost:4000/admin/update-user-status/${userId}`
+    );
+    return res
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+export const unBlockUser = async (userId: string) => {
+  try {
+    const res = await adminApi.put(
+      `http://localhost:4000/admin/update-user-status/${userId}`
+    );
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};

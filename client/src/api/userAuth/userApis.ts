@@ -278,3 +278,23 @@ export const unLikeEvent = async (eventId: string) => {
     console.log(error);
   }
 };
+
+export const getLikedEvents = async () => {
+  try {
+    const data = await api.get('http://localhost:4000/user/get-all-liked-events')
+    return data
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+export const getFollowingOrgs = async () => {
+  try {
+    const data = await api.get(
+      "http://localhost:4000/user/get-all-following-orgs"
+    );
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+};

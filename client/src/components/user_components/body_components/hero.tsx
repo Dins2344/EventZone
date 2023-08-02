@@ -10,15 +10,18 @@ import { useNavigate } from "react-router-dom";
   const navigate = useNavigate()
   const fetchEvents = async()=>{
     const data = await getAllApprovedEvents()
-    console.log(data)
-    const carouselEvents = data?.data.data.splice(0,2)
-    setEvents(carouselEvents)
+    const promotedEvents = data?.data.data.filter((item:RegisteredEventInterface) => {
+      if (item.isPromoted) {
+        return item
+      }
+    })
+    setEvents(promotedEvents);
   }
   useEffect(()=>{
     fetchEvents()
   },[])
   return (
-    <Carousel className="h-96">
+    <Carousel className="h-[29rem]">
       {events?.map((item)=>{
         return(
       <div key={item._id} className="relative h-full w-full">

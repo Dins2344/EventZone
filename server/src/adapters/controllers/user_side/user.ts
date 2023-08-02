@@ -4,6 +4,8 @@ import {
   unFollow,
   likeEvent,
   unLikeEvent,
+  getLikedEvents,
+  getFollowing,
 } from "./../../../application/usecases/user/userAuth";
 import { UserDBInterface } from "../../../application/repositories/userDBRepository";
 import { UserRepositoryMongoDB } from "../../../frameworks/database/mongoDB/repositories/userRepositoryMongoDB";
@@ -392,36 +394,67 @@ const userController = (
     }
   );
 
-  const likeEventController = asyncHandler(async (req: CustomRequest, res: Response) => {
-    const userId = req.user?.Id
-    const eventId = req.params.id
-    if (userId && eventId) {
-      const response = await likeEvent(userId, eventId, dbRepositoryUser)
-      if (response.ok) {
-        res.json({response})
+  const likeEventController = asyncHandler(
+    async (req: CustomRequest, res: Response) => {
+      const userId = req.user?.Id;
+      const eventId = req.params.id;
+      if (userId && eventId) {
+        const response = await likeEvent(userId, eventId, dbRepositoryUser);
+        if (response.ok) {
+          res.json({ response });
+        } else {
+          res.json({ response });
+        }
       } else {
-        res.json({response})
+        res.json({ error: "params not find" });
       }
-      
-    } else {
-      res.json({error:'params not find'})
     }
-  })
+  );
 
-  const unLikeEventController = asyncHandler(async (req: CustomRequest, res: Response) => {
-    const userId = req.user?.Id
-    const eventId = req.params.id 
-    if (userId && eventId) {
-      const response = await unLikeEvent(userId, eventId, dbRepositoryUser)
-      if (response.ok) {
-        res.json({response})
+  const unLikeEventController = asyncHandler(
+    async (req: CustomRequest, res: Response) => {
+      const userId = req.user?.Id;
+      const eventId = req.params.id;
+      if (userId && eventId) {
+        const response = await unLikeEvent(userId, eventId, dbRepositoryUser);
+        if (response.ok) {
+          res.json({ response });
+        } else {
+          res.json({ response });
+        }
       } else {
-        res.json({response})
+        res.json({ error: "params not find" });
       }
-    } else {
-      res.json({error:'params not find'})
     }
-  })
+  );
+
+  const getLikedEventsController = asyncHandler(
+    async (req: CustomRequest, res: Response) => {
+      const userId = req.user?.Id;
+      if (userId) {
+        const data = await getLikedEvents(userId, dbRepositoryUser);
+        if (data) {
+          res.json({ message: "getting liked events done", ok: true, data });
+        } else {
+          res.json({ error: "getting liked events failed", ok: false });
+        }
+      }
+    }
+  );
+
+  const getFollowingController = asyncHandler(
+    async (req: CustomRequest, res: Response) => {
+      const userId = req.user?.Id;
+      if (userId) {
+        const data = await getFollowing(userId, dbRepositoryUser);
+        if (data) {
+          res.json({ message: "getting liked events done", ok: true, data });
+        } else {
+          res.json({ error: "getting liked events failed", ok: false });
+        }
+      }
+    }
+  );
   return {
     getUserByEmail,
     verifyPasswordController,
@@ -446,6 +479,8 @@ const userController = (
     unFollowController,
     likeEventController,
     unLikeEventController,
+    getLikedEventsController,
+    getFollowingController,
   };
 };
 

@@ -16,7 +16,7 @@ const ProfilePage: React.FC = () => {
   return (
     <>
       {token && (
-        <div className="flex flex-wrap px-7 md:px-20 lg:px-32 xlg:px-44 mt-12">
+        <div className="flex flex-wrap px-7 md:px-20 lg:px-32 xlg:px-44 mt-12 min-h-screen mb-10">
           <div className="w-full md:w-4/12">
             <ProfileDetail />
           </div>

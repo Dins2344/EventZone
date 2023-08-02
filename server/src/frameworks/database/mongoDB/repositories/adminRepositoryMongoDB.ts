@@ -1,7 +1,9 @@
 import Admin from "../models/adminModel";
 import EventCategory from "../models/eventCategory";
 import OrganizationCategory from "../models/orgCategory";
-import AdminInterface, { CityInterface } from "../../../../types/adminInterface";
+import AdminInterface, {
+  CityInterface,
+} from "../../../../types/adminInterface";
 import {
   EventCategoryInterface,
   EditEventCategoryInterface,
@@ -123,118 +125,115 @@ export const adminRepositoryMongoDB = () => {
     return data;
   };
 
-  const getAdminMonthlySales = async()=>{
+  const getAdminMonthlySales = async () => {
     const data = await Bookings.aggregate([
       {
         $addFields: {
           // Convert the bookingTime string into a date object
-          bookingDate: { $dateFromString: { dateString: '$bookingTime' } }
-        }
+          bookingDate: { $dateFromString: { dateString: "$bookingTime" } },
+        },
       },
       {
         $group: {
-          _id: { $dateToString: { format: '%Y-%m', date: '$bookingDate' } },
-          totalSales: { $sum: '$totalAmount' }
-        }
+          _id: { $dateToString: { format: "%Y-%m", date: "$bookingDate" } },
+          totalSales: { $sum: "$totalAmount" },
+        },
       },
       {
         $project: {
           _id: 0,
-          month: '$_id', // Rename _id field to month
-          totalSales: 1
-        }
+          month: "$_id", // Rename _id field to month
+          totalSales: 1,
+        },
       },
       {
         $sort: {
-          month: 1
-        }
-      }
-    ])
-    return data
-  }
+          month: 1,
+        },
+      },
+    ]);
+    return data;
+  };
 
-  const getAdminMonthlyTicketSales = async()=>{
+  const getAdminMonthlyTicketSales = async () => {
     const data = await Bookings.aggregate([
       {
         $addFields: {
           // Convert the bookingTime string into a date object
-          bookingDate: { $dateFromString: { dateString: '$bookingTime' } }
-        }
+          bookingDate: { $dateFromString: { dateString: "$bookingTime" } },
+        },
       },
       {
         $group: {
-          _id: { $dateToString: { format: '%Y-%m', date: '$bookingDate' } },
-          totalTickets: { $sum: '$ticketCount' }
-        }
+          _id: { $dateToString: { format: "%Y-%m", date: "$bookingDate" } },
+          totalTickets: { $sum: "$ticketCount" },
+        },
       },
       {
         $project: {
           _id: 0,
-          month: '$_id', // Rename _id field to month
-          totalTickets: 1
-        }
+          month: "$_id", // Rename _id field to month
+          totalTickets: 1,
+        },
       },
       {
         $sort: {
-          month: 1
-        }
-      }
-    ])
-    return data
-  }
+          month: 1,
+        },
+      },
+    ]);
+    return data;
+  };
 
-  const getAdminTicketTypeSold = async()=>{
+  const getAdminTicketTypeSold = async () => {
     const data = await Bookings.aggregate([
-    
       {
         $group: {
-          _id: '$paymentType',
-          totalTickets: { $sum: '$ticketCount' }
-        }
+          _id: "$paymentType",
+          totalTickets: { $sum: "$ticketCount" },
+        },
       },
       {
         $project: {
           _id: 0,
-          paymentType: '$_id', // Rename _id field to month
-          totalTickets: 1
-        }
+          paymentType: "$_id", // Rename _id field to month
+          totalTickets: 1,
+        },
       },
       {
         $sort: {
-          month: 1
-        }
-      }
-    ])
-    return data
-  }
+          month: 1,
+        },
+      },
+    ]);
+    return data;
+  };
 
-  const getMostSoldEvents = async()=>{
+  const getMostSoldEvents = async () => {
     const data = await Event.aggregate([
       {
         $group: {
-          _id: '$eventName',
-          totalTickets: { $sum: '$ticketSold' },
-        }
+          _id: "$eventName",
+          totalTickets: { $sum: "$ticketSold" },
+        },
       },
       {
         $project: {
           _id: 0,
-          eventName: '$_id', // Rename _id field to month
+          eventName: "$_id", // Rename _id field to month
           totalTickets: 1,
-        }
+        },
       },
       {
         $sort: {
-          totalTickets: -1
-        }
+          totalTickets: -1,
+        },
       },
-     
-    ])
-    return data
-  }
+    ]);
+    return data;
+  };
 
-
-  const getAllBookings = async()=>{
+  const getAllBookings = async () => {
     const data = await Bookings.aggregate([
       {
         $addFields: {
@@ -313,26 +312,69 @@ export const adminRepositoryMongoDB = () => {
         $sort: { _id: -1 },
       },
     ]).exec();
-    console.log(data.length)
-    return data
+    console.log(data.length);
+    return data;
+  };
+
+  const addCities = async (data: CityInterface) => {
+    console.log(data);
+    const cityModel = new Cities(data);
+    const res = await cityModel.save();
+    return res;
+  };
+
+  const getAllCities = async () => {
+    const data = await Cities.find({});
+    return data;
+  };
+
+  const deleteCity = async (id: string) => {
+    const res = await Cities.deleteOne({ _id: new ObjectId(id) });
+    return res;
+  };
+
+  const addPromotedEvent = async (eventId: string) => {
+    const res = await Event.updateOne(
+      { _id: new ObjectId(eventId) },
+      { isPromoted: true }
+    );
+    if (res) {
+      return { message: "adding event to promoted events done", ok: true };
+    } else {
+      return { error: "adding event to promoted events failed", ok: false };
+    }
+  };
+
+  const deletePromotedEvent = async (eventId: string) => {
+    const res = await Event.updateOne(
+      { _id: new ObjectId(eventId) },
+      { isPromoted: false }
+    );
+    if (res) {
+      return { message: "deleting from promoted event done", ok: true };
+    } else {
+      return { error: "deleting from promoted event failed", ok: false };
+    }
+  };
+
+  const blockUser = async (userId: string) => {
+    const res = await User.updateOne({ _id: new ObjectId(userId) }, { status: 'blocked' })
+    if (res) {
+      return {message:'blocking user done',ok:true,res}
+    } else {
+      return { message: 'blocking user not done', ok:false}
+    }
   }
 
-  const addCities = async(data:CityInterface)=>{
-    console.log(data)
-    const cityModel = new Cities(data)
-    const res = await cityModel.save()
-    return res
-  }
-
-  const getAllCities = async()=>{
-    const data = await Cities.find({})
-    return data
-  }
-
-  const deleteCity = async(id:string)=>{
-    const res = await Cities.deleteOne({_id:new ObjectId(id)})
-    return res
-  }
+  const unBlockUser = async (userId: string) => {
+    const res = await User.updateOne({ _id: new ObjectId(userId) }, { status: 'active' })
+      if (res) {
+        return { message: 'unblocking user done', ok: true, res }
+      } else {
+        return {message:'unblocking user not done',ok:true}
+      }
+    }
+  
 
   return {
     getAdminByEmail,
@@ -360,7 +402,11 @@ export const adminRepositoryMongoDB = () => {
     getAllBookings,
     addCities,
     getAllCities,
-    deleteCity
+    deleteCity,
+    addPromotedEvent,
+    deletePromotedEvent,
+    blockUser,
+    unBlockUser,
   };
 };
 

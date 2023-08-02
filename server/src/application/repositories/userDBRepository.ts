@@ -124,6 +124,14 @@ export const userDbRepository = (repository:ReturnType<UserRepositoryMongoDB>)=>
         return res
     }
 
+    const getLikedEvents = async (userId: string) => {
+        const data = await repository.getLikedEvents(userId)
+        return data
+    }
+    const getFollowing = async (userId: string) => {
+        const data = await repository.getFollowingOrgs(userId)
+        return data
+    }
     return {
       addUser,
       getUserByEmail,
@@ -151,6 +159,8 @@ export const userDbRepository = (repository:ReturnType<UserRepositoryMongoDB>)=>
       unFollow,
       likeEvent,
       unLikeEvent,
+      getLikedEvents,
+      getFollowing,
     };
 }
 

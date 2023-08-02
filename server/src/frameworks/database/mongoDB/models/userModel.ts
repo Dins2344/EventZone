@@ -23,14 +23,19 @@ const userSchema = new Schema({
   organizations: {
     type: Array,
   },
-  status: {
-    type: Boolean,
-  },
   phoneNumber: {
     type: Number,
   },
   website: {
     type: String,
+  },
+  status: {
+    type: String,
+    default:'active'
+  },
+  joinedOn: {
+    type: Date,
+    default:new Date().toISOString()
   },
   following: [
     {

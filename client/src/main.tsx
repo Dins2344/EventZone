@@ -37,6 +37,7 @@ import AddCities from "./pages/admin_pages/addCities.tsx";
 import CityAddingForm from "./components/admin_components/CityAddingForm.tsx";
 import SearchPage from "./pages/user_pages/searchPage.tsx";
 import ShowOrganizer from "./pages/user_pages/showOrganizer.tsx";
+import UsersAndOrganization from "./pages/admin_pages/usersAndOrganization.tsx";
 
 const appRouter = createBrowserRouter([
   {
@@ -69,8 +70,12 @@ const appRouter = createBrowserRouter([
         element: <CategoryManagement />,
       },
       {
-        path: "/admin/request-management",
+        path: "/admin/events-management",
         element: <RequestManagement />,
+      },
+      {
+        path: "/admin/users-organization-management",
+        element: <UsersAndOrganization />,
       },
       {
         path: "/admin/add-cities",
@@ -128,8 +133,8 @@ const appRouter = createBrowserRouter([
         element: <ProfilePage />,
       },
       {
-        path: '/user/edit-profile',
-        element: <EditProfile />
+        path: "/user/edit-profile",
+        element: <EditProfile />,
       },
       {
         path: "/show-booking",

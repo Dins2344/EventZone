@@ -102,34 +102,51 @@ export const adminDbRepository = (repository:AdminRepositoryDBReturn) =>{
     const deleteCity = async(id:string)=>{
         return await repository.deleteCity(id)
     }
-    return {
-        getAdminByEmail,
-        addEventCategory,
-        deleteEventCategory,
-        getEventCategories,
-        getSingleEventCategory,
-        editEventCategory,
-        addOrgCategory,
-        deleteOrgCategory,
-        editOrgCategory,
-        getSingleOrgCategory,
-        getAllOrgCategory,
-        getAllEvents,
-        approveEvent,
-        rejectEvent,
-        getTotalEvents,
-        getTotalOrganization,
-        getTotalUsers,
-        getTotalTicketsSold,
-        getAdminMonthlySales,
-        getAdminMonthlyTicketSales,
-        getAdminTicketTypeSold,
-        getMostSoldEvents,
-        getAllBookings,
-        addCities,
-        getAllCities,
-        deleteCity
+
+    const addPromotedEvent = async (eventId: string) => {
+        return await repository.addPromotedEvent(eventId)
     }
+    const deletePromotedEvent = async (eventId: string) => {
+        return await repository.deletePromotedEvent(eventId)
+    }
+    const blockUser = async (userId: string) => {
+        return await repository.blockUser(userId)
+    }
+    const unBlockUser = async (userId: string) => {
+        return await repository.unBlockUser(userId)
+    }
+    return {
+      getAdminByEmail,
+      addEventCategory,
+      deleteEventCategory,
+      getEventCategories,
+      getSingleEventCategory,
+      editEventCategory,
+      addOrgCategory,
+      deleteOrgCategory,
+      editOrgCategory,
+      getSingleOrgCategory,
+      getAllOrgCategory,
+      getAllEvents,
+      approveEvent,
+      rejectEvent,
+      getTotalEvents,
+      getTotalOrganization,
+      getTotalUsers,
+      getTotalTicketsSold,
+      getAdminMonthlySales,
+      getAdminMonthlyTicketSales,
+      getAdminTicketTypeSold,
+      getMostSoldEvents,
+      getAllBookings,
+      addCities,
+      getAllCities,
+      deleteCity,
+      addPromotedEvent,
+      deletePromotedEvent,
+      blockUser,
+      unBlockUser,
+    };
 }
 
 export type AdminDbInterface = typeof adminDbRepository

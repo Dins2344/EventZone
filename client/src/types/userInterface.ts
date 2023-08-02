@@ -17,7 +17,9 @@ export interface RegisteredUserInterface{
   images?:[]
   __v?:number
   following?: string[]
-  likedEvents:string[]
+  likedEvents: string[]
+  status?: string
+  joinedDate?:string
 }
 
 export interface loginUserInterface {

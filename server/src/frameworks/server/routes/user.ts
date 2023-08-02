@@ -110,6 +110,8 @@ const userRouter = () => {
     .route("/update-like-list/:id")
     .get(jwtAuthMiddleware, controller.likeEventController)
     .put(jwtAuthMiddleware, controller.unLikeEventController);
+  router.get('/get-all-liked-events', jwtAuthMiddleware, controller.getLikedEventsController)
+  router.get('/get-all-following-orgs',jwtAuthMiddleware,controller.getFollowingController)
 
   return router;
 };

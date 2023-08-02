@@ -1,3 +1,4 @@
+import { addPromotedEvent, blockUser, deletePromotedEvent, unBlockUser } from './../../../application/usecases/admin/adminUsecases';
 import { Response, Request, NextFunction } from "express";
 import asyncHandler from "express-async-handler";
 import {
@@ -289,6 +290,47 @@ const adminController = (
       res.json({error:'deleting city failed'})
     }
   })
+
+  const addPromotedEventController = asyncHandler(async (req: Request, res: Response) => {
+    const eventId = req.params.id 
+    const response = await addPromotedEvent(eventId, dbRepositoryAdmin)
+    if (response) {
+      res.json({response})
+    }else{res.json({error:'adding promoted event failed'})}
+  })
+  
+
+  const deletePromotedEventController = asyncHandler(async (req: Request, res: Response) => {
+    const eventId = req.params.id 
+    const response = await deletePromotedEvent(eventId, dbRepositoryAdmin)
+    if (response) {
+      res.json({response})
+    } else {
+      res.json({error:'deleting promoted event'})
+    }
+  })
+
+  const unBlockUserController = asyncHandler(async (req: Request, res: Response) => {
+    const userId = req.params.id 
+    const response = await unBlockUser(userId,dbRepositoryAdmin)
+    if (response) {
+      res.json({response})
+    } else {
+      res.json({error:'unblocking user failed'})
+    }
+  })
+
+  const blockUserController = asyncHandler(async (req: Request, res: Response) => {
+    const userId = req.params.id
+    const response = await blockUser(userId, dbRepositoryAdmin)
+    if (response) {
+      res.json({response})
+    } else {
+      res.json({error:'blocking user failed'})
+    }
+  })
+
+
   return {
     addEventCategoryController,
     getEventCategoriesController,
@@ -314,7 +356,11 @@ const adminController = (
     getAllBookingsController,
     addCitiesController,
     getAllCitiesController,
-    deleteCityController
+    deleteCityController,
+    addPromotedEventController,
+    deletePromotedEventController,
+    unBlockUserController,
+    blockUserController,
   };
 };
 

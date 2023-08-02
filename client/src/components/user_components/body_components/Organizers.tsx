@@ -47,7 +47,7 @@ type OrganizersProps = {
   organization: RegisteredOrganization;
 };
 
-const OrganizersCard: React.FC<OrganizersProps> = ({ organization }) => {
+export const OrganizersCard: React.FC<OrganizersProps> = ({ organization }) => {
   const [followed, setFollowed] = useState<boolean>();
 
   useEffect(() => {

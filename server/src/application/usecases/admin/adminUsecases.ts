@@ -1,3 +1,4 @@
+import { adminRepositoryMongoDB } from './../../../frameworks/database/mongoDB/repositories/adminRepositoryMongoDB';
 import { Await } from "react-router-dom";
 import {
   EventCategoryInterface,
@@ -7,7 +8,6 @@ import {
 import { HttpStatus } from "../../../types/httpStatus";
 import AppError from "../../../utils/appError";
 import { AdminDbInterface } from "../../repositories/adminDBRepository";
-import { adminRepositoryMongoDB } from "../../../frameworks/database/mongoDB/repositories/adminRepositoryMongoDB";
 
 export const addEventCategory = async (
   eventData: EventCategoryInterface,
@@ -233,4 +233,41 @@ export const deleteCity = async(id:string,adminRepository:ReturnType<AdminDbInte
     throw new AppError('deleting city failed',HttpStatus.BAD_REQUEST)
   }
   return data
+}
+
+
+export const addPromotedEvent = async (eventId: string, adminRepository: ReturnType<AdminDbInterface>) => {
+  const res = await adminRepository.addPromotedEvent(eventId)
+  if (res.ok) {
+    return res
+  } else {
+    throw new AppError('adding promoted event failed',HttpStatus.BAD_REQUEST)
+  }
+}
+
+export const deletePromotedEvent = async (eventId: string, adminRepository: ReturnType<AdminDbInterface>) => {
+  const res = await adminRepository.deletePromotedEvent(eventId)
+  if (res.ok) {
+    return res
+  } else {
+    throw new AppError('deleting promoted event failed',HttpStatus.BAD_REQUEST)
+  }
+}
+
+export const blockUser = async (userId: string, adminRepository: ReturnType<AdminDbInterface>) => {
+  const res = await adminRepository.blockUser(userId)
+  if (res.ok) {
+    return res
+  } else {
+    throw new AppError('blocking user failed',HttpStatus.BAD_REQUEST)
+  }
+}
+
+export const unBlockUser = async (userId: string, adminRepository: ReturnType<AdminDbInterface>) => {
+  const res = await adminRepository.unBlockUser(userId)
+  if (res.ok) {
+    return res
+  } else {
+    throw new AppError('unBlocking user failed',HttpStatus.BAD_REQUEST)
+  }
 }
