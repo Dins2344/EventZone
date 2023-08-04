@@ -45,6 +45,12 @@ const bookingsSchema = new Schema({
     orgOwnerId:{
         type:String,
         required:[true,'add orgOwnerId']
+    },
+    isAttended: {
+        type:Boolean
+    },
+    isCanceled: {
+        type:Boolean
     }
 })
 

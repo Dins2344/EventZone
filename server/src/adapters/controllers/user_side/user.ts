@@ -6,6 +6,8 @@ import {
   unLikeEvent,
   getLikedEvents,
   getFollowing,
+  addReview,
+  updateBookings,
 } from "./../../../application/usecases/user/userAuth";
 import { UserDBInterface } from "../../../application/repositories/userDBRepository";
 import { UserRepositoryMongoDB } from "../../../frameworks/database/mongoDB/repositories/userRepositoryMongoDB";
@@ -455,6 +457,31 @@ const userController = (
       }
     }
   );
+
+  const updateBookingsController = asyncHandler(async (req: Request, res: Response) => {
+    const response = await updateBookings(req.params.id, dbRepositoryUser)
+    if (response) {
+      res.json({message:'updated booking',ok:true})
+    } else {
+      res.json({error:'updating bookings failed'})
+    }
+  })
+
+  const addReviewController = asyncHandler(async (req: CustomRequest, res: Response) => {
+    if (req.user) {
+      const review = {
+        userId: req.user?.Id,
+        rating: req.body.rating,
+        comment : req.body.comment
+      }
+      const response = await addReview(review, req.body.eventId, dbRepositoryUser)
+      if (response) {
+        res.json({response})
+      } else {
+        res.json({error:'updating review failed'})
+      }
+    }
+  })
   return {
     getUserByEmail,
     verifyPasswordController,
@@ -481,6 +508,8 @@ const userController = (
     unLikeEventController,
     getLikedEventsController,
     getFollowingController,
+    updateBookingsController,
+    addReviewController,
   };
 };
 

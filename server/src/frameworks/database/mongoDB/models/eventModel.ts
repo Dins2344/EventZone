@@ -82,6 +82,29 @@ const eventSchema = new Schema(
         },
         isPromoted: {
             type:Boolean
+        },
+        reviews: [
+            {
+                userId: {
+                    type: Schema.Types.ObjectId,
+                    ref: 'User',
+                    default:''
+                },
+                rating: {
+                    type: Number,
+                    default:0
+                },
+                comment: {
+                    type: String,
+                    default:0
+                }
+            }
+        ],
+        avgRating: {
+            type:Number
+        },
+        numOfReviews: {
+            type:Number
         }
     }
 )

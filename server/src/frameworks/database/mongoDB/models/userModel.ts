@@ -34,8 +34,8 @@ const userSchema = new Schema({
     default:'active'
   },
   joinedOn: {
-    type: Date,
-    default:new Date().toISOString()
+    type: String,
+    default:new Date().toDateString()
   },
   following: [
     {

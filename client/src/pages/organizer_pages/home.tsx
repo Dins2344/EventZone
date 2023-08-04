@@ -34,7 +34,7 @@ const OrganizationHome = () => {
 export default OrganizationHome;
 
 const OrganizationDetails = () => {
-  const [organizations, setOrganizations] = useState<OrganizationInterface[]>();
+  const [organizations, setOrganizations] = useState<OrganizationInterface[]>([]);
   const [selectedOrganization, setSelectedOrganization] = useState("");
   const [organizationDetails, setOrganizationDetails] =
     useState<OrganizationInterface>();

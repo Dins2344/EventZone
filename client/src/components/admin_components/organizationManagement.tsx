@@ -21,7 +21,7 @@ import { useEffect, useState } from "react";
 import { RegisteredOrganization } from "../../types/userInterface";
 
 
-const TABLE_HEAD = ["Organization", "Category", "Events", "Created", ""];
+const TABLE_HEAD = ["Organization", "Category", "Followers", "Created", ""];
 
 
 
@@ -84,7 +84,7 @@ const OrganizationsTable = () => {
           </thead>
           <tbody>
             {TABLE_ROWS&&TABLE_ROWS.map(
-              ({ logo, orgName, orgType,_id }, index) => {
+              ({ logo, orgName, orgType,_id,followers,createdOn }, index) => {
                 const isLast = index === TABLE_ROWS.length - 1;
                 const classes = isLast
                   ? "p-4"
@@ -140,6 +140,13 @@ const OrganizationsTable = () => {
                     </td>
                     <td className={classes}>
                       <div className="w-max">
+                        <Typography
+                          variant="small"
+                          color="blue-gray"
+                          className="font-normal"
+                        >
+                          {followers.length} followers
+                        </Typography>
                         {/* <Chip
                           variant="ghost"
                           size="sm"
@@ -149,13 +156,13 @@ const OrganizationsTable = () => {
                       </div>
                     </td>
                     <td className={classes}>
-                      {/* <Typography
+                      <Typography
                         variant="small"
                         color="blue-gray"
                         className="font-normal"
                       >
-                        {date}
-                      </Typography> */}
+                        {createdOn}
+                      </Typography>
                     </td>
                     <td className={classes}>
                       <Tooltip content="Edit User">

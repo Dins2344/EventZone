@@ -5,6 +5,7 @@ import {
   CreateChatInterface,
   NewMessageInterface,
   ProfileContactInfo,
+  ReviewData,
   SearchQueryInterface,
   UserInterface,
   searchDataInterface,
@@ -19,6 +20,12 @@ import Address from "../models/address";
 import Chat from "../models/chats";
 import Message from "../models/message";
 import { Types } from "mongoose";
+// import {ObjectId as objectId} from 'mongoose/Schema/Types/ObjectId'
+// import { ObjectId as objectId } from "mongoose";
+// const objectId = mongoose.Schema.Types.ObjectId
+
+
+
 
 export const userRepositoryMongoDB = () => {
   const getUserByEmail = async (email: string) => {
@@ -69,7 +76,6 @@ export const userRepositoryMongoDB = () => {
   };
 
   const createBooking = async (data: BookingCreationInterface) => {
-    console.log(data);
     await Event.updateOne(
       { _id: new ObjectId(data.eventId) },
       { $inc: { ticketSold: data.ticketCount } }
@@ -446,6 +452,46 @@ export const userRepositoryMongoDB = () => {
     console.log(data)
     return data
   }
+
+  const updateBookings = async (bookingId: string) => {
+    const res = await Bookings.updateOne({ _id: bookingId }, { isAttended: true,status:'attended' })
+    return res
+  }
+
+  const addReview = async (review: ReviewData, eventId: string) => {
+    const event = await Event.findById(eventId)
+    
+    if (event) {
+    const isReviewed = event?.reviews.find((item) => {
+      return item.userId?.toString() == review.userId.toString()
+    })
+    if (isReviewed) {
+      event?.reviews.forEach((item) => {
+        if (item.userId?.toString() == review.userId.toString()) {
+          item.rating = review.rating
+          item.comment = review.comment
+        }
+      })
+    } else {
+      const dataToPush = {
+        userId:new Types.ObjectId(review.userId),
+        rating: review.rating,
+        comment:review.comment
+      }
+        event?.reviews.push(dataToPush)
+      }
+      event.numOfReviews = event?.reviews.length
+      const res = await event.save()
+      if (res) {
+        console.log(res)
+        return {message:"reviews updated",ok:true}
+      } else {
+        return {message:'review updating failed',ok:false}
+      }
+    } else {
+      return {message:"event not found",ok:false}
+    }
+  }
   return {
     addUser,
     getUserByEmail,
@@ -475,6 +521,8 @@ export const userRepositoryMongoDB = () => {
     unLikeEvent,
     getLikedEvents,
     getFollowingOrgs,
+    addReview,
+    updateBookings,
   };
 };
 

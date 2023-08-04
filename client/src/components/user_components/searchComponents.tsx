@@ -302,6 +302,18 @@ const SearchedEvents: React.FC<SearchedEventsProps> = ({ data, searchFor }) => {
     console.log(data);
     console.log(searchFor);
   });
+  if (data.length === 0) {
+    return (
+      <>
+        <div className="w-full px-4 h-96 flex items-center justify-center">
+          <h3 className="text-2xl">
+           Ooops..! Your search query fails to align with any scheduled events in our
+            database.
+          </h3>
+        </div>
+      </>
+    );
+  }
   return (
     <>
       <div className="w-full px-4">

@@ -6,8 +6,16 @@ import {
   getUserDetailsById,
   unLikeEvent,
   likeEvent,
+  updateBooking,
 } from "../../../api/userAuth/userApis";
-import { Button, Card, CardBody, CardFooter, CardHeader, Typography } from "@material-tailwind/react";
+import {
+  Button,
+  Card,
+  CardBody,
+  CardFooter,
+  CardHeader,
+  Typography,
+} from "@material-tailwind/react";
 import { useNavigate } from "react-router-dom";
 import { Bookings, RegisteredOrganization } from "../../../types/userInterface";
 import { RegisteredEventInterface } from "../../../types/organizerInterface";
@@ -24,12 +32,14 @@ const ProfileActivities: React.FC = () => {
   const [likedEvents, setLikedEvents] = useState<RegisteredEventInterface[]>();
   const [followingOrgs, setFollowingOrgs] =
     useState<RegisteredOrganization[]>();
+  const [updated, setUpdated] = useState<boolean>();
+
   const navigate = useNavigate();
   useEffect(() => {
     fetchBookingInfo();
     fetchLikedEvents();
     fetchFollowingOrg();
-  }, []);
+  }, [updated]);
   const fetchLikedEvents = async () => {
     const data = await getLikedEvents();
     if (data?.data.data.likedEvents.length > 0) {
@@ -63,6 +73,18 @@ const ProfileActivities: React.FC = () => {
       }
     });
     setUpComing(lastEvent);
+  };
+  useEffect(() => {
+    updateBookings();
+  }, []);
+  const updateBookings = async () => {
+    const today = new Date().getTime();
+    bookings?.forEach(async (item) => {
+      if (today > new Date(item.event.startDate).getTime()) {
+        await updateBooking(item._id);
+      }
+    });
+    setUpdated(!updated);
   };
   return (
     <>
@@ -142,7 +164,7 @@ const ProfileActivities: React.FC = () => {
                       </p>
                     </div>
                   </div>
-                  <div className="flex items-center p-2">
+                  <div className="flex i  tems-center p-2">
                     <Button
                       className="h-8"
                       size="sm"
@@ -192,12 +214,11 @@ const ProfileActivities: React.FC = () => {
 
 export default ProfileActivities;
 
-
 interface EventCardProps {
   approvedEvent: RegisteredEventInterface;
 }
 
- const SmallEventCards: React.FC<EventCardProps> = ({ approvedEvent }) => {
+const SmallEventCards: React.FC<EventCardProps> = ({ approvedEvent }) => {
   const [isClick, setIsClick] = useState<boolean>(false);
   const navigate = useNavigate();
   const user = useSelector(selectUser);
@@ -282,10 +303,7 @@ interface EventCardProps {
         pauseOnHover
         theme="colored"
       />
-      <div
-        key={approvedEvent._id}
-        className="  px-2  mt-2 "
-      >
+      <div key={approvedEvent._id} className="  px-2  mt-2 ">
         <Card className="w-60 shadow-lg ">
           <div className="!absolute top-0 right-0 rounded-full w-min h-min z-10">
             <Heart isClick={isClick} onClick={handleLike} />
@@ -312,7 +330,6 @@ interface EventCardProps {
                   >
                     {approvedEvent.city},{approvedEvent.state}
                   </Typography>
-                  
                 </div>
                 <Typography
                   variant="h6"
@@ -326,7 +343,6 @@ interface EventCardProps {
                 <Typography color="red">
                   {approvedEvent.startDate}, {approvedEvent.startTime}
                 </Typography>
-                
               </div>
             </CardBody>
           </div>

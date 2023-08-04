@@ -27,14 +27,19 @@ const organizationSchema = new Schema({
         type:String
     },
     country:{
-        type:String
+        type: String,
+        default:''
     },
     followers: [
         {
             type: Schema.Types.ObjectId,
             ref:'User'
         }
-    ]
+    ],
+    createdOn: {
+        type: String,
+        default:new Date().toDateString()
+    }
 
 })
 

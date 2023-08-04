@@ -344,7 +344,7 @@ const UserManagement: React.FC = () => {
               handleUnblockOpen();
             }}
           >
-            block
+            Unblock
           </Button>
         </DialogFooter>
       </Dialog>

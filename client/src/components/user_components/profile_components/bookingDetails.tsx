@@ -1,21 +1,22 @@
 import { useEffect, useState } from "react";
-import { cancelBooking, getOneBookingDetails } from "../../../api/userAuth/userApis";
-import { Bookings } from "../../../types/userInterface";
 import {
-  Button,
-  Chip,
-  Dialog,
-  DialogBody,
-} from "@material-tailwind/react";
+  addReview,
+  cancelBooking,
+  getOneBookingDetails,
+} from "../../../api/userAuth/userApis";
+import { Bookings } from "../../../types/userInterface";
+import { Button, Chip, Dialog, DialogBody } from "@material-tailwind/react";
 import ViewTicketComponent from "./viewTicket";
 
 const BookingDetails = () => {
   const [bookingDetail, setBookingDetails] = useState<Bookings>();
+  const [rating, setRating] = useState("");
+  const [comment, setComment] = useState("");
   const [open, setOpen] = useState(false);
-  const [updated,setUpdated] = useState(false)
+  const [updated, setUpdated] = useState(false);
 
   const handleOpen = () => setOpen(!open);
-  const handleUpdated = () => setUpdated(!updated)
+  const handleUpdated = () => setUpdated(!updated);
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const bookingId = urlParams.get("bookingId");
@@ -29,48 +30,99 @@ const BookingDetails = () => {
     setBookingDetails(data?.data.data[0]);
   };
 
-  const handleCancel = async ()=>{
-   if(bookingDetail) {
-    const res = await cancelBooking(bookingDetail?._id)
-    console.log(res)
-    handleUpdated()
-    handleOpen()
-   }
-  }
+  const handleCancel = async () => {
+    if (bookingDetail) {
+      const res = await cancelBooking(bookingDetail?._id);
+      console.log(res);
+      handleUpdated();
+      handleOpen();
+    }
+  };
+  const submitReview = async () => {
+    if (bookingDetail) {
+      const data = { rating, comment, eventId: bookingDetail?.eventId };
+      const res = addReview(data);
+      if (res) {
+        console.log(res);
+        setUpdated(!updated);
+      }
+    }
+  };
   return (
     <>
       <div className="flex flex-col w-full px-8 md:px-20 lg:px-52 pt-20  h-screen">
         <div className="flex w-full justify-between">
-        <h1 className="mb-4 text-2xl font-semibold w-full leading-none tracking-tight text-gray-900 md:text-3xl lg:text-4xl dark:text-white">
-          Booking for{" "}
-          <span className="text-blue-600">
-            {bookingDetail?.event.eventName}
-          </span>
-        </h1>
-        <div className="flex">
+          <h1 className="mb-4 text-2xl font-semibold w-full leading-none tracking-tight text-gray-900 md:text-3xl lg:text-4xl dark:text-white">
+            Booking for{" "}
+            <span className="text-blue-600">
+              {bookingDetail?.event.eventName}
+            </span>
+          </h1>
+          <div className="flex">
             <p>Status: </p>
-            {bookingDetail?.status === 'confirmed' &&  <Chip className="h-8" variant="ghost" value={bookingDetail?.status} color="green" />}
-            {bookingDetail?.status === 'canceled' &&  <Chip className="h-8" variant="ghost" value={bookingDetail?.status} color="red" /> }
+            {bookingDetail?.status === "confirmed" && (
+              <Chip
+                className="h-8"
+                variant="ghost"
+                value={bookingDetail?.status}
+                color="green"
+              />
+            )}
+            {bookingDetail?.status === "canceled" && (
+              <Chip
+                className="h-8"
+                variant="ghost"
+                value={bookingDetail?.status}
+                color="red"
+              />
+            )}
+            {bookingDetail?.status === "attended" && (
+              <Chip
+                className="h-8"
+                variant="ghost"
+                value={bookingDetail?.status}
+                color="orange"
+              />
+            )}
+          </div>
         </div>
-        </div>
-        <div className="flex flex-col">
-          <p>
-            {bookingDetail?.event.ticketValue} order #{bookingDetail?._id} on{" "}
-            {bookingDetail?.bookingTime}
-          </p>
-          <p>Category: {bookingDetail?.event.category}</p>
-          <p>
-            Event info: from {bookingDetail?.event.startDate},{" "}
-            {bookingDetail?.event.startTime} to {bookingDetail?.event.endDate},{" "}
-            {bookingDetail?.event.endTime}
-          </p>
-          <p>Location: {bookingDetail?.event.addressLine2}</p>
+        <div className="flex flex-wrap">
+          <div className="flex flex-col md:w-1/2 w-full">
+            <p>
+              {bookingDetail?.event.ticketValue} order #{bookingDetail?._id} on{" "}
+              {bookingDetail?.bookingTime}
+            </p>
+            <p>Category: {bookingDetail?.event.category}</p>
+            <p>
+              Event info: from {bookingDetail?.event.startDate},{" "}
+              {bookingDetail?.event.startTime} to {bookingDetail?.event.endDate}
+              , {bookingDetail?.event.endTime}
+            </p>
+            <p>Location: {bookingDetail?.event.addressLine2}</p>
+          </div>
+          {bookingDetail?.status === "attended" && (
+            <div className="flex flex-col w-full md:w-1/2">
+              <label htmlFor="rating">rating</label>
+              <input
+                onChange={(e) => setRating(e.target.value)}
+                type="number"
+              />
+              <label htmlFor="comment">write your comment</label>
+              <input
+                onChange={(e) => setComment(e.target.value)}
+                type="textarea"
+                name="comment"
+                id="comment"
+              />
+              <button onClick={submitReview}>submit</button>
+            </div>
+          )}
         </div>
         <div className="flex flex-wrap mt-5">
           <div className="flex flex-col w-full md:w-4/12 p-2">
-            {bookingDetail && 
-            <ViewTicketComponent BookingData={bookingDetail} />
-            }
+            {bookingDetail && (
+              <ViewTicketComponent BookingData={bookingDetail} />
+            )}
             <Button onClick={handleOpen} color="red" variant="outlined">
               Cancel order
             </Button>
@@ -99,16 +151,14 @@ const BookingDetails = () => {
                 <p className=" w-full md:w-1/2">
                   Total amount: {bookingDetail?.totalAmount}
                 </p>
-                <p className="w-full md:w-1/2">
-                Delivery method: e-Ticket
-                </p>
+                <p className="w-full md:w-1/2">Delivery method: e-Ticket</p>
               </div>
             </div>
           </div>
         </div>
       </div>
       <Dialog open={open} handler={handleOpen}>
-        <DialogBody >
+        <DialogBody>
           <div className="relative w-full h-full">
             <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
               <button
@@ -153,7 +203,7 @@ const BookingDetails = () => {
                   Are you sure you want to cancel this booking?
                 </h3>
                 <button
-                onClick={handleCancel}
+                  onClick={handleCancel}
                   type="button"
                   className="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center mr-2"
                 >

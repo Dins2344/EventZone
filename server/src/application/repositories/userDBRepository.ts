@@ -1,6 +1,6 @@
 import { getChat } from './../usecases/user/userAuth';
 import { UserRepositoryMongoDB } from "../../frameworks/database/mongoDB/repositories/userRepositoryMongoDB";
-import { AddressFormDataCreateInterface, BookingCreationInterface, CreateChatInterface, CreateUserInterface, NewMessageInterface, ProfileContactInfo, searchDataInterface } from "../../types/userInterface";
+import { AddressFormDataCreateInterface, BookingCreationInterface, CreateChatInterface, CreateUserInterface, NewMessageInterface, ProfileContactInfo, ReviewData, searchDataInterface } from "../../types/userInterface";
 
 
 export const userDbRepository = (repository:ReturnType<UserRepositoryMongoDB>)=>{
@@ -132,6 +132,15 @@ export const userDbRepository = (repository:ReturnType<UserRepositoryMongoDB>)=>
         const data = await repository.getFollowingOrgs(userId)
         return data
     }
+    const updateBookings = async (bookingId: string) => {
+        const res = await repository.updateBookings(bookingId)
+        return res
+    }
+    const addReview = async (review: ReviewData, eventId: string) => {
+        const res = await repository.addReview(review, eventId)
+        return res
+    }
+
     return {
       addUser,
       getUserByEmail,
@@ -161,6 +170,8 @@ export const userDbRepository = (repository:ReturnType<UserRepositoryMongoDB>)=>
       unLikeEvent,
       getLikedEvents,
       getFollowing,
+      addReview,
+      updateBookings,
     };
 }
 

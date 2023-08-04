@@ -1,4 +1,5 @@
 import { Request } from "express"
+import { ObjectId } from "mongodb"
 export interface UserInterface{
     _id:string,
     firstName:string,
@@ -60,7 +61,10 @@ export interface RegisteredEventInterface {
     orgOwnerId:string
     registeredTime:string
     orgName:string
-    ticketSold:number
+    ticketSold: number
+    reviews: ReviewData[]
+    avgRating: number,
+    numOfReviews:number
   }
 
 export interface BookingCreationInterface {
@@ -75,6 +79,22 @@ export interface BookingCreationInterface {
     totalAmount:number
     orgOwnerId: string;
     organizationId: string;
+}
+
+export interface RegisteredBookingCreationInterface {
+  eventId: string;
+  userId: string;
+  bookingTime: string;
+  contactInfo: object;
+  ticketCount: number;
+  status: string;
+  QRCodeLink: string;
+  paymentType: string;
+  totalAmount: number;
+  orgOwnerId: string;
+    organizationId: string;
+    _id: string,
+    __v:number
 }
 export interface ticketBookingCreationInterface{
     firstName: string;
@@ -149,4 +169,9 @@ export interface NewMessageInterface{
     chat:string
   }
 
+export interface ReviewData {
+    userId: string,
+    rating: number,
+    comment:string
+  }
   

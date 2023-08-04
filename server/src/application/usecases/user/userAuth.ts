@@ -1,11 +1,13 @@
-import { userRepositoryMongoDB } from "./../../../frameworks/database/mongoDB/repositories/userRepositoryMongoDB";
+import { userDbRepository } from './../../repositories/userDBRepository';
 import { HttpStatus } from "../../../types/httpStatus";
 import {
   AddressFormDataCreateInterface,
   CreateChatInterface,
   NewMessageInterface,
   ProfileContactInfo,
+  RegisteredBookingCreationInterface,
   RegisteredEventInterface,
+  ReviewData,
   SearchQueryInterface,
   UserInterface,
   searchDataInterface,
@@ -17,7 +19,6 @@ import { AuthServiceInterface } from "../../services/authServiceInterface";
 import AppError from "../../../utils/appError";
 import QRCode from "qrcode";
 import { EventDetailsInterface } from "../../../types/organizerInterface";
-import { Request } from "express";
 
 export const userRegister = async (
   user: UserRegisterInterface,
@@ -445,6 +446,22 @@ export const getFollowing = async (userId: string, userRepository: ReturnType<Us
   const data = await userRepository.getFollowing(userId)
   if (!data) {
     throw new AppError('getting following organizers failed',HttpStatus.BAD_REQUEST)
+  }
+  return data
+}
+
+export const updateBookings = async (bookingId: string, userRepository: ReturnType<UserDBInterface>) => {
+  const res = await userRepository.updateBookings(bookingId) 
+  if (!res) {
+    throw new AppError('updating attended events failed',HttpStatus.BAD_REQUEST)
+  }
+  return res
+}
+
+export const addReview = async (review: ReviewData, eventId: string, userRepository:ReturnType<UserDBInterface>) => {
+  const data = await userRepository.addReview(review, eventId)
+  if (!data.ok) {
+    throw new AppError('updating review has failed',HttpStatus.BAD_REQUEST)
   }
   return data
 }

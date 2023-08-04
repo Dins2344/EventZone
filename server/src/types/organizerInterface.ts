@@ -72,5 +72,7 @@ export interface RegisteredOrganization {
   admin: string[]; // Assuming admin is an array of user IDs (string)
   logo:string,
   __v: number;
-  country:string
+  country: string
+  followers: string[]
+  createdOn:string[]
 }

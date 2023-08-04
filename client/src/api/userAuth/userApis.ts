@@ -1,4 +1,4 @@
-import { ticketBookingCreationInterface } from "../../types/userInterface";
+import { ReviewData, ticketBookingCreationInterface } from "../../types/userInterface";
 import api from "../interceptors/userInterceptor";
 import { AddressFormData } from "../../components/user_components/profile_components/contactInfo";
 
@@ -294,6 +294,23 @@ export const getFollowingOrgs = async () => {
       "http://localhost:4000/user/get-all-following-orgs"
     );
     return data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const updateBooking = async (bookingId: string) => {
+  try {
+    await api.get(`http://localhost:4000/user/update-booking-attended/${bookingId}`)
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+export const addReview = async (data: ReviewData) => {
+  try {
+    const res = await api.post("http://localhost:4000/user/add-review", data);
+    return res;
   } catch (error) {
     console.log(error);
   }

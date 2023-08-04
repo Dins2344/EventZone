@@ -112,7 +112,8 @@ export interface RegisteredOrganization {
   logo:string,
   __v: number;
   country: string
-  followers:string[]
+  followers: string[]
+  createdOn:string
 }
 
 export interface Bookings {
@@ -196,4 +197,10 @@ export interface CompleteMessageInterface {
   __v: number
   _id:string
 
+}
+
+export interface ReviewData {
+  eventId: string;
+  rating: string;
+  comment: string;
 }
