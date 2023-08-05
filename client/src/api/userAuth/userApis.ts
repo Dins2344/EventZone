@@ -315,3 +315,12 @@ export const addReview = async (data: ReviewData) => {
     console.log(error);
   }
 };
+
+export const getReview = async (eventId: string) => {
+  try {
+    const data = await api.get(`http://localhost:4000/user/get-reviews/${eventId}`);
+    return data
+  } catch (error) {
+    console.log(error)
+  }
+}

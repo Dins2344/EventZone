@@ -141,6 +141,11 @@ export const userDbRepository = (repository:ReturnType<UserRepositoryMongoDB>)=>
         return res
     }
 
+    const getReviews = async (eventId: string) => {
+        const data = await repository.getReview(eventId)
+        return data
+    }
+
     return {
       addUser,
       getUserByEmail,
@@ -172,6 +177,7 @@ export const userDbRepository = (repository:ReturnType<UserRepositoryMongoDB>)=>
       getFollowing,
       addReview,
       updateBookings,
+      getReviews,
     };
 }
 

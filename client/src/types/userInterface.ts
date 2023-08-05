@@ -137,7 +137,10 @@ export interface Bookings {
     addressLine1: string;
     addressLine2: string;
     addressLine3: string;
-    orgName:string
+    orgName: string
+    avgRating: number
+    numOfReviews: number
+    reviews:[{userId:string,rating:number,comment:string}]
   };
   eventId: string;
   ticketCount: number;
@@ -199,8 +202,22 @@ export interface CompleteMessageInterface {
 
 }
 
-export interface ReviewData {
-  eventId: string;
-  rating: string;
-  comment: string;
+export interface CompleteReviewData{
+  rating: number
+  comment: string
+  userId: RegisteredUserInterface
+  _id:string
 }
+
+export interface ReviewData {
+  eventId?: string;
+  rating: number
+  comment: string;
+  userId?:string
+}
+export interface RegisteredReviewData {
+  rating:  number;
+  comment: string;
+  userId?: string;
+}
+

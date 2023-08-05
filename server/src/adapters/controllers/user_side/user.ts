@@ -8,6 +8,7 @@ import {
   getFollowing,
   addReview,
   updateBookings,
+  getReviews,
 } from "./../../../application/usecases/user/userAuth";
 import { UserDBInterface } from "../../../application/repositories/userDBRepository";
 import { UserRepositoryMongoDB } from "../../../frameworks/database/mongoDB/repositories/userRepositoryMongoDB";
@@ -482,6 +483,15 @@ const userController = (
       }
     }
   })
+
+  const getReviewsController = asyncHandler(async (req: Request, res: Response) => {
+    const data = await getReviews(req.params.id, dbRepositoryUser)
+    if (data) {
+      res.json({message:'getting reviews done',data,ok:true})
+    } else {
+      res.json({error:'getting reviews failed'})
+    }
+  })
   return {
     getUserByEmail,
     verifyPasswordController,
@@ -510,6 +520,7 @@ const userController = (
     getFollowingController,
     updateBookingsController,
     addReviewController,
+    getReviewsController,
   };
 };
 

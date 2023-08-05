@@ -1,3 +1,4 @@
+import { RegisteredReviewData } from "./userInterface";
 
 export interface BasicFormInterface {
   eventName: string;
@@ -40,7 +41,10 @@ export interface RegisteredEventInterface {
   registeredTime:string
   orgName:string
   ticketSold: number
-  isPromoted:boolean
+  isPromoted: boolean
+  numOfReviews: number
+  reviews: Array<RegisteredReviewData>
+  avgRating:number
 }
 export interface mediaFormInterface {
   videoURL: string;

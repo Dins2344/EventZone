@@ -110,10 +110,29 @@ const userRouter = () => {
     .route("/update-like-list/:id")
     .get(jwtAuthMiddleware, controller.likeEventController)
     .put(jwtAuthMiddleware, controller.unLikeEventController);
-  router.get('/get-all-liked-events', jwtAuthMiddleware, controller.getLikedEventsController)
-  router.get('/get-all-following-orgs', jwtAuthMiddleware, controller.getFollowingController)
-  router.get("/update-booking-attended/:id",jwtAuthMiddleware,controller.updateBookingsController);
-  router.route("/add-review").post(jwtAuthMiddleware,controller.addReviewController)
+  router.get(
+    "/get-all-liked-events",
+    jwtAuthMiddleware,
+    controller.getLikedEventsController
+  );
+  router.get(
+    "/get-all-following-orgs",
+    jwtAuthMiddleware,
+    controller.getFollowingController
+  );
+  router.get(
+    "/update-booking-attended/:id",
+    jwtAuthMiddleware,
+    controller.updateBookingsController
+  );
+  router
+    .route("/add-review")
+    .post(jwtAuthMiddleware, controller.addReviewController);
+  router.get(
+    "/get-reviews/:id",
+    jwtAuthMiddleware,
+    controller.getReviewsController
+  );
 
   return router;
 };

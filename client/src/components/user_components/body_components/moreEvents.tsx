@@ -189,7 +189,7 @@ export const EventCards: React.FC<EventCardProps> = ({ approvedEvent }) => {
                     className="flex items-center gap-1.5 font-normal"
                   >
                     <StarIcon className="-mt-0.5 h-5 w-5 text-yellow-700" />
-                    5.0
+                    {approvedEvent.avgRating?approvedEvent.avgRating:0}
                   </Typography>
                 </div>
                 <Typography

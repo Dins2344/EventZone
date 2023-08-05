@@ -198,6 +198,9 @@ export const userRepositoryMongoDB = () => {
             addressLine2: "$event.addressLine2",
             addressLine3: "$event.addressLine3",
             orgName: "$event.orgName",
+            avgRating: '$event.avgRating',
+            numOfReviews: '$event.numOfReviews',
+            reviews:'$event.reviews'
             // Include other event fields as needed
           },
         },
@@ -481,9 +484,12 @@ export const userRepositoryMongoDB = () => {
         event?.reviews.push(dataToPush)
       }
       event.numOfReviews = event?.reviews.length
-      const res = await event.save()
+      event.avgRating =
+        event.reviews.reduce((acc, item) => item.rating + acc, 0) /
+        event.numOfReviews;
+      console.log(event.avgRating)
+      const res = await event.save({validateBeforeSave:false})
       if (res) {
-        console.log(res)
         return {message:"reviews updated",ok:true}
       } else {
         return {message:'review updating failed',ok:false}
@@ -491,6 +497,12 @@ export const userRepositoryMongoDB = () => {
     } else {
       return {message:"event not found",ok:false}
     }
+  }
+
+  const getReview = async (eventId: string) => {
+    const data = await Event.findById(eventId).populate('reviews.userId')
+    console.log(data)
+    return data
   }
   return {
     addUser,
@@ -523,6 +535,7 @@ export const userRepositoryMongoDB = () => {
     getFollowingOrgs,
     addReview,
     updateBookings,
+    getReview,
   };
 };
 

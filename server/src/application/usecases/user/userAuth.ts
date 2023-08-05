@@ -1,3 +1,4 @@
+import { userRepositoryMongoDB } from './../../../frameworks/database/mongoDB/repositories/userRepositoryMongoDB';
 import { userDbRepository } from './../../repositories/userDBRepository';
 import { HttpStatus } from "../../../types/httpStatus";
 import {
@@ -462,6 +463,14 @@ export const addReview = async (review: ReviewData, eventId: string, userReposit
   const data = await userRepository.addReview(review, eventId)
   if (!data.ok) {
     throw new AppError('updating review has failed',HttpStatus.BAD_REQUEST)
+  }
+  return data
+}
+
+export const getReviews = async (eventId: string, userRepository: ReturnType<UserDBInterface>) => {
+  const data = await userRepository.getReviews(eventId)
+  if (!data) {
+    throw new AppError('getting reviews of one event is failed',HttpStatus.BAD_REQUEST)
   }
   return data
 }

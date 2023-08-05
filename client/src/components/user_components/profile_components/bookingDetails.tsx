@@ -4,30 +4,47 @@ import {
   cancelBooking,
   getOneBookingDetails,
 } from "../../../api/userAuth/userApis";
-import { Bookings } from "../../../types/userInterface";
+import { Bookings, RegisteredReviewData } from "../../../types/userInterface";
 import { Button, Chip, Dialog, DialogBody } from "@material-tailwind/react";
 import ViewTicketComponent from "./viewTicket";
+import StartRating from "./starRating";
+import { FaStar } from "react-icons/fa";
 
 const BookingDetails = () => {
   const [bookingDetail, setBookingDetails] = useState<Bookings>();
-  const [rating, setRating] = useState("");
+  const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
   const [open, setOpen] = useState(false);
   const [updated, setUpdated] = useState(false);
+  const [isReviewed, setIsReviewed] = useState<boolean>(false);
+  const [userRating, setUserRating] = useState<RegisteredReviewData>();
+  const [hoverRating, setHoverRating] = useState(0);
 
   const handleOpen = () => setOpen(!open);
   const handleUpdated = () => setUpdated(!updated);
+
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const bookingId = urlParams.get("bookingId");
-    console.log(bookingId);
     bookingId && fetchBookingDetails(bookingId);
   }, [updated]);
 
   const fetchBookingDetails = async (bookingId: string) => {
     const data = await getOneBookingDetails(bookingId);
-    console.log(data);
     setBookingDetails(data?.data.data[0]);
+    checkIsReviewed(data?.data.data[0]);
+  };
+
+  const checkIsReviewed = async (bookingInfo: Bookings) => {
+    if (bookingInfo) {
+      const reviewedItem = bookingInfo.event.reviews.find(
+        (item) => item.userId === bookingInfo.userId
+      );
+      if (reviewedItem) {
+        setUserRating(reviewedItem);
+        setIsReviewed(true);
+      }
+    }
   };
 
   const handleCancel = async () => {
@@ -38,16 +55,18 @@ const BookingDetails = () => {
       handleOpen();
     }
   };
+
   const submitReview = async () => {
     if (bookingDetail) {
       const data = { rating, comment, eventId: bookingDetail?.eventId };
-      const res = addReview(data);
+      const res = await addReview(data);
       if (res) {
-        console.log(res);
-        setUpdated(!updated);
+        handleUpdated();
       }
     }
   };
+
+  const stars = Array(5).fill(0);
   return (
     <>
       <div className="flex flex-col w-full px-8 md:px-20 lg:px-52 pt-20  h-screen">
@@ -101,21 +120,103 @@ const BookingDetails = () => {
             <p>Location: {bookingDetail?.event.addressLine2}</p>
           </div>
           {bookingDetail?.status === "attended" && (
-            <div className="flex flex-col w-full md:w-1/2">
-              <label htmlFor="rating">rating</label>
-              <input
-                onChange={(e) => setRating(e.target.value)}
-                type="number"
-              />
-              <label htmlFor="comment">write your comment</label>
-              <input
-                onChange={(e) => setComment(e.target.value)}
-                type="textarea"
-                name="comment"
-                id="comment"
-              />
-              <button onClick={submitReview}>submit</button>
-            </div>
+            <>
+              {isReviewed ? (
+                <>
+                  <div className=" flex-col mb-2 mt-2 md:mt-0">
+                    {userRating && (
+                      <>
+                        <StartRating
+                          rating={userRating.rating}
+                          numOfReviews={bookingDetail.event.numOfReviews}
+                        />
+                        <textarea readOnly className="mt-2">
+                          {userRating.comment}
+                        </textarea>
+                        <Button
+                          onClick={() => setIsReviewed(false)}
+                          size="sm"
+                          color="red"
+                          variant="text"
+                          className=" ml-2 mb-6"
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke-width="1.5"
+                            stroke="currentColor"
+                            className="w-6 h-6"
+                          >
+                            <path
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125"
+                            />
+                          </svg>
+                        </Button>
+                      </>
+                    )}
+                  </div>
+                </>
+              ) : (
+                <div className="flex flex-col w-full md:w-1/2">
+                  <div className="flex">
+                    {stars.map((v, i) => {
+                      const ratingValue = i + 1;
+                      return (
+                        <label>
+                          <input
+                            style={{ display: "none" }}
+                            name="rating"
+                            type="radio"
+                            value={ratingValue}
+                            onClick={() => {
+                              setRating(ratingValue);
+                            }}
+                            onMouseOver={() => setHoverRating(ratingValue)}
+                            onMouseOut={() => setHoverRating(0)}
+                          />
+                          <FaStar
+                            className="mr-1 hover:cursor-pointer"
+                            color={
+                              ratingValue <= (hoverRating||rating)
+                                ? "#ffc107"
+                                : "#e4e5e9"
+                            }
+                            key={i}
+                          ></FaStar>
+                        </label>
+                      );
+                    })}
+                  </div>
+                 
+                  <label className="mt-2" htmlFor="comment">
+                    write your comment
+                  </label>
+                  <input
+                    onChange={(e) => setComment(e.target.value)}
+                    type="text"
+                    name="comment"
+                    id="comment"
+                  />
+                  <div className="flex justify-end mt-2">
+                    <Button
+                      size="sm"
+                      color="red"
+                      variant="outlined"
+                        onClick={() => setIsReviewed(true)}
+                        className="mr-2"
+                    >
+                      Discard
+                    </Button>
+                    <Button size="sm" color="green" onClick={submitReview}>
+                      Save
+                    </Button>
+                  </div>
+                </div>
+              )}
+            </>
           )}
         </div>
         <div className="flex flex-wrap mt-5">

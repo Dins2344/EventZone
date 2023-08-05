@@ -1,6 +1,10 @@
 import { Button } from "@material-tailwind/react";
 import VideoPlayer from "./youtube";
-import { EventDetailsInterface } from "../../../types/userInterface";
+import { CompleteReviewData, EventDetailsInterface } from "../../../types/userInterface";
+import { useEffect, useState } from "react";
+import { getReview } from "../../../api/userAuth/userApis";
+import { Avatar } from '@material-tailwind/react';
+import StartRating from "../profile_components/starRating";
 
 export type EventData = {
   _id: string;
@@ -40,9 +44,20 @@ type EventDetailsProps = {
   event: EventDetailsInterface;
 };
 const EventInfo: React.FC<EventDetailsProps> = ({ event }) => {
+  const [reviews,setReviews] = useState<CompleteReviewData[]>()
   const youtubeVideoUrl = event?.videoURL;
   const videoId = youtubeVideoUrl?.split("v=")[1];
   const organization = event?.organizerInfo;
+
+  useEffect(() => {
+    fetchEventReviews()
+  }, [])
+  
+  const fetchEventReviews = async () => {
+    const data = await getReview(event._id);
+    console.log(data?.data.data)
+    setReviews(data?.data.data.reviews)
+  }
   return (
     <>
       <div className=" mt-5 mb-10">
@@ -113,7 +128,9 @@ const EventInfo: React.FC<EventDetailsProps> = ({ event }) => {
                 <p className="mb-3">
                   {event?.addressLine1} {event?.addressLine2}
                 </p>
-                <p>{event?.city},{event?.state}</p>
+                <p>
+                  {event?.city},{event?.state}
+                </p>
               </div>
             </div>
           </div>
@@ -123,13 +140,28 @@ const EventInfo: React.FC<EventDetailsProps> = ({ event }) => {
             </h3>
             <div className="flex flex-col">
               <h5 className="text-xl font-bold dark:text-white mt-3 mb-3">
+                Reviews
+              </h5>
+              <div className="w-full flex flex-col max-h-60 border-2 p-2">
+                {reviews?.map((item) =>{
+                  return(
+                  <div key={item._id} className="flex">
+                      <Avatar src={item && item?.userId?.profileImage} ></Avatar>
+                      <div className="flex flex-col px-4">
+                        <StartRating rating={item.rating} />
+                      </div>
+                  </div>  
+                 )
+                  })}
+              </div>
+              <h5 className="text-xl font-bold dark:text-white mt-3 mb-3">
                 Event description
               </h5>
               <p className="mb-3 text-gray-500 dark:text-gray-400">
                 {event?.description}
               </p>
               <h5 className="text-xl font-bold dark:text-white mt-3 mb-3">
-               Agenda
+                Agenda
               </h5>
               <p className="mb-3 text-gray-500 dark:text-gray-400">
                 {event?.agenda}
@@ -158,7 +190,11 @@ const EventInfo: React.FC<EventDetailsProps> = ({ event }) => {
             <div className="flex flex-col place-items-center border mt-3 rounded-md shadow-md p-5">
               <img
                 className="rounded-full w-20 h-20 mb-5 mt-10"
-                src={organization.logo ? organization.logo : "https://img.freepik.com/free-icon/user_318-159711.jpg"}
+                src={
+                  organization.logo
+                    ? organization.logo
+                    : "https://img.freepik.com/free-icon/user_318-159711.jpg"
+                }
                 alt="image description"
               />
               <p>Organized by</p>
@@ -168,7 +204,14 @@ const EventInfo: React.FC<EventDetailsProps> = ({ event }) => {
               <p>{organization.followers.length}</p>
               <p className="font-bold mb-4">Followers</p>
               <div className="flex mt-3">
-                <Button className="mr-3" size="sm" color="blue" variant="outlined">Contact</Button>
+                <Button
+                  className="mr-3"
+                  size="sm"
+                  color="blue"
+                  variant="outlined"
+                >
+                  Contact
+                </Button>
                 <Button size="sm">Follow</Button>
               </div>
             </div>
