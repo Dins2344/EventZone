@@ -5,6 +5,7 @@ import asyncHandler from "express-async-handler";
 import { CreateOrganization } from "../../../types/userInterface";
 import {
   getAllOrganizationCategories,
+  getEventBookedUsers,
   getMonthlySales,
   getMonthlyTicketSales,
   getOrgAllCities,
@@ -14,6 +15,7 @@ import {
   getTicketTypeSold,
   getTicketsSoldByEvents,
   organizationRegister,
+  updateEventInfo,
   updateOrganizationInfo,
 } from "../../../application/usecases/organization/organization";
 import { CustomRequest } from "../../../types/userInterface";
@@ -32,17 +34,23 @@ import {
   getOrganizersAllEvent,
 } from "../../../application/usecases/organization/organization";
 import { MediaFormInterface } from "../../../types/organizerInterface";
+import { SendNotificationMails } from "../../../application/services/sendNotificaton";
+import { SendNotificationMail } from "../../../frameworks/service/sendNotificationMail";
+import { UserRegisterInterface } from "../../../types/user";
 
 const organizationController = (
   organizationDbRepository: OrganizationDBInterface,
   organizationDbRepositoryImpl: OrganizationRepositoryMongoDB,
   userDbRepository: UserDBInterface,
-  userDbRepositoryImpl: UserRepositoryMongoDB
+  userDbRepositoryImpl: UserRepositoryMongoDB,
+  emailServiceInterface: SendNotificationMails,
+  emailServiceImpl: SendNotificationMail
 ) => {
   const dbRepositoryOrganization = organizationDbRepository(
     organizationDbRepositoryImpl()
   );
   const dbRepositoryUser = userDbRepository(userDbRepositoryImpl());
+  const emailService = emailServiceInterface(emailServiceImpl());
 
   const registerOrganization = asyncHandler(
     async (req: CustomRequest, res: Response) => {
@@ -98,14 +106,16 @@ const organizationController = (
     }
   );
 
-  const getOrgAllCitiesController = asyncHandler(async(req:Request,res:Response)=>{
-    const data = await getOrgAllCities(dbRepositoryOrganization)
-    if(data){
-      res.json({message:'fetching cities done',ok:true,data})
-    }else{
-      res.json({error:'fetching cities failed',ok:false})
+  const getOrgAllCitiesController = asyncHandler(
+    async (req: Request, res: Response) => {
+      const data = await getOrgAllCities(dbRepositoryOrganization);
+      if (data) {
+        res.json({ message: "fetching cities done", ok: true, data });
+      } else {
+        res.json({ error: "fetching cities failed", ok: false });
+      }
     }
-  })
+  );
 
   const getOrganizationDetailController = asyncHandler(
     async (req: Request, res: Response) => {
@@ -241,80 +251,128 @@ const organizationController = (
     }
   );
 
-  const getOrgOwnerDetailsController = asyncHandler(async(req:Request,res:Response)=>{
-    const ownerId = req.params.id
-    const data = await getOrgOwnerDetails(ownerId,dbRepositoryOrganization)
-    if(data){
-      res.json({message:'owner details fetched',ok:true,data})
-    }else{
-      res.json({error:'owner details fetching failed'})
-    }
-  })
-
-  const getAllOrganizationCategoriesController = asyncHandler(async(req:Request,res:Response)=>{
-    const data = await getAllOrganizationCategories(dbRepositoryOrganization)
-    if(data){
-      res.json({message:'orgCategory fetching done',ok:true,data})
-    }else{
-      res.json({error:'orgCategory fetching failed'})
-    }
-  })
-
-  const updateOrganizationInfoController = asyncHandler(async(req:Request,res:Response)=>{
-    const data = req.body
-    const logo = req.files  as Express.Multer.File[];
-    if(logo?.length){
-      data.logo = logo[0].path
-    }
-    const response = await updateOrganizationInfo(data,dbRepositoryOrganization)
-    if(response){
-      res.json({message:'updating orgInfo done',ok:true,response})
-    }else{
-      res.json({error:'updating failed'})
-    }
-  })
-
-  const getMonthlySalesController = asyncHandler(async(req:Request,res:Response)=>{
-    const data = await getMonthlySales(dbRepositoryOrganization)
-    if(data){
-      res.json({message:'fetching data done ',ok:true,data})
-    }else{
-      res.json({error:'monthly data fetching failed'})
-    }
-  })
-
-  const getMonthlyTicketSalesController = asyncHandler(async(req:Request,res:Response)=>{
-    const data = await getMonthlyTicketSales(dbRepositoryOrganization)
-    if(data){
-      res.json({message:'ticket sales data fetching done',ok:true,data})
-    }else{
-      res.json({error:'ticket sales data fetching error'})
-    }
-  })
-
-  const getTicketTypeSoldController = asyncHandler(async(req:Request,res:Response)=>{
-    const data = await getTicketTypeSold(dbRepositoryOrganization)
-    if(data){
-      res.json({message:'fetching ticket type sold done',ok:true,data})
-    }else{
-      res.json({error:'fetching ticket type sold failed ',ok:false})
-    }
-  })
-
-  const getTicketsSoldByEventsController = asyncHandler(async(req:CustomRequest,res:Response)=>{
-    const user = req?.user
-    if(user){
-      const data = await getTicketsSoldByEvents(user.Id,dbRepositoryOrganization)
-      if(data){
-        res.json({message:'fetching data done',ok:true,data})
-      }else{
-        res.json({error:'fetching data failed'})
+  const getOrgOwnerDetailsController = asyncHandler(
+    async (req: Request, res: Response) => {
+      const ownerId = req.params.id;
+      const data = await getOrgOwnerDetails(ownerId, dbRepositoryOrganization);
+      if (data) {
+        res.json({ message: "owner details fetched", ok: true, data });
+      } else {
+        res.json({ error: "owner details fetching failed" });
       }
-    }else{
-      res.json({error:'invalid token'})
     }
-  })
+  );
 
+  const getAllOrganizationCategoriesController = asyncHandler(
+    async (req: Request, res: Response) => {
+      const data = await getAllOrganizationCategories(dbRepositoryOrganization);
+      if (data) {
+        res.json({ message: "orgCategory fetching done", ok: true, data });
+      } else {
+        res.json({ error: "orgCategory fetching failed" });
+      }
+    }
+  );
+
+  const updateOrganizationInfoController = asyncHandler(
+    async (req: Request, res: Response) => {
+      const data = req.body;
+      const logo = req.files as Express.Multer.File[];
+      if (logo?.length) {
+        data.logo = logo[0].path;
+      }
+      const response = await updateOrganizationInfo(
+        data,
+        dbRepositoryOrganization
+      );
+      if (response) {
+        res.json({ message: "updating orgInfo done", ok: true, response });
+      } else {
+        res.json({ error: "updating failed" });
+      }
+    }
+  );
+
+  const getMonthlySalesController = asyncHandler(
+    async (req: Request, res: Response) => {
+      const data = await getMonthlySales(dbRepositoryOrganization);
+      if (data) {
+        res.json({ message: "fetching data done ", ok: true, data });
+      } else {
+        res.json({ error: "monthly data fetching failed" });
+      }
+    }
+  );
+
+  const getMonthlyTicketSalesController = asyncHandler(
+    async (req: Request, res: Response) => {
+      const data = await getMonthlyTicketSales(dbRepositoryOrganization);
+      if (data) {
+        res.json({
+          message: "ticket sales data fetching done",
+          ok: true,
+          data,
+        });
+      } else {
+        res.json({ error: "ticket sales data fetching error" });
+      }
+    }
+  );
+
+  const getTicketTypeSoldController = asyncHandler(
+    async (req: Request, res: Response) => {
+      const data = await getTicketTypeSold(dbRepositoryOrganization);
+      if (data) {
+        res.json({ message: "fetching ticket type sold done", ok: true, data });
+      } else {
+        res.json({ error: "fetching ticket type sold failed ", ok: false });
+      }
+    }
+  );
+
+  const getTicketsSoldByEventsController = asyncHandler(
+    async (req: CustomRequest, res: Response) => {
+      const user = req?.user;
+      if (user) {
+        const data = await getTicketsSoldByEvents(
+          user.Id,
+          dbRepositoryOrganization
+        );
+        if (data) {
+          res.json({ message: "fetching data done", ok: true, data });
+        } else {
+          res.json({ error: "fetching data failed" });
+        }
+      } else {
+        res.json({ error: "invalid token" });
+      }
+    }
+  );
+
+  const updateEventInfoController = asyncHandler(
+    async (req: Request, res: Response) => {
+      const data = req.body;
+      const response = await updateEventInfo(data, dbRepositoryOrganization);
+      if (!response) {
+        res.json({error:'updating event info failed',ok:false})
+      }
+      if (response.modifiedCount >= 1) {
+        const message =
+          "We kindly request your cooperation as there have been some updates made to the event you have booked in the event zone. Your attention and understanding regarding these changes are highly appreciated. Thank you for your cooperation.";
+        const users = await getEventBookedUsers(data.eventId, dbRepositoryOrganization)
+        console.log(users)
+       const response = users.map(async(item:any) => {
+          console.log(item.email)
+        return await emailService.sendEmail(item?.email,message)
+       })
+        if (response) {
+          res.json({message:'mail send to all the customers',ok:true})
+        }
+      } else {
+        res.json({message:'there is no changes happened'})
+      }
+    }
+  );
   return {
     registerOrganization,
     getAllEventCategoriesController,
@@ -336,7 +394,8 @@ const organizationController = (
     getMonthlyTicketSalesController,
     getTicketTypeSoldController,
     getTicketsSoldByEventsController,
-    getOrgAllCitiesController
+    getOrgAllCitiesController,
+    updateEventInfoController,
   };
 };
 

@@ -3,6 +3,7 @@ import { OrganizationDBInterface } from "../../repositories/organizationDBReposi
 import { CreateOrganization } from "../../../types/userInterface";
 import {
   BasicFormInterface,
+  EditEventFormData,
   MediaFormInterface,
   PublishFormInterface,
   RegisteredOrganization,
@@ -224,4 +225,24 @@ export const getTicketsSoldByEvents = async(userId:string,organizationRepository
     throw new AppError("fetching ticket sold by events data done",HttpStatus.BAD_REQUEST)
   }
   return data
+}
+
+export const updateEventInfo = async (data: EditEventFormData, organizationRepository: ReturnType<OrganizationDBInterface>) => {
+  const res = await organizationRepository.updateEventInfo(data)
+  if (!res) {
+    throw new AppError('updating event info failed',HttpStatus.BAD_REQUEST)
+  }
+  return res
+}
+
+export const getEventBookedUsers = async (eventId: string,organizationRepository:ReturnType<OrganizationDBInterface>) => {
+  const data = await organizationRepository.getEventBookedUsers(eventId)
+  if (!data) {
+    throw new AppError('getting event booked users failed',HttpStatus.BAD_REQUEST)
+  }
+  let users:any = []
+  data.forEach((item) => {
+    users.push(item.userId)
+  })
+  return users
 }

@@ -10,13 +10,17 @@ import { authService } from "../../service/authService";
 import jwtAuthMiddleware from "../middlewares/authJWT";
 import { userRoleChecking } from "../middlewares/roleChecking";
 import { upload } from "../middlewares/cloudinary";
+import { sendNotificationMails } from "../../../application/services/sendNotificaton";
+import { sendNotificationMail } from "../../service/sendNotificationMail";
 const userRouter = () => {
   const router = express.Router();
   const orgController = organizationController(
     organizationDbRepository,
     organizationRepositoryMongoDB,
     userDbRepository,
-    userRepositoryMongoDB
+    userRepositoryMongoDB,
+    sendNotificationMails,
+    sendNotificationMail
   );
   const controller = userController(
     userDbRepository,

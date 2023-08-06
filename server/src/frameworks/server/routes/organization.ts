@@ -5,6 +5,8 @@ import { organizationRepositoryMongoDB } from "../../database/mongoDB/repositori
 import { userDbRepository } from "../../../application/repositories/userDBRepository";
 import { userRepositoryMongoDB } from "../../database/mongoDB/repositories/userRepositoryMongoDB";
 import { upload } from "../middlewares/cloudinary";
+import { sendNotificationMails } from "../../../application/services/sendNotificaton";
+import { sendNotificationMail } from "../../service/sendNotificationMail";
 // import { uploadMiddleware } from "../middlewares/cloudinary";
 
 const organizationRouter = () => {
@@ -13,7 +15,9 @@ const organizationRouter = () => {
     organizationDbRepository,
     organizationRepositoryMongoDB,
     userDbRepository,
-    userRepositoryMongoDB
+    userRepositoryMongoDB,
+    sendNotificationMails,
+    sendNotificationMail
   );
 
   router.get(
@@ -76,7 +80,8 @@ const organizationRouter = () => {
 
   router.get('/get-ticket-type-sold',orgController.getTicketTypeSoldController)
 
-  router.get('/get-tickets-sold-by-events',orgController.getTicketsSoldByEventsController)
+  router.get('/get-tickets-sold-by-events', orgController.getTicketsSoldByEventsController)
+  router.put("/update-event-info",orgController.updateEventInfoController);
 
   return router;
 };

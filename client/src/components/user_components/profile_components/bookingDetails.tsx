@@ -128,7 +128,6 @@ const BookingDetails = () => {
                       <>
                         <StartRating
                           rating={userRating.rating}
-                          numOfReviews={bookingDetail.event.numOfReviews}
                         />
                         <textarea readOnly className="mt-2">
                           {userRating.comment}

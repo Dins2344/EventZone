@@ -17,7 +17,7 @@ export interface RegisteredUserInterface{
   images?:[]
   __v?:number
   following?: string[]
-  likedEvents: string[]
+  likedEvents?: string[]
   status?: string
   joinedDate?:string
 }
@@ -71,6 +71,9 @@ export interface EventDetailsInterface {
   ticketSold: number;
   ticketValue: string;
   videoURL: string;
+  reviews: RegisteredReviewData[]
+  numOfReviews: number
+  avgRating:number
   _id: string;
 }
 
@@ -112,8 +115,8 @@ export interface RegisteredOrganization {
   logo:string,
   __v: number;
   country: string
-  followers: string[]
-  createdOn:string
+  followers?: string[]
+  createdOn?:string
 }
 
 export interface Bookings {

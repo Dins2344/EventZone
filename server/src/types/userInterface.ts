@@ -1,5 +1,4 @@
 import { Request } from "express"
-import { ObjectId } from "mongodb"
 export interface UserInterface{
     _id:string,
     firstName:string,
@@ -69,7 +68,7 @@ export interface RegisteredEventInterface {
 
 export interface BookingCreationInterface {
     eventId:string,
-    userId:string,
+    userId?:string,
     bookingTime:string,
     contactInfo:object,
     ticketCount:number,

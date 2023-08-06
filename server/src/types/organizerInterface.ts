@@ -76,3 +76,19 @@ export interface RegisteredOrganization {
   followers: string[]
   createdOn:string[]
 }
+
+export interface EditEventFormData {
+  eventName: string;
+  category: string;
+  description: string;
+  agenda: string;
+  addressLine1: string;
+  addressLine2: string;
+  state: string;
+  city: string;
+  startTime: string;
+  startDate: string;
+  endTime: string;
+  endDate: string;
+  eventId:string
+}

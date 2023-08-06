@@ -36,7 +36,7 @@ const ProfileDetail: React.FC = () => {
               </svg>
             </div>
             <div className="flex flex-col">
-              <p>likes { user.likedEvents.length} events</p> 
+              <p>likes { user.likedEvents?.length} events</p> 
             <p>following {user.following?.length} organizations</p>
             </div>
           </div>

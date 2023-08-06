@@ -1,6 +1,7 @@
 import api from "../interceptors/userInterceptor";
 import { BasicFormInterface } from "../../types/organizerInterface";
 import { PublishFormDataInterface } from "../../types/organizerInterface";
+import { EditEventFormData } from "../../components/organizer_components/editEventComponent";
 
 export const getUsersOrganizations = async () => {
   const data = await api.get(
@@ -66,6 +67,7 @@ export const getEventDetails = async (id: string) => {
     console.log(error);
   }
 };
+// export const getEditableEventDetails = async(id:strign)
 
 export const publishEvent = async (id: string) => {
   console.log("publish called");
@@ -178,3 +180,15 @@ export const getAllCities = async()=>{
     console.log(error)
   }
 }
+
+export const editEventInfo = async (formData: EditEventFormData) => {
+  try {
+    const res = await api.put(
+      "http://localhost:4000/organization/update-event-info",
+      formData
+    );
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};

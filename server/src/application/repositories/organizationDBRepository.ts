@@ -2,6 +2,7 @@ import { OrganizationRepositoryMongoDB } from "../../frameworks/database/mongoDB
 import { CreateOrganization } from "../../types/userInterface";
 import {
   BasicFormInterface,
+  EditEventFormData,
   MediaFormInterface,
   PublishFormInterface,
   RegisteredOrganization,
@@ -112,6 +113,14 @@ export const organizationDbRepository = (
     return data
   }
 
+  const updateEventInfo = async (data: EditEventFormData) => {
+    return await repository.updateEventInfo(data)
+  }
+
+  const getEventBookedUsers = async (eventId: string) => {
+    return await repository.getEventBookedUsers(eventId)
+  }
+
 
   return {
     addOrganization,
@@ -133,7 +142,9 @@ export const organizationDbRepository = (
     getMonthlyTicketSales,
     getTicketTypeSold,
     getTicketsSoldByEvents,
-    getAllCities
+    getAllCities,
+    updateEventInfo,
+    getEventBookedUsers,
   };
 };
 

@@ -5,6 +5,7 @@ import { CreateOrganization } from "../../../../types/userInterface";
 import { OrganizationInterface } from "../../../../types/userInterface";
 import {
   BasicFormInterface,
+  EditEventFormData,
   MediaFormInterface,
   PublishFormInterface,
   RegisteredOrganization,
@@ -330,7 +331,30 @@ export const organizationRepositoryMongoDB = () => {
     return data
   }
    
-
+  const updateEventInfo = async (data: EditEventFormData) => {
+    const res = await Event.updateOne({ _id: data.eventId }, {
+      eventName: data.eventName,
+      category: data.category,
+      description: data.description,
+      agenda: data.agenda,
+      addressLine1: data.addressLine1,
+      addressLine2: data.addressLine2,
+      state: data.state,
+      city: data.city,
+      startDate: data.startDate,
+      startTime: data.startTime,
+      endDate: data.endDate,
+      endTime:data.endTime
+    })
+    return res
+  }
+  
+  const getEventBookedUsers = async (eventId: string) => {
+    const data = Bookings.find({ eventId: eventId })
+      .populate({ path: "userId", select: "email" })
+      
+    return data
+  }
 
 
   return {
@@ -353,7 +377,9 @@ export const organizationRepositoryMongoDB = () => {
     getMonthlyTicketSales,
     getTicketTypeSold,
     getTicketsSoldByEvents,
-    getAllCities
+    getAllCities,
+    updateEventInfo,
+    getEventBookedUsers,
   };
 };
 

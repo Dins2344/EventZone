@@ -6,8 +6,9 @@ const bookingsSchema = new Schema({
         required:[true,'please add eventId'],
     },
     userId:{
-        type:String,
-        required:[true,'please add userId']
+        type:Schema.Types.ObjectId,
+        required: [true, 'please add userId'],
+        ref :'User'
     },
     bookingTime:{
         type:String,

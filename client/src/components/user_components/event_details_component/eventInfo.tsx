@@ -140,15 +140,20 @@ const EventInfo: React.FC<EventDetailsProps> = ({ event }) => {
             </h3>
             <div className="flex flex-col">
               <h5 className="text-xl font-bold dark:text-white mt-3 mb-3">
-                Reviews
+                Reviews ({ reviews?.length})
               </h5>
               <div className="w-full flex flex-col max-h-60 border-2 p-2">
                 {reviews?.map((item) =>{
                   return(
-                  <div key={item._id} className="flex">
-                      <Avatar src={item && item?.userId?.profileImage} ></Avatar>
-                      <div className="flex flex-col px-4">
+                    <div key={item._id} className="flex flex-col border p-2"> 
+                      <div className="flex">
                         <StartRating rating={item.rating} />
+                        <p className="ml-2">{item.rating} stars</p>
+                      </div>
+                      <p className="mb-2">{item.comment}</p>
+                      <div className="flex">
+                      <Avatar className="w-7 h-7" size="sm" src={item && item?.userId?.profileImage} ></Avatar>
+                        <p className="ml-2 ">{item.userId.firstName} { item.userId.lastName}</p>
                       </div>
                   </div>  
                  )
