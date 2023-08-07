@@ -1,4 +1,8 @@
-import { ReviewData, ticketBookingCreationInterface } from "../../types/userInterface";
+import {
+  ChangePasswordData,
+  ReviewData,
+  ticketBookingCreationInterface,
+} from "../../types/userInterface";
 import api from "../interceptors/userInterceptor";
 import { AddressFormData } from "../../components/user_components/profile_components/contactInfo";
 
@@ -55,6 +59,17 @@ export const getAllApprovedEvents = async () => {
   try {
     const data = await api.get(
       `http://localhost:4000/user/get-all-approved-events`
+    );
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getEventsFromFollowingOrganizers = async () => {
+  try {
+    const data = await api.get(
+      "http://localhost:4000/user/get-all-events-from-following-organizers"
     );
     return data;
   } catch (error) {
@@ -262,11 +277,11 @@ export const likeEvent = async (eventId: string) => {
     const res = await api.get(
       `http://localhost:4000/user/update-like-list/${eventId}`
     );
-    return res
+    return res;
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
-}
+};
 
 export const unLikeEvent = async (eventId: string) => {
   try {
@@ -281,12 +296,14 @@ export const unLikeEvent = async (eventId: string) => {
 
 export const getLikedEvents = async () => {
   try {
-    const data = await api.get('http://localhost:4000/user/get-all-liked-events')
-    return data
+    const data = await api.get(
+      "http://localhost:4000/user/get-all-liked-events"
+    );
+    return data;
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
-}
+};
 
 export const getFollowingOrgs = async () => {
   try {
@@ -301,11 +318,13 @@ export const getFollowingOrgs = async () => {
 
 export const updateBooking = async (bookingId: string) => {
   try {
-    await api.get(`http://localhost:4000/user/update-booking-attended/${bookingId}`)
+    await api.get(
+      `http://localhost:4000/user/update-booking-attended/${bookingId}`
+    );
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
-}
+};
 
 export const addReview = async (data: ReviewData) => {
   try {
@@ -318,9 +337,26 @@ export const addReview = async (data: ReviewData) => {
 
 export const getReview = async (eventId: string) => {
   try {
-    const data = await api.get(`http://localhost:4000/user/get-reviews/${eventId}`);
-    return data
+    const data = await api.get(
+      `http://localhost:4000/user/get-reviews/${eventId}`
+    );
+    return data;
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
-}
+};
+
+export const changePassword = async (
+  newPassword: string,
+) => {
+  const data = { newPassword };
+  try {
+    const res = await api.post(
+      "http://localhost:4000/user/change-password",
+      data
+    );
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};

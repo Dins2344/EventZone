@@ -24,9 +24,6 @@ import { Types } from "mongoose";
 // import { ObjectId as objectId } from "mongoose";
 // const objectId = mongoose.Schema.Types.ObjectId
 
-
-
-
 export const userRepositoryMongoDB = () => {
   const getUserByEmail = async (email: string) => {
     const user: UserInterface | null = await User.findOne({ email });
@@ -45,7 +42,13 @@ export const userRepositoryMongoDB = () => {
       { $push: { organizations: orgId } }
     );
   };
-
+  const changePassword = async (newPassword: string, userId: string) => {
+    const res = await User.updateOne(
+      { _id: new ObjectId(userId) },
+      { password: newPassword }
+    );
+    return res;
+  };
   const getApprovedEvents = async () => {
     const data = await Event.find({ status: "approved" });
     return data;
@@ -198,9 +201,9 @@ export const userRepositoryMongoDB = () => {
             addressLine2: "$event.addressLine2",
             addressLine3: "$event.addressLine3",
             orgName: "$event.orgName",
-            avgRating: '$event.avgRating',
-            numOfReviews: '$event.numOfReviews',
-            reviews:'$event.reviews'
+            avgRating: "$event.avgRating",
+            numOfReviews: "$event.numOfReviews",
+            reviews: "$event.reviews",
             // Include other event fields as needed
           },
         },
@@ -391,10 +394,10 @@ export const userRepositoryMongoDB = () => {
   };
 
   const addFollow = async (userId: string, orgId: string) => {
-    const user = await User.findById(userId)
-    const orgId_id =new Types.ObjectId(orgId)
+    const user = await User.findById(userId);
+    const orgId_id = new Types.ObjectId(orgId);
     if (user?.following.includes(orgId_id)) {
-      return {message:'this organizer is already in the list',ok:false}
+      return { message: "this organizer is already in the list", ok: false };
     }
     const userAdded = await Organization.updateOne(
       { _id: new ObjectId(orgId) },
@@ -405,7 +408,7 @@ export const userRepositoryMongoDB = () => {
       { $push: { following: orgId } }
     );
     if (userAdded && organizationAdded) {
-      return { message: "successfully added to following",ok:true };
+      return { message: "successfully added to following", ok: true };
     }
   };
 
@@ -419,95 +422,131 @@ export const userRepositoryMongoDB = () => {
       { $pull: { following: orgId } }
     );
     if (userRemoved && organizationRemoved) {
-      return { message: "successfully removed from following list", ok:true };
+      return { message: "successfully removed from following list", ok: true };
     }
   };
 
-  const likeEvent = async (userId:string,eventId: string) => {
-    const res = await User.updateOne({ _id: new ObjectId(userId) }, { $push: { likedEvents: eventId } })
-    console.log(res)
+  const likeEvent = async (userId: string, eventId: string) => {
+    const res = await User.updateOne(
+      { _id: new ObjectId(userId) },
+      { $push: { likedEvents: eventId } }
+    );
+    console.log(res);
     if (res) {
-      return {message:'successfully added to like list',ok:true}
+      return { message: "successfully added to like list", ok: true };
     } else {
-      return {error:'adding like list failed',ok:false}
+      return { error: "adding like list failed", ok: false };
     }
-  }
+  };
 
   const unLikeEvent = async (userId: string, eventId: string) => {
-    const res = await User.updateOne({ _id: new ObjectId(userId) }, { $pull: { likedEvents: eventId } })
+    const res = await User.updateOne(
+      { _id: new ObjectId(userId) },
+      { $pull: { likedEvents: eventId } }
+    );
     if (res) {
-      return {message:'successfully removed event form like list',ok:true}
+      return { message: "successfully removed event form like list", ok: true };
     } else {
-      return {error:'removing event from liked list failed',ok:false}
+      return { error: "removing event from liked list failed", ok: false };
     }
-  }
+  };
 
   const getLikedEvents = async (userId: string) => {
     try {
-      const data = await User.findById({ _id: userId }).populate('likedEvents')
-      return data
+      const data = await User.findById({ _id: userId }).populate("likedEvents");
+      return data;
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
+  };
   const getFollowingOrgs = async (userId: string) => {
     const data = await User.findById({ _id: userId }).populate("following");
-    console.log(data)
-    return data
-  }
+    console.log(data);
+    return data;
+  };
 
   const updateBookings = async (bookingId: string) => {
-    const res = await Bookings.updateOne({ _id: bookingId }, { isAttended: true,status:'attended' })
-    return res
-  }
+    const res = await Bookings.updateOne(
+      { _id: bookingId },
+      { isAttended: true, status: "attended" }
+    );
+    return res;
+  };
 
   const addReview = async (review: ReviewData, eventId: string) => {
-    const event = await Event.findById(eventId)
-    
+    const event = await Event.findById(eventId);
+
     if (event) {
-    const isReviewed = event?.reviews.find((item) => {
-      return item.userId?.toString() == review.userId.toString()
-    })
-    if (isReviewed) {
-      event?.reviews.forEach((item) => {
-        if (item.userId?.toString() == review.userId.toString()) {
-          item.rating = review.rating
-          item.comment = review.comment
-        }
-      })
-    } else {
-      const dataToPush = {
-        userId:new Types.ObjectId(review.userId),
-        rating: review.rating,
-        comment:review.comment
+      const isReviewed = event?.reviews.find((item) => {
+        return item.userId?.toString() == review.userId.toString();
+      });
+      if (isReviewed) {
+        event?.reviews.forEach((item) => {
+          if (item.userId?.toString() == review.userId.toString()) {
+            item.rating = review.rating;
+            item.comment = review.comment;
+          }
+        });
+      } else {
+        const dataToPush = {
+          userId: new Types.ObjectId(review.userId),
+          rating: review.rating,
+          comment: review.comment,
+        };
+        event?.reviews.push(dataToPush);
       }
-        event?.reviews.push(dataToPush)
-      }
-      event.numOfReviews = event?.reviews.length
+      event.numOfReviews = event?.reviews.length;
       event.avgRating =
         event.reviews.reduce((acc, item) => item.rating + acc, 0) /
         event.numOfReviews;
-      console.log(event.avgRating)
-      const res = await event.save({validateBeforeSave:false})
+      console.log(event.avgRating);
+      const res = await event.save({ validateBeforeSave: false });
       if (res) {
-        return {message:"reviews updated",ok:true}
+        return { message: "reviews updated", ok: true };
       } else {
-        return {message:'review updating failed',ok:false}
+        return { message: "review updating failed", ok: false };
       }
     } else {
-      return {message:"event not found",ok:false}
+      return { message: "event not found", ok: false };
     }
-  }
+  };
 
   const getReview = async (eventId: string) => {
-    const data = await Event.findById(eventId).populate('reviews.userId')
-    console.log(data)
-    return data
-  }
+    const data = await Event.findById(eventId).populate("reviews.userId");
+    console.log(data);
+    return data;
+  };
+  const getEventsFromFollowingOrganizers = async (userId: string) => {
+    // const data = await User.aggregate([
+    //   {
+    //     $match: { _id: new ObjectId(userId) },
+    //   },
+    //   {
+    //     $lookup: {
+    //       from: "events",
+    //       localField: "following",
+    //       foreignField: "organizer",
+    //       as: "events",
+    //     },
+    //   },
+    //   {
+    //     $unwind: "$events",
+    //   },
+    //   {
+    //     $replaceRoot: { newRoot: "$events" },
+    //   },
+    // ]);
+    const user = await User.findById(userId);
+    const followingArray = user?.following.map((item) => item.toString());
+    const events = await Event.find({ organizer: { $in: followingArray } });
+    return events;
+  };
+
   return {
     addUser,
     getUserByEmail,
     getUserById,
+    changePassword,
     addOrganization,
     getApprovedEvents,
     getCompleteEventDetails,
@@ -536,6 +575,7 @@ export const userRepositoryMongoDB = () => {
     addReview,
     updateBookings,
     getReview,
+    getEventsFromFollowingOrganizers,
   };
 };
 

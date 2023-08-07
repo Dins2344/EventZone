@@ -1,5 +1,5 @@
-import { userRepositoryMongoDB } from './../../../frameworks/database/mongoDB/repositories/userRepositoryMongoDB';
-import { userDbRepository } from './../../repositories/userDBRepository';
+import { userRepositoryMongoDB } from "./../../../frameworks/database/mongoDB/repositories/userRepositoryMongoDB";
+import { userDbRepository } from "./../../repositories/userDBRepository";
 import { HttpStatus } from "../../../types/httpStatus";
 import {
   AddressFormDataCreateInterface,
@@ -54,6 +54,21 @@ export const verifyPassword = async (
       user?.password
     );
     return isPasswordMatch;
+  }
+};
+
+export const changePassword = async (
+  newPassword: string,
+  userId: string,
+  userRepository: ReturnType<UserDBInterface>,
+  authServices: ReturnType<AuthServiceInterface>
+) => {
+  newPassword = await authServices.hashPassword(newPassword);
+  const res = await userRepository.changePassword(newPassword, userId);
+  if (res) {
+    return res;
+  } else {
+    throw new AppError("updating password failed", HttpStatus.BAD_REQUEST);
   }
 };
 
@@ -435,42 +450,81 @@ export const unLikeEvent = async (
   }
 };
 
-export const getLikedEvents = async (userId: string, userRepository: ReturnType<UserDBInterface>) => {
-  const data = await userRepository.getLikedEvents(userId)
+export const getLikedEvents = async (
+  userId: string,
+  userRepository: ReturnType<UserDBInterface>
+) => {
+  const data = await userRepository.getLikedEvents(userId);
   if (!data) {
-    throw new AppError('getting liked events failed',HttpStatus.BAD_REQUEST)
+    throw new AppError("getting liked events failed", HttpStatus.BAD_REQUEST);
   }
-  return data
-}
+  return data;
+};
 
-export const getFollowing = async (userId: string, userRepository: ReturnType<UserDBInterface>) => {
-  const data = await userRepository.getFollowing(userId)
+export const getFollowing = async (
+  userId: string,
+  userRepository: ReturnType<UserDBInterface>
+) => {
+  const data = await userRepository.getFollowing(userId);
   if (!data) {
-    throw new AppError('getting following organizers failed',HttpStatus.BAD_REQUEST)
+    throw new AppError(
+      "getting following organizers failed",
+      HttpStatus.BAD_REQUEST
+    );
   }
-  return data
-}
+  return data;
+};
 
-export const updateBookings = async (bookingId: string, userRepository: ReturnType<UserDBInterface>) => {
-  const res = await userRepository.updateBookings(bookingId) 
+export const updateBookings = async (
+  bookingId: string,
+  userRepository: ReturnType<UserDBInterface>
+) => {
+  const res = await userRepository.updateBookings(bookingId);
   if (!res) {
-    throw new AppError('updating attended events failed',HttpStatus.BAD_REQUEST)
+    throw new AppError(
+      "updating attended events failed",
+      HttpStatus.BAD_REQUEST
+    );
   }
-  return res
-}
+  return res;
+};
 
-export const addReview = async (review: ReviewData, eventId: string, userRepository:ReturnType<UserDBInterface>) => {
-  const data = await userRepository.addReview(review, eventId)
+export const addReview = async (
+  review: ReviewData,
+  eventId: string,
+  userRepository: ReturnType<UserDBInterface>
+) => {
+  const data = await userRepository.addReview(review, eventId);
   if (!data.ok) {
-    throw new AppError('updating review has failed',HttpStatus.BAD_REQUEST)
+    throw new AppError("updating review has failed", HttpStatus.BAD_REQUEST);
   }
-  return data
-}
+  return data;
+};
 
-export const getReviews = async (eventId: string, userRepository: ReturnType<UserDBInterface>) => {
-  const data = await userRepository.getReviews(eventId)
+export const getReviews = async (
+  eventId: string,
+  userRepository: ReturnType<UserDBInterface>
+) => {
+  const data = await userRepository.getReviews(eventId);
   if (!data) {
-    throw new AppError('getting reviews of one event is failed',HttpStatus.BAD_REQUEST)
+    throw new AppError(
+      "getting reviews of one event is failed",
+      HttpStatus.BAD_REQUEST
+    );
   }
-  return data
-}
+  return data;
+};
+
+export const getEventsFromFollowingOrganizers = async (
+  userId: string,
+  userRepository: ReturnType<UserDBInterface>
+) => {
+  const data = await userRepository.getEventsFromFollowingOrganizers(userId);
+  if (!data) {
+    throw new AppError(
+      "getting events from user following organizations has failed",
+      HttpStatus.BAD_REQUEST
+    );
+  }
+  return data;
+};

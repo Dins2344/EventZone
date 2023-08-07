@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import ContactInfo from "../../../components/user_components/profile_components/contactInfo";
 import ChangeEmail from "../../../components/user_components/profile_components/changeEmail";
 import { useNavigate } from "react-router-dom";
+import ChangePassword from "../../../components/user_components/profile_components/changePassword";
 
 const EditProfile: React.FC = () => {
   const [menu, setMenu] = useState("contactInfo");
@@ -25,33 +26,33 @@ const EditProfile: React.FC = () => {
             <div className="flex h-10 md:h-20 w-full items-center justify-between">
               <h4
                 onClick={() => handleMenu("contactInfo")}
-                className="text-sm md:text-lg lg:text-xl md:font-bold dark:text-white hover:cursor-pointer hover:bg-blue-gray-600 rounded-md p-3"
+                className={`text-sm md:text-lg lg:text-xl md:font-bold dark:text-white hover:cursor-pointer hover:bg-blue-gray-600 rounded-md p-3 ${
+                  menu === "contactInfo" && "bg-blue-gray-500"
+                } `}
               >
                 Account info
               </h4>
               <h4
                 onClick={() => handleMenu("changeEmail")}
-                className="text-sm md:text-lg lg:text-xl md:font-bold dark:text-white hover:cursor-pointer hover:bg-blue-gray-600 rounded-md p-3"
+                className={`text-sm md:text-lg lg:text-xl md:font-bold dark:text-white hover:cursor-pointer hover:bg-blue-gray-600 rounded-md p-3 ${
+                  menu === "changeEmail" && "bg-blue-gray-500"
+                }`}
               >
                 Change email
               </h4>
               <h4
                 onClick={() => handleMenu("changePassword")}
-                className="text-sm md:text-lg lg:text-xl md:font-bold dark:text-white hover:cursor-pointer hover:bg-blue-gray-600 rounded-md p-3"
+                className={`text-sm md:text-lg lg:text-xl md:font-bold dark:text-white hover:cursor-pointer hover:bg-blue-gray-600 rounded-md p-3 ${
+                  menu === "changePassword" && "bg-blue-gray-500"
+                }`}
               >
                 Change password
-              </h4>
-
-              <h4
-                onClick={() => handleMenu("closeAcc")}
-                className="text-sm md:text-lg lg:text-xl md:font-bold dark:text-white hover:cursor-pointer hover:bg-blue-gray-600 rounded-md p-3"
-              >
-                Close account
               </h4>
             </div>
           </div>
           <div>{menu === "contactInfo" && <ContactInfo />}</div>
           <div>{menu === "changeEmail" && <ChangeEmail />}</div>
+          <div>{menu === "changePassword" && <ChangePassword />}</div>
         </div>
       )}
     </>

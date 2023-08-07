@@ -28,7 +28,7 @@ const userRouter = () => {
     authServiceInterface,
     authService
   );
-
+  router.post('/change-password',jwtAuthMiddleware,controller.changePasswordController)
   router.post(
     "/register-organization",
     jwtAuthMiddleware,
@@ -137,6 +137,8 @@ const userRouter = () => {
     jwtAuthMiddleware,
     controller.getReviewsController
   );
+
+  router.get("/get-all-events-from-following-organizers",jwtAuthMiddleware,controller.getEventsFromFollowingOrganizersController);
 
   return router;
 };

@@ -14,6 +14,10 @@ export const userDbRepository = (repository:ReturnType<UserRepositoryMongoDB>)=>
        return await repository.addUser(user)
     }
 
+    const changePassword = async (newPassword: string, userId: string) => {
+        return await repository.changePassword(newPassword,userId)
+    }
+
     const addOrganization = async(orgId:string,userId:string)=>{
         return await repository.addOrganization(orgId,userId)
     }
@@ -146,8 +150,12 @@ export const userDbRepository = (repository:ReturnType<UserRepositoryMongoDB>)=>
         return data
     }
 
+    const getEventsFromFollowingOrganizers = async (userId: string) => {
+        return await repository.getEventsFromFollowingOrganizers(userId)
+    }
     return {
-      addUser,
+        addUser,
+        changePassword,
       getUserByEmail,
       getUserById,
       addOrganization,
@@ -178,6 +186,7 @@ export const userDbRepository = (repository:ReturnType<UserRepositoryMongoDB>)=>
       addReview,
       updateBookings,
       getReviews,
+      getEventsFromFollowingOrganizers,
     };
 }
 

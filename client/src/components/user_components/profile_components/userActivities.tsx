@@ -19,7 +19,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { Bookings, RegisteredOrganization } from "../../../types/userInterface";
 import { RegisteredEventInterface } from "../../../types/organizerInterface";
-import { OrganizersCard } from "../body_components/Organizers";
+import { OrganizersCard } from "../../common/organizerCards";
 import Heart from "react-animated-heart";
 import { selectUser, setUser } from "../../../redux/reducers/userSlice";
 import { useDispatch, useSelector } from "react-redux";
@@ -201,7 +201,7 @@ const ProfileActivities: React.FC = () => {
         <div className="flex p-2 border-4 rounded-lg overflow-y-scroll no-scrollbar">
           {followingOrgs && followingOrgs.length > 0 ? (
             followingOrgs.map((item) => {
-              return <OrganizersCard organization={item} />;
+              return <OrganizersCard key={item._id} organization={item} />;
             })
           ) : (
             <div>No liked events to display.</div>

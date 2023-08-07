@@ -9,6 +9,8 @@ import {
   addReview,
   updateBookings,
   getReviews,
+  getEventsFromFollowingOrganizers,
+  changePassword,
 } from "./../../../application/usecases/user/userAuth";
 import { UserDBInterface } from "../../../application/repositories/userDBRepository";
 import { UserRepositoryMongoDB } from "../../../frameworks/database/mongoDB/repositories/userRepositoryMongoDB";
@@ -72,6 +74,20 @@ const userController = (
     }
   );
 
+  const changePasswordController = asyncHandler(async (req: CustomRequest, res: Response) => {
+    const newPassword = req.body.newPassword
+    const userId = req.user?.Id
+    if (userId && newPassword) {
+      const response = await changePassword(newPassword, userId, dbRepositoryUser, authService)
+      console.log(response);
+      if (response) {
+        res.json({message:'changing password is done',ok:true,response})
+      } else {
+        res.json({ error: 'changing password failed', ok:false,})
+      }
+    }
+  })
+
   const getUserByEmail = asyncHandler(
     async (req: CustomRequest, res: Response) => {
       const email = req.user?.email;
@@ -90,6 +106,7 @@ const userController = (
   const getUserByIdController = asyncHandler(
     async (req: CustomRequest, res: Response) => {
       const userId = req.user?.Id;
+      console.log(userId);
       if (userId) {
         const data = await getUserById(userId, dbRepositoryUser);
         if (data) {
@@ -459,42 +476,78 @@ const userController = (
     }
   );
 
-  const updateBookingsController = asyncHandler(async (req: Request, res: Response) => {
-    const response = await updateBookings(req.params.id, dbRepositoryUser)
-    if (response) {
-      res.json({message:'updated booking',ok:true})
-    } else {
-      res.json({error:'updating bookings failed'})
-    }
-  })
-
-  const addReviewController = asyncHandler(async (req: CustomRequest, res: Response) => {
-    if (req.user) {
-      const review = {
-        userId: req.user?.Id,
-        rating: req.body.rating,
-        comment : req.body.comment
-      }
-      const response = await addReview(review, req.body.eventId, dbRepositoryUser)
+  const updateBookingsController = asyncHandler(
+    async (req: Request, res: Response) => {
+      const response = await updateBookings(req.params.id, dbRepositoryUser);
       if (response) {
-        res.json({response})
+        res.json({ message: "updated booking", ok: true });
       } else {
-        res.json({error:'updating review failed'})
+        res.json({ error: "updating bookings failed" });
       }
     }
-  })
+  );
 
-  const getReviewsController = asyncHandler(async (req: Request, res: Response) => {
-    const data = await getReviews(req.params.id, dbRepositoryUser)
-    if (data) {
-      res.json({message:'getting reviews done',data,ok:true})
-    } else {
-      res.json({error:'getting reviews failed'})
+  const addReviewController = asyncHandler(
+    async (req: CustomRequest, res: Response) => {
+      if (req.user) {
+        const review = {
+          userId: req.user?.Id,
+          rating: req.body.rating,
+          comment: req.body.comment,
+        };
+        const response = await addReview(
+          review,
+          req.body.eventId,
+          dbRepositoryUser
+        );
+        if (response) {
+          res.json({ response });
+        } else {
+          res.json({ error: "updating review failed" });
+        }
+      }
     }
-  })
+  );
+
+  const getReviewsController = asyncHandler(
+    async (req: Request, res: Response) => {
+      const data = await getReviews(req.params.id, dbRepositoryUser);
+      if (data) {
+        res.json({ message: "getting reviews done", data, ok: true });
+      } else {
+        res.json({ error: "getting reviews failed" });
+      }
+    }
+  );
+
+  const getEventsFromFollowingOrganizersController = asyncHandler(
+    async (req: CustomRequest, res: Response) => {
+      const userId = req.user?.Id;
+      if (userId) {
+        const data = await getEventsFromFollowingOrganizers(
+          userId,
+          dbRepositoryUser
+        );
+        if (!data) {
+          res.json({
+            error: "getting following organizers events failed",
+            ok: false,
+          })
+        } else {
+          res.json({
+            message: "getting following organizers events done",
+            data,
+            ok: true,
+          });
+        }
+      }
+    }
+  );
+
   return {
     getUserByEmail,
     verifyPasswordController,
+    changePasswordController,
     getUserByIdController,
     getApprovedEventsController,
     getCompleteEventDetailsController,
@@ -521,6 +574,7 @@ const userController = (
     updateBookingsController,
     addReviewController,
     getReviewsController,
+    getEventsFromFollowingOrganizersController,
   };
 };
 

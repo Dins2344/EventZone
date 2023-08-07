@@ -2,9 +2,7 @@ import {
   Button,
   Input,
   Dialog,
-  DialogHeader,
   DialogBody,
-  DialogFooter,
 } from "@material-tailwind/react";
 import { useEffect, useState } from "react";
 import { updateEmail, verifyPassword } from "../../../api/userAuth/userApis";

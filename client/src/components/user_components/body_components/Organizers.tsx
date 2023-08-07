@@ -1,23 +1,19 @@
 import { useEffect, useState } from "react";
-import {
-  addFollowing,
-  getAllOrganizers,
-  getUserDetailsById,
-  unFollow,
-} from "../../../api/userAuth/userApis";
+import { getAllOrganizers } from "../../../api/userAuth/userApis";
 import { RegisteredOrganization } from "../../../types/userInterface";
-import { Button } from "@material-tailwind/react";
-import { useNavigate } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+
+import { OrganizerCardShimmer, OrganizersCard } from "../../common/organizerCards";
 
 const Organizers = () => {
   const [organizations, setOrganizations] =
     useState<RegisteredOrganization[]>();
+  const [isLoading, setIsLoading] = useState(false);
 
   const fetchOrganizers = async () => {
+    setIsLoading(true)
     const data = await getAllOrganizers();
     setOrganizations(data?.data.data);
+    setTimeout(()=>setIsLoading(false),3000)
   };
 
   useEffect(() => {
@@ -28,13 +24,43 @@ const Organizers = () => {
     <>
       <div className=" mt-24  w-full px-20 ">
         <h4 className="text-2xl pl-4 mb-10 font-bold dark:text-white">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="currentColor"
+            className="w-10 h-10 inline-block mr-2"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z"
+            />
+          </svg>
           Organizers to follow
         </h4>
-        <div className="flex w-full  overflow-x-scroll px-4+">
-          {organizations &&
-            organizations.map((item) => {
-              return <OrganizersCard key={item._id} organization={item} />;
-            })}
+        <div className="flex w-full  overflow-x-scroll px-4">
+          {organizations && organizations?.length > 0 ? (
+            <>
+              {isLoading ?
+                <>
+                  <OrganizerCardShimmer />
+                </>
+                :
+                <>
+              {organizations.map((item) => {
+                return <OrganizersCard key={item._id} organization={item} />;
+              })}
+                </>
+              }
+            </>
+          ) : (
+            <h4 className="text-2xl md:text-4xl">
+              Apologies, but it seems that there are currently no organizers
+              available.
+            </h4>
+          )}
         </div>
       </div>
     </>
@@ -42,141 +68,3 @@ const Organizers = () => {
 };
 
 export default Organizers;
-
-type OrganizersProps = {
-  organization: RegisteredOrganization;
-};
-
-export const OrganizersCard: React.FC<OrganizersProps> = ({ organization }) => {
-  const [followed, setFollowed] = useState<boolean>();
-
-  useEffect(() => {
-    setFollow();
-  }, []);
-
-  const setFollow = async () => {
-    const data = await getUserDetailsById();
-    if (data?.data.data.following.includes(organization._id)) {
-      setFollowed(true);
-    }
-  };
-
-  const handleFollow = async (orgId: string) => {
-    const res = await addFollowing(orgId);
-    console.log(res?.data);
-    if (res?.data.response.ok) {
-      setFollowed(true);
-      addedNotify()
-    }
-  };
-
-  const handleUnfollow = async (orgId: string) => {
-    const res = await unFollow(orgId);
-    if (res?.data.response.ok) {
-      setFollowed(false);
-      removedNotify()
-    }
-  };
-
-  const navigate = useNavigate();
-
-   const removedNotify = () => {
-     toast.warn("You will no longer receive updates from the organizer...!", {
-       position: "bottom-right",
-       autoClose: 3000,
-       hideProgressBar: false,
-       closeOnClick: true,
-       pauseOnHover: true,
-       draggable: true,
-       progress: undefined,
-       theme: "colored",
-     });
-   };
-   const addedNotify = () => {
-     toast.success("You will receive updates from the organizer....!", {
-       position: "bottom-right",
-       autoClose: 3000,
-       hideProgressBar: false,
-       closeOnClick: true,
-       pauseOnHover: true,
-       draggable: true,
-       progress: undefined,
-       theme: "colored",
-     });
-   };
-
-  return (
-    <>
-      <ToastContainer
-        position="bottom-right"
-        autoClose={3000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="colored"
-      />
-      <ToastContainer
-        position="bottom-right"
-        autoClose={3000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="colored"
-      />
-      <div
-        key={organization._id}
-        className=" px-5 w-64 mr-3 max-w-xl bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700"
-      >
-        <div className="flex flex-col w-full items-center mt-10 pb-10">
-          <img
-            className="w-24 h-24 mb-3 rounded-full shadow-lg"
-            src={
-              organization.logo
-                ? organization.logo
-                : "https://cdn-icons-png.flaticon.com/512/149/149071.png"
-            }
-            alt="Bonnie image"
-          />
-          <h5 className="mb-1 text-xl font-medium text-gray-900 dark:text-white">
-            {organization.orgName}
-          </h5>
-          <span className="text-sm text-gray-500 dark:text-gray-400">
-            Followers count
-          </span>
-          <div className="flex justify-between mt-4 space-x-3 w-48 md:mt-6">
-            {followed ? (
-              <Button
-                onClick={() => handleUnfollow(organization._id)}
-                size="sm"
-              >
-                Unfollow
-              </Button>
-            ) : (
-              <Button onClick={() => handleFollow(organization._id)} size="sm">
-                Follow
-              </Button>
-            )}
-            <Button
-              onClick={() => {
-                const id = organization._id;
-                navigate(`/show-organizer/?id=${id}`);
-              }}
-              size="sm"
-              variant="outlined"
-            >
-              View
-            </Button>
-          </div>
-        </div>
-      </div>
-    </>
-  );
-};
