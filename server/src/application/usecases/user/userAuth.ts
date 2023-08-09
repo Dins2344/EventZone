@@ -4,10 +4,12 @@ import { HttpStatus } from "../../../types/httpStatus";
 import {
   AddressFormDataCreateInterface,
   CreateChatInterface,
+  GoogleUserCreateInterface,
   NewMessageInterface,
   ProfileContactInfo,
   RegisteredBookingCreationInterface,
   RegisteredEventInterface,
+  RegisteredUserInterface,
   ReviewData,
   SearchQueryInterface,
   UserInterface,
@@ -102,6 +104,29 @@ export const userLogin = async (
     role: "user",
   });
   return { token, userData };
+};
+
+export const googleLogin = async (
+  user: RegisteredUserInterface,
+  userRepository: ReturnType<UserDBInterface>,
+  authService: ReturnType<AuthServiceInterface>
+) => {
+  const token = authService.generateToken({
+    Id: user._id,
+    email: user.email,
+    role: "user",
+  });
+  return token;
+};
+
+export const googleSignup = async (
+  user: GoogleUserCreateInterface,
+  userRepository: ReturnType<UserDBInterface>,
+  authService: ReturnType<AuthServiceInterface>
+) => {
+  const registeredUser = await userRepository.addUser(user)
+  const token = authService.generateToken({ Id: registeredUser._id.toString(), email: registeredUser.email, role: 'user' })
+  return { registeredUser, token }
 };
 
 export const emailVerify = async (

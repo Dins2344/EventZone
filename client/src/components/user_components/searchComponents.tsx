@@ -24,9 +24,10 @@ const SearchComponents: React.FC = () => {
   const [price, setPrice] = useState("");
   const [category, setCategory] = useState("");
   const [searchFor, setSearchFor] = useState("event");
-  const [searchedData, setSearchedData] = useState<
-    RegisteredEventInterface[] | RegisteredOrganization[]
-  >();
+  const [searchedData, setSearchedData] =
+    useState<RegisteredEventInterface[]>();
+  const [searchedOrganization, setSearchedOrganization] =
+    useState<RegisteredOrganization[]>();
   const searchData = useSelector(selectSearchData);
   const dispatch = useDispatch();
 
@@ -52,14 +53,25 @@ const SearchComponents: React.FC = () => {
   };
 
   const fetchSearchData = async () => {
-    const data = await getSearchData(
-      searchFor,
-      searchText,
-      city,
-      price,
-      category
-    );
-    setSearchedData(data?.data.data);
+    if (searchFor === "event") {
+      const data = await getSearchData(
+        searchFor,
+        searchText,
+        city,
+        price,
+        category
+      );
+      setSearchedData(data?.data.data);
+    } else if (searchFor === "organizer") {
+      const data = await getSearchData(
+        searchFor,
+        searchText,
+        city,
+        price,
+        category
+      );
+      setSearchedOrganization(data?.data.data);
+    }
   };
 
   return (
@@ -143,8 +155,13 @@ const SearchComponents: React.FC = () => {
           />
         </div>
         <div className="w-8/12 flex flex-col">
-          {searchedData ? (
-            <SearchedEvents data={searchedData} searchFor={searchFor} />
+          {searchedData && searchedOrganization ? (
+            <>
+              {searchFor === "event" && <SearchedEvents data={searchedData} />}
+              {searchFor === "organizer" && (
+                <SearchedOrganizers data={searchedOrganization} />
+              )}
+            </>
           ) : (
             <></>
           )}
@@ -292,23 +309,19 @@ const FilterElements: React.FC<FilterChildProps> = ({
 };
 
 type SearchedEventsProps = {
-  data: RegisteredOrganization[] | RegisteredEventInterface[];
-  searchFor: string;
+  data: RegisteredEventInterface[];
 };
 
-const SearchedEvents: React.FC<SearchedEventsProps> = ({ data, searchFor }) => {
-  const navigate = useNavigate()
-  useEffect(() => {
-    console.log(data);
-    console.log(searchFor);
-  });
+const SearchedEvents: React.FC<SearchedEventsProps> = ({ data }) => {
+  const navigate = useNavigate();
+
   if (data.length === 0) {
     return (
       <>
         <div className="w-full px-4 h-96 flex items-center justify-center">
           <h3 className="text-2xl">
-           Ooops..! Your search query fails to align with any scheduled events in our
-            database.
+            Ooops..! Your search query fails to align with any scheduled events
+            in our database.
           </h3>
         </div>
       </>
@@ -317,62 +330,80 @@ const SearchedEvents: React.FC<SearchedEventsProps> = ({ data, searchFor }) => {
   return (
     <>
       <div className="w-full px-4">
-        {searchFor === "organizer" ? (
-          <>
-            {data.map((item) => {
-              return (
-                <div
-                  onClick={()=>navigate(`/show-organizer/?id=${item._id}`)}
-                  key={item._id}
-                  className="w-full flex flex-wrap p-3 hover:cursor-pointer hover:shadow-md border-2 rounded-md mt-3"
-                >
-                  <img
-                    className=" w-full md:w-48 rounded-md"
-                    src={item.logo}
-                  ></img>
-                  <div className="flex flex-col pt-2 md:pt-0 md:pl-2">
-                    <h3 className="text-lg md:text-2xl font-bold dark:text-white mb-3">
-                      {item.orgName}
-                    </h3>
-                    <p>category: {item.orgType}</p>
+        {data &&
+          data.map((item) => {
+            return (
+              <div
+                onClick={() => navigate(`/show-event/?id=${item._id}`)}
+                key={item._id}
+                className="w-full flex flex-wrap p-3 hover:shadow-md border-2 rounded-md mt-3"
+              >
+                <img
+                  className=" w-full md:w-48 rounded-md"
+                  src={item.imageURL[0]}
+                ></img>
+                <div className="flex flex-col pt-2 md:pt-0 md:pl-2">
+                  <h3 className="text-lg md:text-2xl font-bold dark:text-white mb-3">
+                    {item.eventName}
+                  </h3>
+                  <p>
+                    on: {item.startDate},{item.startTime}
+                  </p>
+                  {item.ticketValue === "free" ? (
+                    <p>{item.ticketValue}</p>
+                  ) : (
+                    <p>Price: {item.ticketPrice}</p>
+                  )}
+                </div>
+              </div>
+            );
+          })}
+      </div>
+    </>
+  );
+};
 
-                    <p>Country: {item.country}</p>
-                  </div>
-                </div>
-              );
-            })}
-          </>
-        ) : (
-          <>
-            {data && data.map((item) => {
-              return (
-                <div
-                onClick={()=>navigate(`/show-event/?id=${item._id}`)}
-                  key={item._id}
-                  className="w-full flex flex-wrap p-3 hover:shadow-md border-2 rounded-md mt-3"
-                >
-                  <img
-                    className=" w-full md:w-48 rounded-md"
-                    src={item.imageURL[0]}
-                  ></img>
-                  <div className="flex flex-col pt-2 md:pt-0 md:pl-2">
-                    <h3 className="text-lg md:text-2xl font-bold dark:text-white mb-3">
-                      {item.eventName}
-                    </h3>
-                    <p>
-                      on: {item.startDate},{item.startTime}
-                    </p>
-                    {item.ticketValue === "free" ? (
-                      <p>{item.ticketValue}</p>
-                    ) : (
-                      <p>Price: {item.ticketPrice}</p>
-                    )}
-                  </div>
-                </div>
-              );
-            })}
-          </>
-        )}
+type SearchedOrganizersProps = {
+  data: RegisteredOrganization[];
+};
+const SearchedOrganizers: React.FC<SearchedOrganizersProps> = ({ data }) => {
+  const navigate = useNavigate();
+
+  if (data.length === 0) {
+    return (
+      <>
+        <div className="w-full px-4 h-96 flex items-center justify-center">
+          <h3 className="text-2xl">
+            Ooops..! Your search query fails to align with any scheduled events
+            in our database.
+          </h3>
+        </div>
+      </>
+    );
+  }
+
+  return (
+    <>
+      <div className="w-full px-4">
+        {data.map((item) => {
+          return (
+            <div
+              onClick={() => navigate(`/show-organizer/?id=${item._id}`)}
+              key={item._id}
+              className="w-full flex flex-wrap p-3 hover:cursor-pointer hover:shadow-md border-2 rounded-md mt-3"
+            >
+              <img className=" w-full md:w-48 rounded-md" src={item.logo}></img>
+              <div className="flex flex-col pt-2 md:pt-0 md:pl-2">
+                <h3 className="text-lg md:text-2xl font-bold dark:text-white mb-3">
+                  {item.orgName}
+                </h3>
+                <p>category: {item.orgType}</p>
+
+                <p>Country: {item.country}</p>
+              </div>
+            </div>
+          );
+        })}
       </div>
     </>
   );

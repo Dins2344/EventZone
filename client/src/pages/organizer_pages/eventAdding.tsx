@@ -1,4 +1,4 @@
-import React, { useState,ChangeEvent, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Stepper, Step, Button, Typography } from "@material-tailwind/react";
 import {
   CogIcon,
@@ -24,19 +24,19 @@ export interface SubmittedChildComponentProps {
 
 const EventAddingPage = () => {
   const [activeStep, setActiveStep] = React.useState(0);
-  const [isLastStep, setIsLastStep] = React.useState(false);
-  const [isFirstStep, setIsFirstStep] = React.useState(false);
+  // const [isLastStep, setIsLastStep] = React.useState(false);
+  // const [isFirstStep, setIsFirstStep] = React.useState(false);
 
-  const handleNext = () => !isLastStep && setActiveStep((cur) => cur + 1);
-  const handlePrev = () => !isFirstStep && setActiveStep((cur) => cur - 1);
+  // const handleNext = () => !isLastStep && setActiveStep((cur) => cur + 1);
+  // const handlePrev = () => !isFirstStep && setActiveStep((cur) => cur - 1);
 
 
   return (
     <div className="w-full py-4 px-8">
       <Stepper
         activeStep={activeStep}
-        isLastStep={(value) => setIsLastStep(value)}
-        isFirstStep={(value) => setIsFirstStep(value)}
+        // isLastStep={(value) => setIsLastStep(value)}
+        // isFirstStep={(value) => setIsFirstStep(value)}
       >
         <Step onClick={() => setActiveStep(0)}>
           <UserIcon className="h-5 w-5" />
@@ -176,7 +176,6 @@ const PublishForm = () => {
 
   const fetchEvent =async (id:string)=>{
     const res =await getEventDetails(id)
-    console.log(res)
     setEventDetails(res?.data.data)
 
   }
@@ -186,7 +185,6 @@ const PublishForm = () => {
  
  const handlePublish = async()=>{
   const res = await publishEvent(event.eventDetails._id)
-  console.log(res)
   if(res?.status){
     navigate('/organization/events')
   }

@@ -7,9 +7,9 @@ export interface createUserInterface {
 export interface RegisteredUserInterface{
   firstName: string;
   lastName: string;
-  email?: string;
+  email: string;
   password?: string;
-  _id?:string
+  _id:string
   organizations?:string[]
   phoneNumber:string
   profileImage?:string

@@ -164,7 +164,8 @@ const BookingDetails = () => {
                     {stars.map((v, i) => {
                       const ratingValue = i + 1;
                       return (
-                        <label>
+                        <label key={i}>
+                          <p className="hidden">{ v}</p>
                           <input
                             style={{ display: "none" }}
                             name="rating"

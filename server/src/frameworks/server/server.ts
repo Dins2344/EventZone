@@ -12,7 +12,7 @@ const serverConfig = (server: Server) => {
     });
 
     const startServer = () => { 
-        server.listen(4000, () => {
+        server.listen(configKeys.PORT, () => {
             console.log(`Server listening on Port ${configKeys.PORT}`);
         })
     }

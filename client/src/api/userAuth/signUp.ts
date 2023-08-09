@@ -54,3 +54,15 @@ export const OTPVerifyPost = async (OTP: string, email: string | null,mode:strin
     console.log(error); 
   }
 };
+
+
+export const loginWithGoogle = async (token: string) => {
+  try {
+    const res = await axios.get(
+      `http://localhost:4000/auth/user-google-login/${token}`
+      );
+      return res
+  } catch (error) {
+    console.log(error)
+  }
+}

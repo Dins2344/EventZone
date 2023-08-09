@@ -1,6 +1,6 @@
 import { Button } from "@material-tailwind/react";
 import { RegisteredEventInterface } from "../../../types/organizerInterface";
-import EventCards,{EventCardsShimmer} from "../../common/eventCards";
+import EventCards from "../../common/eventCards";
 import { useEffect, useState } from "react";
 
 type EventsSectionProps = {

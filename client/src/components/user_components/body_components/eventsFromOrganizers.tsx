@@ -18,7 +18,6 @@ const EventFromOrganizers: React.FC = () => {
     }, 3000);
     };
     
-    const array = new Array(8).fill(0);
 
   return (
     <div className=" mt-24  w-full px-5 md:px-20">
@@ -56,8 +55,8 @@ const EventFromOrganizers: React.FC = () => {
           ) : (
             <>
               {events &&
-                array.map((item,i) => {
-                  return <EventCards key={i} approvedEvent={events[i]} />;
+                    events.map((item, i) => {
+                  return <EventCards key={i} approvedEvent={item} />;
                 })}
             </>
           )}

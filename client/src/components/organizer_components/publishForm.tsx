@@ -1,4 +1,4 @@
-import { ChangeEvent, Fragment, useEffect, useState } from "react";
+import {  Fragment, useState } from "react";
 import {
   Button,
   Dialog,
@@ -41,9 +41,9 @@ const PublishFormComponent :React.FC<SubmittedChildComponentProps>= ({ submitted
     }
   };
 
-  const handleOptionChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setSelectedOption(event.target.value);
-  };
+  // const handleOptionChange = (event: ChangeEvent<HTMLInputElement>) => {
+  //   setSelectedOption(event.target.value);
+  // };
 
   const SubmitModal = () => {
     const [open, setOpen] = useState(false);

@@ -186,13 +186,13 @@ export default function EventRequests() {
                   ) => {
                     const isLast = index === TABLE_ROWS.length - 1;
                     const classes = isLast
-                      ? "p-4"
-                      : "p-4 border-b border-blue-gray-50";
+                      ? "p-2"
+                      : "p-2 border-b border-blue-gray-50";
 
                     return (
                       <tr key={eventName}>
                         <td className={classes}>
-                          <div className="flex items-center gap-3">
+                          <div className="flex items-center gap-1">
                             <Avatar
                               src={imageURL[0]}
                               alt="image"

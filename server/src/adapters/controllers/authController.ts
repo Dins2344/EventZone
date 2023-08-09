@@ -5,6 +5,8 @@ import {
   userLogin,
   emailVerify,
   tokenGenerator,
+  googleLogin,
+  googleSignup,
 } from "../../application/usecases/user/userAuth";
 import { UserDBInterface } from "../../application/repositories/userDBRepository";
 import { UserRepositoryMongoDB } from "../../frameworks/database/mongoDB/repositories/userRepositoryMongoDB";
@@ -16,6 +18,7 @@ import { AdminRepositoryMongoDB } from "../../frameworks/database/mongoDB/reposi
 import { SendEmailServiceInterface } from "../../application/services/sendMail";
 import { SendEmailService } from "../../frameworks/service/sendMailService";
 import asyncHandler from "express-async-handler";
+import jwtDecode from 'jwt-decode'
 
 const authController = (
   userDbRepository: UserDBInterface,
@@ -112,12 +115,34 @@ const authController = (
       res.json({ message });
     }
   });
+
+  const googleLoginController = asyncHandler(async (req: Request, res: Response) => {
+    const token = req.params.id
+    const decodedData :any = jwtDecode(token)
+    console.log(decodedData)
+    const user = {
+      firstName: decodedData.given_name,
+      lastName: decodedData.family_name,
+      email: decodedData.email,
+      profileImage: decodedData.picture,
+      status:'active'
+    };
+    const isUser = await emailVerify(user.email, dbRepositoryUser)
+    if (isUser) {
+      const token = await googleLogin(isUser, dbRepositoryUser, authService)
+      res.json({message:'login done',ok:true,token,isUser})
+    } else {
+      const {token,registeredUser:isUser} = await googleSignup(user, dbRepositoryUser, authService)
+      res.json({ message: "user sign up done", token, isUser, ok: true });
+    }
+  })
   return {
     registerUser,
     loginUser,
     loginAdmin,
     OTPLogin,
     OTPVerify,
+    googleLoginController,
   };
 };
 

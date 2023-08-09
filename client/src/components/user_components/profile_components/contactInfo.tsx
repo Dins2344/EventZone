@@ -2,7 +2,7 @@ import { Input, Button } from "@material-tailwind/react";
 import { useState, useEffect } from "react";
 import * as Yup from "yup";
 import {
-    addAddress,
+  addAddress,
   addProfileContactInfo,
   getAddressInfo,
   getUserDetailsById,
@@ -18,26 +18,35 @@ const ContactInfo: React.FC = () => {
   const [changeDp, setChangeDp] = useState(false);
   const [dataFetched, setDataFetched] = useState(false);
   const [userData, setUserData] = useState<RegisteredUserInterface>();
-  const [formData, setFormData] = useState<RegisteredUserInterface>({
+  const [formData, setFormData] = useState({
     firstName: userData?.firstName || "",
     lastName: userData?.lastName || "",
     phoneNumber: userData?.phoneNumber || "",
     website: userData?.website || "",
-    images: [],
+    images: [] || '',
+    profileImage:userData?.profileImage
   });
   const [profilePicture, setProfilePicture] = useState<File | undefined>(
     undefined
   );
-  const [isLoading, setIsLoading] = useState(false)
-  const dispatch = useDispatch()
-  
+  const [isLoading, setIsLoading] = useState(false);
+  const dispatch = useDispatch();
+
   const fetchUserInfo = async () => {
     const data = await getUserDetailsById();
     if (data) {
       const userData: RegisteredUserInterface = data.data.data;
       setUserData(userData);
-      setFormData(userData);
-     userData && dispatch(setUser(userData))
+      const editableUser = {
+        firstName: userData.firstName,
+        lastName: userData.lastName,
+        phoneNumber: userData.phoneNumber,
+        website: userData.website,
+        profileImage: userData?.profileImage,
+        images:[]
+      };
+      setFormData(editableUser);
+      userData && dispatch(setUser(userData));
       setDataFetched(true);
     }
   };
@@ -86,13 +95,13 @@ const ContactInfo: React.FC = () => {
             data.append(`images`, image, `images${index}`);
           });
         }
-        setIsLoading(true)
+        setIsLoading(true);
         const res = await addProfileContactInfo(data);
         setErrors({});
         if (res?.data.ok) {
-          console.log(res.data)
+          console.log(res.data);
           setUpdated(!updated);
-          setIsLoading(false)
+          setIsLoading(false);
         }
       })
       .catch((err: Yup.ValidationError) => {
@@ -126,7 +135,7 @@ const ContactInfo: React.FC = () => {
                     <div className="w-56 h-56 flex flex-col items-center  ">
                       <div className="flex flex-col items-center w-40-h-40 rounded-full overflow-hidden">
                         <img
-                            className="rounded-full h-56  object-cover"
+                          className="rounded-full h-56  object-cover"
                           src={formData.profileImage}
                           alt="image description"
                         />
@@ -298,16 +307,16 @@ const AddressForm: React.FC = () => {
 
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
-  useEffect(()=>{
-    fetchAddress()
-  },[])
+  useEffect(() => {
+    fetchAddress();
+  }, []);
 
-  const fetchAddress =async ()=>{
-    const data = await getAddressInfo()
-    console.log(data)
-    const address = data?.data.data
-    setFormData(address)
-  }
+  const fetchAddress = async () => {
+    const data = await getAddressInfo();
+    console.log(data);
+    const address = data?.data.data;
+    setFormData(address);
+  };
 
   const validationSchema = Yup.object().shape({
     addressLine1: Yup.string().required("Address line 1 is required"),
@@ -338,8 +347,8 @@ const AddressForm: React.FC = () => {
       .validate(formData, { abortEarly: false })
       .then(async () => {
         // Your form submission logic goes here
-        setErrors({})
-        const res = await addAddress(formData)
+        setErrors({});
+        await addAddress(formData);
       })
       .catch((err: Yup.ValidationError) => {
         const newErrors = err.inner.reduce(
@@ -483,17 +492,22 @@ const AddressForm: React.FC = () => {
             </div>
             <div className="flex mb-4">
               <div className="w-1/2 pr-3">
-                <Input name="wPin"
+                <Input
+                  name="wPin"
                   value={formData.wPin}
                   onChange={handleChange}
-                    label="Pin" />
-                    <div className="error text-red-600">{errors?.wPin}</div>
+                  label="Pin"
+                />
+                <div className="error text-red-600">{errors?.wPin}</div>
               </div>
               <div className="w-1/2 pl-3">
-                <Input name="wState"
+                <Input
+                  name="wState"
                   value={formData.wState}
-                  onChange={handleChange} label="State" />
-                  <div className="error text-red-600">{errors?.wState}</div>
+                  onChange={handleChange}
+                  label="State"
+                />
+                <div className="error text-red-600">{errors?.wState}</div>
               </div>
             </div>
           </div>

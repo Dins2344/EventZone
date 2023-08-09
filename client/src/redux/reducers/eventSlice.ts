@@ -1,6 +1,6 @@
 import { createSlice,PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../store";
-import { registeredEventInterface } from "../../types/organizerInterface";
+import { RegisteredEventInterface } from "../../types/organizerInterface";
 
 
 
@@ -8,18 +8,21 @@ const initialState={
     eventDetails:{}
 }
 
-const eventSlice=createSlice({
-   name:'eventData',
-   initialState,
-   reducers:{
-    setEvent(state,action:PayloadAction<{eventDetails:registeredEventInterface}>){
-          state.eventDetails = {eventDetails:action.payload}
-       },
-       clearEvent(state){
-        state.eventDetails={}   
-       }
-   }
-})
+const eventSlice = createSlice({
+  name: "eventData",
+  initialState,
+  reducers: {
+    setEvent(
+      state,
+      action: PayloadAction<{ eventDetails: RegisteredEventInterface }>
+    ) {
+      state.eventDetails = { eventDetails: action.payload };
+    },
+    clearEvent(state) {
+      state.eventDetails = {};
+    },
+  },
+});
 
 export const {setEvent,clearEvent}=eventSlice.actions
 

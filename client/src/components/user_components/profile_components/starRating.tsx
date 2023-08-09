@@ -3,10 +3,11 @@ interface StarRatingProps {
   rating: number;
 }
 const StartRating: React.FC<StarRatingProps> = ({ rating,  }) => {
-    const ratingStar = Array.from({ length: 5 }, (elem, i) => {
-    const number = 0.5 + i;
+    const ratingStar = Array.from({ length: 5 }, (elem:string, i) => {
+      const number = 0.5 + i;
     return (
-      <span  key={i}>
+      <span key={i}>
+        <p className="hidden">{ elem}</p>
         {rating >= i + 1 ? (
           <FaStar className="text-yellow-200" />
         ) : rating >= number ? (

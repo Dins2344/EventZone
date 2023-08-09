@@ -150,7 +150,8 @@ export const OrganizerCardShimmer: React.FC = () => {
         <>
             {array.map((v, i) => {
                 return (
-                  <div className="p-3">
+                  <div key={i} className="p-3">
+                    <p className="hidden">{ v}</p>
                     <div className="w-52 h-64 border-2 rounded-md border-gray-300 animate-pulse flex flex-col items-center">
                       <div className="rounded-full w-20 h-20 bg-gray-300 mt-10"></div>
                       <div className="w-20 h-4 bg-gray-300 mt-2"></div>

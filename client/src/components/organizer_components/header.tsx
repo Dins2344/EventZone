@@ -1,7 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import navLogo from "../../assets/logos/svg/logo-no-background.svg";
-import { FaHome, FaTasks } from "react-icons/fa";
-import React from "react";
+import  { useEffect, useState } from "react";
 import { getUserDetails } from "../../api/userAuth/userApis";
 import { useDispatch } from "react-redux";
 import { setUser } from "../../redux/reducers/userSlice";
@@ -9,6 +8,7 @@ import { useSelector } from "react-redux";
 import { selectUser } from "../../redux/reducers/userSlice";
 
 const OrganizationHeader = () => {
+  const [option,setOption] = useState('')
   const dispatch = useDispatch();
 
   const fetchUser = async () => {
@@ -16,7 +16,7 @@ const OrganizationHeader = () => {
     dispatch(setUser(user?.data.data));
   };
 
-  React.useEffect(() => {
+useEffect(() => {
     fetchUser();
   }, []);
 
@@ -154,7 +154,10 @@ const OrganizationHeader = () => {
             <li>
               <Link
                 to={"/organization/home"}
-                className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+                onClick={() => setOption("home")}
+                className={`flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 ${
+                  option === "home" && "bg-gray-100"
+                }`}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -171,7 +174,10 @@ const OrganizationHeader = () => {
             <li>
               <Link
                 to={"/organization/reports"}
-                className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+                onClick={() => setOption("reports")}
+                className={`flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 ${
+                  option === "reports" && "bg-gray-100"
+                }`}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -192,7 +198,10 @@ const OrganizationHeader = () => {
             <li>
               <Link
                 to={"/organization/events"}
-                className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+                onClick={() => setOption("events")}
+                className={`flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 ${
+                  option === "events" && "bg-gray-100"
+                }`}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -219,7 +228,10 @@ const OrganizationHeader = () => {
             <li>
               <Link
                 to={"/organization/bookings"}
-                className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+                onClick={() => setOption("bookings")}
+                className={`flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 ${
+                  option === "bookings" && "bg-gray-100"
+                }`}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -240,7 +252,10 @@ const OrganizationHeader = () => {
             <li>
               <Link
                 to={"/organization/settings"}
-                className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+                onClick={() => setOption("settings")}
+                className={`flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 ${
+                  option === "settings" && "bg-gray-100"
+                }`}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

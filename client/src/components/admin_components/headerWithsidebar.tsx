@@ -1,6 +1,8 @@
 import { Link, useNavigate } from "react-router-dom";
 import navLogo from "../../assets/logos/svg/logo-no-background.svg";
+import { useState } from "react";
 const HeaderWithSideBar = () => {
+  const [option,setOption] = useState('dashboard')
   const navigate = useNavigate();
   return (
     <>
@@ -130,7 +132,10 @@ const HeaderWithSideBar = () => {
             <li>
               <Link
                 to={"/admin"}
-                className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+                onClick={() => setOption("dashboard")}
+                className={`flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 ${
+                  option === "dashboard" && "bg-gray-100"
+                }`}
               >
                 <svg
                   aria-hidden="true"
@@ -148,7 +153,10 @@ const HeaderWithSideBar = () => {
             <li>
               <Link
                 to={"/admin/category-management"}
-                className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+                onClick={() => setOption("category")}
+                className={`flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 ${
+                  option === "category" && "bg-gray-100"
+                }`}
               >
                 <svg
                   aria-hidden="true"
@@ -167,7 +175,10 @@ const HeaderWithSideBar = () => {
             <li>
               <Link
                 to={"/admin/events-management"}
-                className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+                onClick={() => setOption("events")}
+                className={`flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 ${
+                  option === "events" && "bg-gray-100"
+                }`}
               >
                 <svg
                   aria-hidden="true"
@@ -179,7 +190,9 @@ const HeaderWithSideBar = () => {
                   <path d="M8.707 7.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l2-2a1 1 0 00-1.414-1.414L11 7.586V3a1 1 0 10-2 0v4.586l-.293-.293z"></path>
                   <path d="M3 5a2 2 0 012-2h1a1 1 0 010 2H5v7h2l1 2h4l1-2h2V5h-1a1 1 0 110-2h1a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V5z"></path>
                 </svg>
-                <span className="flex-1 ml-3 whitespace-nowrap">Events management</span>
+                <span className="flex-1 ml-3 whitespace-nowrap">
+                  Events management
+                </span>
                 <span className="inline-flex items-center justify-center w-3 h-3 p-3 ml-3 text-sm font-medium text-blue-800 bg-blue-100 rounded-full dark:bg-blue-900 dark:text-blue-300">
                   3
                 </span>
@@ -187,8 +200,11 @@ const HeaderWithSideBar = () => {
             </li>
             <li>
               <Link
-                to={'/admin/users-organization-management'}
-                className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+                to={"/admin/users-organization-management"}
+                onClick={() => setOption("user")}
+                className={`flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 ${
+                  option === "user" && "bg-gray-100"
+                }`}
               >
                 <svg
                   aria-hidden="true"
@@ -203,13 +219,18 @@ const HeaderWithSideBar = () => {
                     clip-rule="evenodd"
                   ></path>
                 </svg>
-                <span className="flex-1 ml-3 whitespace-nowrap">Users/Organizations</span>
+                <span className="flex-1 ml-3 whitespace-nowrap">
+                  Users/Organizations
+                </span>
               </Link>
             </li>
             <li>
               <Link
                 to={"/admin/add-cities"}
-                className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+                onClick={() => setOption("city")}
+                className={`flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 ${
+                  option === "city" && "bg-gray-100"
+                }`}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -231,7 +252,7 @@ const HeaderWithSideBar = () => {
                 </span>
               </Link>
             </li>
-            <li>
+            {/* <li>
               <a
                 href="#"
                 className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
@@ -251,7 +272,7 @@ const HeaderWithSideBar = () => {
                 </svg>
                 <span className="flex-1 ml-3 whitespace-nowrap">Products</span>
               </a>
-            </li>
+            </li> */}
             {/* <li>
               <a
                 href="#"

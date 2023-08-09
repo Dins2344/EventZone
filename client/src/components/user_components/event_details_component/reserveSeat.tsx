@@ -39,7 +39,19 @@ const ReserveSeatComponent: React.FC<ReserveSeatProps> = ({
   const [size, setSize] = useState<null | string>(null);
   const [showPaypal, setShowPaypal] = useState(false);
   const [registerInfo, setRegisterInfo] =
-    useState<ticketBookingCreationInterface>();
+    useState<ticketBookingCreationInterface>({
+      firstName: "",
+      lastName: "",
+      phoneNumber: "",
+      email: "",
+      userId: "",
+      ticketCount: 0,
+      eventId: "",
+      totalAmount: 0,
+      paymentType: "",
+      orgOwnerId: "",
+      organizationId: "",
+    });
   const [open, setOpen] = useState(false);
 
   const handleLoginPrompt = () => setOpen(!open);
@@ -63,7 +75,7 @@ const ReserveSeatComponent: React.FC<ReserveSeatProps> = ({
     return token ? true : false;
   };
   const handlePaidRegister = async () => {
-    if (user) {
+    if (user !== undefined) {
       const data: ticketBookingCreationInterface = {
         firstName,
         lastName,
@@ -77,7 +89,7 @@ const ReserveSeatComponent: React.FC<ReserveSeatProps> = ({
         orgOwnerId: eventDetails.orgOwnerId,
         organizationId: eventDetails.organizer,
       };
-      setRegisterInfo(data);
+      data && setRegisterInfo(data);
       setShowPaypal(true);
     }
   };
@@ -121,7 +133,7 @@ const ReserveSeatComponent: React.FC<ReserveSeatProps> = ({
   return (
     <>
       <ToastContainer
-      className='z-50'
+        className="z-50"
         position="bottom-right"
         autoClose={3000}
         hideProgressBar={false}

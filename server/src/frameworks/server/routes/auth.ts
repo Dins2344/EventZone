@@ -27,7 +27,8 @@ const authRouter = () => {
   router.post('/user-login',controller.loginUser)
   router.get('/user-email-verify/:email/:mode' ,controller.OTPLogin)
   router.get('/user-OTP-verify/:OTP/:email/:mode',controller.OTPVerify)
-  router.post ('/admin-login',controller.loginAdmin)
+  router.post('/admin-login', controller.loginAdmin)
+  router.get('/user-google-login/:id',controller.googleLoginController)
 
   return router;
 };

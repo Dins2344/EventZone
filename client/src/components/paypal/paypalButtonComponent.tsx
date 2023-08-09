@@ -20,13 +20,14 @@ type paypalPaymentProps = {
 };
 
 const PaypalPayment: React.FC<paypalPaymentProps> = ({
-  total,
+  // total,
   eventName,
   registerInfo,
   setBookingRes,
 }): JSX.Element => {
   // const totalString = total.toString()
   const createOrder = (data: any): Promise<string> => {
+    console.log(data)
     // Order is created on the server and the order id is returned
     return fetch(`${baseURL}/my-server/create-paypal-order`, {
       method: "POST",

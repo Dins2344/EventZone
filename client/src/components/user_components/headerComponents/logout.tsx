@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import navLogo from "../../../assets/logos/svg/logo-no-background.svg";
 import {
   Navbar,
-  Typography,
   Button,
   IconButton,
   Collapse,

@@ -237,7 +237,7 @@ const SmallEventCards: React.FC<EventCardProps> = ({ approvedEvent }) => {
   };
 
   const handleLike = async () => {
-    if (user.likedEvents.includes(approvedEvent._id)) {
+    if (user.likedEvents?.includes(approvedEvent._id)) {
       const res = await unLikeEvent(approvedEvent._id);
       if (res?.data.response.ok) {
         setIsClick(false);

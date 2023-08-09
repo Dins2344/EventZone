@@ -37,16 +37,19 @@ const EventCategoryEditForm = () => {
     description: category?.description,
     id: category?._id,
   };
-  console.log(initialValues);
   const formik = useFormik<editEventCategoriesInterface>({
     initialValues,
     validationSchema,
     onSubmit: async (values) => {
       const formData = new FormData();
-      formData.append("categoryName", values?.categoryName);
-      formData.append("subCategoryName", values.subCategoryName);
-      formData.append("description", values.subCategoryName);
-      formData.append("id", values.id);
+
+      values.categoryName !== undefined &&
+        formData.append("categoryName", values.categoryName);
+      values.subCategoryName !== undefined &&
+        formData.append("subCategoryName", values.subCategoryName);
+      values.description !== undefined &&
+        formData.append("description", values.description);
+      values.id !== undefined && formData.append("id", values.id);
       // Handle form submission here
       const res = await eventCategoryEditFormSubmit(values);
       console.log(res);

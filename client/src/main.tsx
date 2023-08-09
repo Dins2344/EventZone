@@ -1,5 +1,6 @@
+/* eslint-disable react-refresh/only-export-components */
+import { lazy, Suspense } from "react";
 import { createBrowserRouter } from "react-router-dom";
-import AdminLanding from "./pages/admin_pages/adminHome.tsx";
 import AdminLogin from "./pages/admin_pages/adminLogin.tsx";
 import {
   UserHome,
@@ -12,32 +13,59 @@ import SignUpEmailVerifyPage from "./pages/user_pages/signupEmailVerify.tsx";
 import LoginPage from "./pages/user_pages/loginPage.tsx";
 import OTPLogin from "./pages/user_pages/OTPLogin.tsx";
 import OTPVerifyPage from "./pages/user_pages/OTPVerify.tsx";
-import Body from "./pages/user_pages/userLanding.tsx";
-import ProfilePage from "./pages/user_pages/profile_pages/profile.tsx";
-import BookingDetailsPage from "./pages/user_pages/profile_pages/bookingDetails.tsx";
 import CreationPage from "./pages/organizer_pages/creation.tsx";
-import OrganizationHome from "./pages/organizer_pages/home.tsx";
-import CategoryManagement from "./pages/admin_pages/categoryManagement.tsx";
 import EventCategoryAddingPage from "./pages/admin_pages/eventCategoryAdding.tsx";
 import EventCategoryEditForm from "./components/admin_components/editEventCategory.tsx";
 import OrgCategoryForm from "./components/admin_components/orgcategoryAddingForm.tsx";
-import EventsHome from "./pages/organizer_pages/eventsHome.tsx";
 import "./index.css";
-import EventAddingPage from "./pages/organizer_pages/eventAdding.tsx";
-import RequestManagement from "./pages/admin_pages/requestManagement.tsx";
-import EventDetails from "./pages/user_pages/showEvent.tsx";
-import ViewEvent from "./pages/organizer_pages/viewEvent.tsx";
 import ErrorElement from "./components/common/ErrorElement.tsx";
-import BookingHome from "./pages/organizer_pages/bookingHome.tsx";
-import EditProfile from "./pages/user_pages/profile_pages/editProfile.tsx";
-import OrganizationSettings from "./pages/organizer_pages/organizationSettings.tsx";
-import EditOrganization from "./pages/organizer_pages/editOrganization.tsx";
-import Reports from "./pages/organizer_pages/reports.tsx";
 import AddCities from "./pages/admin_pages/addCities.tsx";
 import CityAddingForm from "./components/admin_components/CityAddingForm.tsx";
-import SearchPage from "./pages/user_pages/searchPage.tsx";
-import ShowOrganizer from "./pages/user_pages/showOrganizer.tsx";
-import UsersAndOrganization from "./pages/admin_pages/usersAndOrganization.tsx";
+import SpinnerComponent from "./components/common/Spinner.tsx";
+
+const AdminLanding = lazy(() => import("./pages/admin_pages/adminHome.tsx"));
+const Body = lazy(() => import("./pages/user_pages/userLanding.tsx"));
+const CategoryManagement = lazy(
+  () => import("./pages/admin_pages/categoryManagement.tsx")
+);
+const RequestManagement = lazy(
+  () => import("./pages/admin_pages/requestManagement.tsx")
+);
+const UsersAndOrganization = lazy(
+  () => import("./pages/admin_pages/usersAndOrganization.tsx")
+);
+const EventDetails = lazy(() => import("./pages/user_pages/showEvent.tsx"));
+const ProfilePage = lazy(
+  () => import("./pages/user_pages/profile_pages/profile.tsx")
+);
+const EditProfile = lazy(
+  () => import("./pages/user_pages/profile_pages/editProfile.tsx")
+);
+const BookingDetailsPage = lazy(
+  () => import("./pages/user_pages/profile_pages/bookingDetails.tsx")
+);
+const SearchPage = lazy(() => import("./pages/user_pages/searchPage.tsx"));
+const ShowOrganizer = lazy(
+  () => import("./pages/user_pages/showOrganizer.tsx")
+);
+const OrganizationHome = lazy(() => import("./pages/organizer_pages/home.tsx"));
+const EventsHome = lazy(() => import("./pages/organizer_pages/eventsHome.tsx"));
+const OrganizationSettings = lazy(
+  () => import("./pages/organizer_pages/organizationSettings.tsx")
+);
+const EditOrganization = lazy(
+  () => import("./pages/organizer_pages/editOrganization.tsx")
+);
+
+const Reports = lazy(() => import("./pages/organizer_pages/reports.tsx"));
+const ViewEvent = lazy(() => import("./pages/organizer_pages/viewEvent.tsx"));
+const EventAddingPage = lazy(
+  () => import("./pages/organizer_pages/eventAdding.tsx")
+);
+const BookingHome = lazy(
+  () => import("./pages/organizer_pages/bookingHome.tsx")
+);
+
 
 const appRouter = createBrowserRouter([
   {
@@ -62,20 +90,36 @@ const appRouter = createBrowserRouter([
     children: [
       {
         path: "/admin",
-        element: <AdminLanding />,
+        element: (
+          <Suspense fallback={<SpinnerComponent />}>
+            <AdminLanding />,
+          </Suspense>
+        ),
       },
 
       {
         path: "/admin/category-management",
-        element: <CategoryManagement />,
+        element: (
+          <Suspense fallback={<SpinnerComponent></SpinnerComponent>}>
+            <CategoryManagement />,
+          </Suspense>
+        ),
       },
       {
         path: "/admin/events-management",
-        element: <RequestManagement />,
+        element: (
+          <Suspense fallback={<SpinnerComponent />}>
+            <RequestManagement />,
+          </Suspense>
+        ),
       },
       {
         path: "/admin/users-organization-management",
-        element: <UsersAndOrganization />,
+        element: (
+          <Suspense fallback={<SpinnerComponent />}>
+            <UsersAndOrganization />,
+          </Suspense>
+        ),
       },
       {
         path: "/admin/add-cities",
@@ -122,31 +166,59 @@ const appRouter = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <Body />,
+        element: (
+          <Suspense fallback={<SpinnerComponent />}>
+            <Body />,
+          </Suspense>
+        ),
       },
       {
         path: "/show-event",
-        element: <EventDetails />,
+        element: (
+          <Suspense fallback={<SpinnerComponent />}>
+            <EventDetails />,
+          </Suspense>
+        ),
       },
       {
         path: "/user/user-profile",
-        element: <ProfilePage />,
+        element: (
+          <Suspense fallback={<SpinnerComponent />}>
+            <ProfilePage />,
+          </Suspense>
+        ),
       },
       {
         path: "/user/edit-profile",
-        element: <EditProfile />,
+        element: (
+          <Suspense fallback={<SpinnerComponent />}>
+            <EditProfile />,
+          </Suspense>
+        ),
       },
       {
         path: "/show-booking",
-        element: <BookingDetailsPage />,
+        element: (
+          <Suspense fallback={<SpinnerComponent />}>
+            <BookingDetailsPage />,
+          </Suspense>
+        ),
       },
       {
         path: "/search-events",
-        element: <SearchPage />,
+        element: (
+          <Suspense fallback={<SpinnerComponent />}>
+            <SearchPage />,
+          </Suspense>
+        ),
       },
       {
         path: "/show-organizer",
-        element: <ShowOrganizer />,
+        element: (
+          <Suspense fallback={<SpinnerComponent />}>
+            <ShowOrganizer />,
+          </Suspense>
+        ),
       },
     ],
   },
@@ -157,7 +229,11 @@ const appRouter = createBrowserRouter([
     children: [
       {
         path: "/organization/home",
-        element: <OrganizationHome />,
+        element: (
+          <Suspense fallback={<SpinnerComponent />}>
+            <OrganizationHome />,
+          </Suspense>
+        ),
       },
       {
         path: "/organization/creation",
@@ -165,31 +241,59 @@ const appRouter = createBrowserRouter([
       },
       {
         path: "/organization/events",
-        element: <EventsHome />,
+        element: (
+          <Suspense fallback={<SpinnerComponent />}>
+            <EventsHome />,
+          </Suspense>
+        ),
       },
       {
         path: "/organization/settings",
-        element: <OrganizationSettings />,
+        element: (
+          <Suspense fallback={<SpinnerComponent />}>
+            <OrganizationSettings />,
+          </Suspense>
+        ),
       },
       {
         path: "/organization/settings/edit-organization",
-        element: <EditOrganization />,
+        element: (
+          <Suspense fallback={<SpinnerComponent />}>
+            <EditOrganization />,
+          </Suspense>
+        ),
       },
       {
         path: "/organization/reports",
-        element: <Reports />,
+        element: (
+          <Suspense fallback={<SpinnerComponent />}>
+            <Reports />,
+          </Suspense>
+        ),
       },
       {
         path: "/organization/events/event",
-        element: <ViewEvent />,
+        element: (
+          <Suspense fallback={<SpinnerComponent />}>
+            <ViewEvent />,
+          </Suspense>
+        ),
       },
       {
         path: "/organization/add-event",
-        element: <EventAddingPage />,
+        element: (
+          <Suspense fallback={<SpinnerComponent />}>
+            <EventAddingPage />,
+          </Suspense>
+        ),
       },
       {
         path: "/organization/bookings",
-        element: <BookingHome />,
+        element: (
+          <Suspense fallback={<SpinnerComponent />}>
+            <BookingHome />,
+          </Suspense>
+        ),
       },
     ],
   },

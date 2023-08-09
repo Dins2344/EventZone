@@ -28,9 +28,9 @@ interface EventCardProps {
 const EventCards: React.FC<EventCardProps> = ({ approvedEvent }) => {
   const [isClick, setIsClick] = useState<boolean>(false);
   const navigate = useNavigate();
-  const user = useSelector(selectUser);
   const dispatch = useDispatch();
-
+  const user = useSelector(selectUser);
+  
   useEffect(() => {
     initialCheck();
   }, [isClick]);
@@ -45,7 +45,7 @@ const EventCards: React.FC<EventCardProps> = ({ approvedEvent }) => {
 
   const handleLike = async () => {
     if (user) {
-      if (user?.likedEvents.includes(approvedEvent._id)) {
+      if (user?.likedEvents?.includes(approvedEvent._id)) {
         const res = await unLikeEvent(approvedEvent._id);
         if (res?.data.response.ok) {
           setIsClick(false);
@@ -205,6 +205,7 @@ export const EventCardsShimmer = () => {
       {array.map((item, index) => {
         return (
           <div key={index} className="p-3">
+            <p className="hidden">{item}</p>
             <div
               role="status"
               className="max-w-sm p-4 border border-gray-200 rounded shadow animate-pulse md:p-6 dark:border-gray-700"

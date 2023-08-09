@@ -20,7 +20,7 @@ type OrganizerHeroProps = {
 
 const OrganizerHero: React.FC<OrganizerHeroProps> = ({ organization }) => {
   const [isFollowing, setIsFollowing] = useState<boolean>();
-  const [followers, setFollowers] = useState(organization.followers.length);
+  const [followers, setFollowers] = useState(organization.followers?.length);
   const [events,setEvents]=useState<RegisteredEventInterface[]>()
   const dispatch = useDispatch();
   const user:RegisteredUserInterface = useSelector(selectUser);
@@ -43,7 +43,7 @@ const OrganizerHero: React.FC<OrganizerHeroProps> = ({ organization }) => {
 
   }
   const handleContact = async () => {
-    const res = await accessChat(
+    await accessChat(
       organization.ownerId,
       organization.orgName,
       organization.logo
@@ -64,14 +64,14 @@ const OrganizerHero: React.FC<OrganizerHeroProps> = ({ organization }) => {
       const res = await unFollow(organization._id);
       if (res?.data.response.ok) {
         setIsFollowing(false);
-        setFollowers(followers - 1);
+       followers && setFollowers(followers - 1);
         removedNotify();
       }
     } else {
       const res = await addFollowing(organization._id);
       if (res?.data.response.ok) {
         setIsFollowing(true);
-        setFollowers(followers + 1);
+       followers && setFollowers(followers + 1);
         addedNotify();
       }
     }

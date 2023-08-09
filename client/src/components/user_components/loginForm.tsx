@@ -5,9 +5,11 @@ import { useDispatch } from "react-redux";
 import { setUser } from "../../redux/reducers/userSlice";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { useState } from "react";
+import {  useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import GoogleLogin from "./googleLogin";
+// import configKeys from "../../config/envConfig";
 
 export const LoginImage: React.FC = () => {
   return (
@@ -22,11 +24,20 @@ export const LoginImage: React.FC = () => {
   );
 };
 
+declare global {
+  interface Window {
+    google: any; // Declare the 'google' object
+  }
+}
+
 const LoginForm: React.FC = () => {
   const [error, setError] = useState(null);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+ 
+
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -89,7 +100,7 @@ const LoginForm: React.FC = () => {
       />
       <div className="w-full lg:w-1/2 ">
         <div className="lg:max-w-lg mx-auto flex justify-center">
-          <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 w-2/3">
+          <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 w-9/12 lg:w-9/12 md:w-6/12 ">
             <form onSubmit={formik.handleSubmit}>
               <h2 className="text-2xl font-bold mb-6">Login</h2>
               <div className="mb-6">
@@ -152,12 +163,18 @@ const LoginForm: React.FC = () => {
             </form>
             <p className="mt-4">
               don't have an account ..?
-              <Link className="text-blue-600" to={"/register/user-sign-up-email-verify"}>
+              <Link
+                className="text-blue-600"
+                to={"/register/user-sign-up-email-verify"}
+              >
                 sign up
               </Link>
             </p>
             <Divider text="or" />
-            <p>
+            <div className="w-full flex justify-center">
+            <GoogleLogin />
+            </div>
+            <p className="mt-2">
               Login with{" "}
               <Link className="text-blue-500" to={"/register/OTP-login"}>
                 OTP

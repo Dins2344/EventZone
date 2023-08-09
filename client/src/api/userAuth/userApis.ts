@@ -1,5 +1,5 @@
 import {
-  ChangePasswordData,
+  
   ReviewData,
   ticketBookingCreationInterface,
 } from "../../types/userInterface";

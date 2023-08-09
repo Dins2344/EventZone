@@ -141,7 +141,6 @@ const OrganizationDetails = () => {
 
 const NextEvent = (props: homeComponents) => {
   const nextEvent = props.nextEvent;
-  console.log(nextEvent);
   return (
     <>
       <div className="flex flex-col border p-3 rounded-md ">

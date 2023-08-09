@@ -31,8 +31,7 @@ const SearchBoxComponents: React.FC = () => {
     setCities(data?.data.data)
   }
 
-    const handleSubmit = async(e:React.FormEvent<HTMLFormElement>)=>{
-        e.preventDefault()
+    const handleSubmit = async()=>{
         const data = {searchText,city}
         dispatch(setSearchData(data))
         handleOpen()
@@ -77,7 +76,7 @@ const SearchBoxComponents: React.FC = () => {
             </svg>
           </div>
 
-          <form onSubmit={handleSubmit} className="flex flex-col lg:mt-28 md:mt-16 mt-5 lg:px-40 md:px-24 px-2 w-full">
+          <form className="flex flex-col lg:mt-28 md:mt-16 mt-5 lg:px-40 md:px-24 px-2 w-full">
             <div className="flex items-center">
               <svg
                 xmlns="http://www.w3.org/2000/svg"

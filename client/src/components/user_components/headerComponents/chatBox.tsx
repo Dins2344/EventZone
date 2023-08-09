@@ -67,7 +67,7 @@ const Inbox: React.FC<InboxProps> = ({ open, setOpen }) => {
   const [chats, setChats] = useState<CompleteRegisteredChatInterface[]>();
   const [selectedChat, setSelectedChat] =
     useState<CompleteRegisteredChatInterface>();
-  const [socketConnection, setSocketConnection] = useState(false);
+  // const [socketConnection, setSocketConnection] = useState(false);
   const user = useSelector(selectUser);
 
   useEffect(() => {
@@ -85,7 +85,10 @@ const Inbox: React.FC<InboxProps> = ({ open, setOpen }) => {
   useEffect(() => {
     socket = io(ENDPOINT);
     socket.emit("setup", user);
-    socket.on("connection", () => setSocketConnection(true));
+    socket.on("connection", () => {
+      // setSocketConnection(true));
+      console.log("socket connected");
+    });
   }, []);
 
   return (
@@ -201,12 +204,10 @@ const Messages: React.FC<MessagesProps> = ({ selectedChat }) => {
     setSelectedChatDetails(selectedChat);
     selectedChatCompare = selectedChat;
   }, [selectedChat]);
-+
-  useEffect(() => {
+  +useEffect(() => {
     fetchMessages();
   }, [selectedChatDetails]);
 
-  
   const fetchMessages = async () => {
     if (selectedChatDetails) {
       const data = await getMessages(selectedChatDetails?._id);
@@ -214,7 +215,7 @@ const Messages: React.FC<MessagesProps> = ({ selectedChat }) => {
       socket.emit("join chat", selectedChatDetails._id);
     }
   };
-  
+
   const handleSendMessage = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (newMessage && selectedChatDetails) {
@@ -224,21 +225,25 @@ const Messages: React.FC<MessagesProps> = ({ selectedChat }) => {
       setNewMessage("");
     }
   };
-  
+
   const handleTyping = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNewMessage(e.target.value);
   };
-  
+
   useEffect(() => {
-    const handleMessageUpdate = (newMessageReceived: CompleteMessageInterface) => {
-      console.log(newMessageReceived)
+    const handleMessageUpdate = (
+      newMessageReceived: CompleteMessageInterface
+    ) => {
+      console.log(newMessageReceived);
       if (
         !selectedChatCompare || // if chat is not selected or doesn't match current chat
         selectedChatCompare._id !== newMessageReceived.chat._id
-      ) {  //notification logic
+      ) {
+        //notification logic
       } else {
         // setMessageFromSocket(newMessageReceived)
-       if(messages ) setMessages((messages)=>[...(messages ?? []), newMessageReceived]);
+        if (messages)
+          setMessages((messages) => [...(messages ?? []), newMessageReceived]);
       }
     };
     // socket.on("message received", (newMessageReceived: CompleteMessageInterface) => {
@@ -254,11 +259,11 @@ const Messages: React.FC<MessagesProps> = ({ selectedChat }) => {
     //   }
     // });
 
-    socket.on('message received', handleMessageUpdate)
-     return () => {
-       socket.off("message received", handleMessageUpdate);
-     };
-  },);
+    socket.on("message received", handleMessageUpdate);
+    return () => {
+      socket.off("message received", handleMessageUpdate);
+    };
+  });
 
   // useEffect(() => {
   //   setMessages((messages)=>[...(messages ?? []),messageFromSocket])
@@ -296,7 +301,9 @@ const ScrollableChat: React.FC<ScrollableChatProps> = ({ messages }) => {
   const user = useSelector(selectUser);
 
   return (
-    <ScrollableFeed className="no-scrollbar" >
+    <ScrollableFeed
+    // className="no-scrollbar"
+    >
       {messages &&
         messages.map((m, i) => (
           <div style={{ display: "flex" }} key={m._id}>

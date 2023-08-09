@@ -10,7 +10,6 @@ import {
   Typography,
   Button,
   CardBody,
-  Chip,
   CardFooter,
   Avatar,
   IconButton,
@@ -145,7 +144,7 @@ const OrganizationsTable = () => {
                           color="blue-gray"
                           className="font-normal"
                         >
-                          {followers.length} followers
+                          {followers?.length} followers
                         </Typography>
                         {/* <Chip
                           variant="ghost"

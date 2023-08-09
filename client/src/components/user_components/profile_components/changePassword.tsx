@@ -1,5 +1,5 @@
 import { Button, Input } from "@material-tailwind/react";
-import React, { useState } from "react";
+import  { useState } from "react";
 import { changePassword, verifyPassword } from "../../../api/userAuth/userApis";
 
 const ChangePassword = () => {
