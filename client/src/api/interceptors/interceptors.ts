@@ -1,6 +1,7 @@
-import axios, { AxiosInstance} from "axios";
+import axios, { AxiosInstance } from "axios";
+import config from "../../config/envConfig";
 const adminApi: AxiosInstance = axios.create({
-  baseURL: 'http://localhost:4000/',
+  baseURL: config.BASE_URL,
 });
 
 adminApi.interceptors.request.use(

@@ -3,11 +3,12 @@ import {
   loginUserInterface,
 } from "../../types/userInterface";
 import axios from "axios";
+import config from "../../config/envConfig";
 
 export const signUpPost = async (signUpData: createUserInterface) => {
   try {
     const response = await axios.post(
-      "http://localhost:4000/auth/register-user",
+      `${config.BASE_URL}/auth/register-user`,
       signUpData
     );
     return response;
@@ -19,7 +20,7 @@ export const signUpPost = async (signUpData: createUserInterface) => {
 export const loginPost = async (loginData: loginUserInterface) => {
   try {
     const response = await axios.post(
-      "http://localhost:4000/auth/user-login",
+      `${config.BASE_URL}/auth/user-login`,
       loginData
     );
     return response;
@@ -36,7 +37,7 @@ export const loginPost = async (loginData: loginUserInterface) => {
 export const OTPRequestPost = async (email: string,mode:string) => {
   try {
     const response = await axios.get(
-      `http://localhost:4000/auth/user-email-verify/${email}/${mode}`
+      `${config.BASE_URL}/auth/user-email-verify/${email}/${mode}`
     );
     return response;
   } catch (error) {
@@ -47,7 +48,7 @@ export const OTPRequestPost = async (email: string,mode:string) => {
 export const OTPVerifyPost = async (OTP: string, email: string | null,mode:string) => {
   try {
     const response = await axios.get(
-      `http://localhost:4000/auth/user-OTP-verify/${OTP}/${email}/${mode}`
+      `${config.BASE_URL}/auth/user-OTP-verify/${OTP}/${email}/${mode}`
     );
     return response;
   } catch (error) {
@@ -59,8 +60,8 @@ export const OTPVerifyPost = async (OTP: string, email: string | null,mode:strin
 export const loginWithGoogle = async (token: string) => {
   try {
     const res = await axios.get(
-      `http://localhost:4000/auth/user-google-login/${token}`
-      );
+      `${config.BASE_URL}/auth/user-google-login/${token}`
+    );
       return res
   } catch (error) {
     console.log(error)

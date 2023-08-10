@@ -21,8 +21,9 @@ import {
 import { useSelector } from "react-redux";
 import { selectUser } from "../../../redux/reducers/userSlice";
 import io from "socket.io-client";
+import config from "../../../config/envConfig";
 
-const ENDPOINT = "http://localhost:4000";
+const ENDPOINT = config.BASE_URL;
 let socket: any, selectedChatCompare: CompleteRegisteredChatInterface;
 
 const ChatBox = () => {

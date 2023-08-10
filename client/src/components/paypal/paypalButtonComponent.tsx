@@ -1,4 +1,4 @@
-const baseURL = "http://localhost:4000";
+import config from "../../config/envConfig";
 import { ticketBooking } from "../../api/userAuth/userApis";
 import {
   RegisteredBookingInterface,
@@ -29,7 +29,7 @@ const PaypalPayment: React.FC<paypalPaymentProps> = ({
   const createOrder = (data: any): Promise<string> => {
     console.log(data)
     // Order is created on the server and the order id is returned
-    return fetch(`${baseURL}/my-server/create-paypal-order`, {
+    return fetch(`${config.BASE_URL}/my-server/create-paypal-order`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -49,7 +49,7 @@ const PaypalPayment: React.FC<paypalPaymentProps> = ({
 
   const onApprove = (data: any): Promise<any> => {
     // Order is captured on the server and the response is returned to the browser
-    const res = fetch(`${baseURL}/my-server/capture-paypal-order`, {
+    const res = fetch(`${config.BASE_URL}/my-server/capture-paypal-order`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

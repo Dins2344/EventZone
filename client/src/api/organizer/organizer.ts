@@ -2,31 +2,32 @@ import api from "../interceptors/userInterceptor";
 import { BasicFormInterface } from "../../types/organizerInterface";
 import { PublishFormDataInterface } from "../../types/organizerInterface";
 import { EditEventFormData } from "../../components/organizer_components/editEventComponent";
+import config from "../../config/envConfig";
 
 export const getUsersOrganizations = async () => {
   const data = await api.get(
-    "http://localhost:4000/organization/get-user-organizations"
+    `${config.BASE_URL}/organization/get-user-organizations`
   );
   return data;
 };
 
 export const getOrganizationDetails = async (id: string) => {
   const data = await api.get(
-    `http://localhost:4000/organization/get-organization-details/${id}`
+    `${config.BASE_URL}/organization/get-organization-details/${id}`
   );
   return data;
 };
 
 export const getEventCategories = async () => {
   const data = await api.get(
-    "http://localhost:4000/organization/get-all-event-categories"
+    `${config.BASE_URL}/organization/get-all-event-categories`
   );
   return data;
 };
 
 export const addBasicEventInfo = async (data: BasicFormInterface) => {
   const res = await api.post(
-    "http://localhost:4000/organization/add-event-basic-info",
+    `${config.BASE_URL}/organization/add-event-basic-info`,
     data
   );
   return res;
@@ -36,7 +37,7 @@ export const addMediaEventInfo = async (data: FormData) => {
   console.log(data);
   try {
     const res = await api.post(
-      "http://localhost:4000/organization/add-event-media-info",
+      `${config.BASE_URL}/organization/add-event-media-info`,
       data
     );
     return res;
@@ -48,7 +49,7 @@ export const addMediaEventInfo = async (data: FormData) => {
 export const addPublishEventInfo = async (data: PublishFormDataInterface) => {
   try {
     const res = await api.post(
-      "http://localhost:4000/organization/add-event-publish-info",
+      `${config.BASE_URL}/organization/add-event-publish-info`,
       data
     );
     return res;
@@ -60,7 +61,7 @@ export const addPublishEventInfo = async (data: PublishFormDataInterface) => {
 export const getEventDetails = async (id: string) => {
   try {
     const res = await api.get(
-      `http://localhost:4000/organization/get-event-details/${id}`
+      `${config.BASE_URL}/organization/get-event-details/${id}`
     );
     return res;
   } catch (error) {
@@ -73,7 +74,7 @@ export const publishEvent = async (id: string) => {
   console.log("publish called");
   try {
     const res = await api.get(
-      `http://localhost:4000/organization/publish-event/${id}`
+      `${config.BASE_URL}/organization/publish-event/${id}`
     );
     return res;
   } catch (error) {
@@ -84,7 +85,7 @@ export const publishEvent = async (id: string) => {
 export const getUsersAllEvents = async () => {
   try {
     const data = await api.get(
-      "http://localhost:4000/organization/get-users-all-events"
+      `${config.BASE_URL}/organization/get-users-all-events`
     );
     return data;
   } catch (error) {
@@ -94,7 +95,9 @@ export const getUsersAllEvents = async () => {
 
 export const getOrganizersAllEvents = async(orgId:string)=>{
   try{
-    const data = await api.get(`http://localhost:4000/organization/get-organizers-all-events/${orgId}`)
+    const data = await api.get(
+      `${config.BASE_URL}/organization/get-organizers-all-events/${orgId}`
+    );
     return data
   }catch(error){
     console.log(error)
@@ -103,7 +106,9 @@ export const getOrganizersAllEvents = async(orgId:string)=>{
 
 export const getOrganizationBookings = async()=>{
   try{
-    const data = await api.get('http://localhost:4000/organization/get-organizers-all-bookings')
+    const data = await api.get(
+      `${config.BASE_URL}/organization/get-organizers-all-bookings`
+    );
     return data
   }catch(error){
     console.log(error)
@@ -112,7 +117,9 @@ export const getOrganizationBookings = async()=>{
 
 export const getOwnerDetails = async(ownerId:string)=>{
   try{
-    const data = await api.get(`http://localhost:4000/organization/get-organization-owner/${ownerId}`)
+    const data = await api.get(
+      `${config.BASE_URL}/organization/get-organization-owner/${ownerId}`
+    );
     return data
   }catch(error){
     console.log(error)
@@ -121,7 +128,9 @@ export const getOwnerDetails = async(ownerId:string)=>{
 
 export const getAllOrgCategories = async()=>{
   try{
-    const data = await api.get('http://localhost:4000/organization/get-all-organization-categories')
+    const data = await api.get(
+      `${config.BASE_URL}/organization/get-all-organization-categories`
+    );
     return data
   }catch(error){
     console.log(error)
@@ -129,7 +138,10 @@ export const getAllOrgCategories = async()=>{
 }
 export const updateOrganizationInfo = async(data:FormData)=>{
   try{
-    const res = await api.post('http://localhost:4000/organization/update-organization-info',data)
+    const res = await api.post(
+      `${config.BASE_URL}/organization/update-organization-info`,
+      data
+    );
     return res
   }catch(error){
     console.log(error)
@@ -138,7 +150,9 @@ export const updateOrganizationInfo = async(data:FormData)=>{
 
 export const getMonthlySales = async ()=>{
   try{
-    const data = await api.get('http://localhost:4000/organization/get-monthly-sales')
+    const data = await api.get(
+      `${config.BASE_URL}/organization/get-monthly-sales`
+    );
     return data
   }catch(error){
     console.log(error)
@@ -147,7 +161,9 @@ export const getMonthlySales = async ()=>{
 
 export const getMonthlyTicketSales = async()=>{
   try{
-    const data = await api.get('http://localhost:4000/organization/get-monthly-ticket-sales')
+    const data = await api.get(
+      `${config.BASE_URL}/organization/get-monthly-ticket-sales`
+    );
     return data
   }catch(error){
     console.log(error)
@@ -156,7 +172,9 @@ export const getMonthlyTicketSales = async()=>{
 
 export const getTicketTypeSold = async()=>{
   try{
-    const data = await api.get('http://localhost:4000/organization/get-ticket-type-sold')
+    const data = await api.get(
+      `${config.BASE_URL}/organization/get-ticket-type-sold`
+    );
     return data
   }catch(error){
     console.log(error)
@@ -165,7 +183,9 @@ export const getTicketTypeSold = async()=>{
 
 export const getTicketsSoldByEvents = async()=>{
   try{
-    const data = await api.get('http://localhost:4000/organization/get-tickets-sold-by-events')
+    const data = await api.get(
+      `${config.BASE_URL}/organization/get-tickets-sold-by-events`
+    );
     return data
   }catch(error){
     console.log(error)
@@ -174,7 +194,9 @@ export const getTicketsSoldByEvents = async()=>{
 
 export const getAllCities = async()=>{
   try{
-    const data = await api.get('http://localhost:4000/organization/get-all-cities')
+    const data = await api.get(
+      `${config.BASE_URL}/organization/get-all-cities`
+    );
     return data
   }catch(error){
     console.log(error)
@@ -184,7 +206,7 @@ export const getAllCities = async()=>{
 export const editEventInfo = async (formData: EditEventFormData) => {
   try {
     const res = await api.put(
-      "http://localhost:4000/organization/update-event-info",
+      `${config.BASE_URL}/organization/update-event-info`,
       formData
     );
     return res;
