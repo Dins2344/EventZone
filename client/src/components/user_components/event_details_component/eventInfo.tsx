@@ -1,10 +1,14 @@
 import { Button } from "@material-tailwind/react";
-import VideoPlayer from "./youtube";
-import { CompleteReviewData, EventDetailsInterface } from "../../../types/userInterface";
-import { useEffect, useState } from "react";
+import {
+  CompleteReviewData,
+  EventDetailsInterface,
+} from "../../../types/userInterface";
+import { lazy, Suspense, useEffect, useState } from "react";
 import { getReview } from "../../../api/userAuth/userApis";
-import { Avatar } from '@material-tailwind/react';
+import { Avatar } from "@material-tailwind/react";
 import StartRating from "../profile_components/starRating";
+
+const VideoPlayer = lazy(() => import("./youtube"));
 
 export type EventData = {
   _id: string;
@@ -44,20 +48,20 @@ type EventDetailsProps = {
   event: EventDetailsInterface;
 };
 const EventInfo: React.FC<EventDetailsProps> = ({ event }) => {
-  const [reviews,setReviews] = useState<CompleteReviewData[]>()
+  const [reviews, setReviews] = useState<CompleteReviewData[]>();
   const youtubeVideoUrl = event?.videoURL;
   const videoId = youtubeVideoUrl?.split("v=")[1];
   const organization = event?.organizerInfo;
 
   useEffect(() => {
-    fetchEventReviews()
-  }, [])
-  
+    fetchEventReviews();
+  }, []);
+
   const fetchEventReviews = async () => {
     const data = await getReview(event._id);
-    console.log(data?.data.data)
-    setReviews(data?.data.data.reviews)
-  }
+    console.log(data?.data.data);
+    setReviews(data?.data.data.reviews);
+  };
   return (
     <>
       <div className=" mt-5 mb-10">
@@ -140,24 +144,30 @@ const EventInfo: React.FC<EventDetailsProps> = ({ event }) => {
             </h3>
             <div className="flex flex-col">
               <h5 className="text-xl font-bold dark:text-white mt-3 mb-3">
-                Reviews ({ reviews?.length})
+                Reviews ({reviews?.length})
               </h5>
               <div className="w-full flex flex-col max-h-60 border-2 p-2">
-                {reviews?.map((item) =>{
-                  return(
-                    <div key={item._id} className="flex flex-col border p-2"> 
+                {reviews?.map((item) => {
+                  return (
+                    <div key={item._id} className="flex flex-col border p-2">
                       <div className="flex">
                         <StartRating rating={item.rating} />
                         <p className="ml-2">{item.rating} stars</p>
                       </div>
                       <p className="mb-2">{item.comment}</p>
                       <div className="flex">
-                      <Avatar className="w-7 h-7" size="sm" src={item && item?.userId?.profileImage} ></Avatar>
-                        <p className="ml-2 ">{item.userId.firstName} { item.userId.lastName}</p>
+                        <Avatar
+                          className="w-7 h-7"
+                          size="sm"
+                          src={item && item?.userId?.profileImage}
+                        ></Avatar>
+                        <p className="ml-2 ">
+                          {item.userId.firstName} {item.userId.lastName}
+                        </p>
                       </div>
-                  </div>  
-                 )
-                  })}
+                    </div>
+                  );
+                })}
               </div>
               <h5 className="text-xl font-bold dark:text-white mt-3 mb-3">
                 Event description
@@ -186,7 +196,9 @@ const EventInfo: React.FC<EventDetailsProps> = ({ event }) => {
             </div>
           </div>
           <div className="mt-3 overflow-scroll no-scrollbar">
-            <VideoPlayer videoId={videoId} />
+            <Suspense>
+              <VideoPlayer videoId={videoId} />
+            </Suspense>
           </div>
           <div className="flex flex-col mt-8">
             <h3 className="text-3xl  font-bold dark:text-white block mb-3">

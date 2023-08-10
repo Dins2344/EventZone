@@ -1,28 +1,25 @@
 /* eslint-disable react-refresh/only-export-components */
 import { lazy, Suspense } from "react";
 import { createBrowserRouter } from "react-router-dom";
-import AdminLogin from "./pages/admin_pages/adminLogin.tsx";
-import {
-  UserHome,
-  AdminHome,
-  OrganizerHome,
-  RegisterHome,
-} from "./pages/homePages.tsx";
-import SignIn from "./pages/user_pages/signInPage.tsx";
-import SignUpEmailVerifyPage from "./pages/user_pages/signupEmailVerify.tsx";
-import LoginPage from "./pages/user_pages/loginPage.tsx";
-import OTPLogin from "./pages/user_pages/OTPLogin.tsx";
-import OTPVerifyPage from "./pages/user_pages/OTPVerify.tsx";
-import CreationPage from "./pages/organizer_pages/creation.tsx";
-import EventCategoryAddingPage from "./pages/admin_pages/eventCategoryAdding.tsx";
-import EventCategoryEditForm from "./components/admin_components/editEventCategory.tsx";
-import OrgCategoryForm from "./components/admin_components/orgcategoryAddingForm.tsx";
+
+// import CreationPage from "./pages/organizer_pages/creation.tsx";
 import "./index.css";
-import ErrorElement from "./components/common/ErrorElement.tsx";
-import AddCities from "./pages/admin_pages/addCities.tsx";
-import CityAddingForm from "./components/admin_components/CityAddingForm.tsx";
+
 import SpinnerComponent from "./components/common/Spinner.tsx";
 
+const CreationPage = lazy(() => import("./pages/organizer_pages/creation.tsx"));
+const ErrorElement = lazy(() => import("./components/common/ErrorElement.tsx"));
+const UserHome = lazy(() => import("./pages/home_pages/userHome.tsx"));
+const OrganizerHome = lazy(
+  () => import("./pages/home_pages/organizerHome.tsx")
+);
+const LoginPage = lazy(() => import("./pages/user_pages/loginPage.tsx"));
+const SignIn = lazy(() => import("./pages/user_pages/signInPage.tsx"));
+const SignUpEmailVerifyPage = lazy(
+  () => import("./pages/user_pages/signupEmailVerify.tsx")
+);
+const RegisterHome = lazy(() => import("./pages/home_pages/registerHome.tsx"));
+const AdminHome = lazy(() => import("./pages/home_pages/adminHome.tsx"));
 const AdminLanding = lazy(() => import("./pages/admin_pages/adminHome.tsx"));
 const Body = lazy(() => import("./pages/user_pages/userLanding.tsx"));
 const CategoryManagement = lazy(
@@ -65,28 +62,65 @@ const EventAddingPage = lazy(
 const BookingHome = lazy(
   () => import("./pages/organizer_pages/bookingHome.tsx")
 );
+const AdminLogin = lazy(() => import("./pages/admin_pages/adminLogin.tsx"));
+const EventCategoryAddingPage = lazy(
+  () => import("./pages/admin_pages/eventCategoryAdding.tsx")
+);
+const EventCategoryEditForm = lazy(
+  () => import("./components/admin_components/editEventCategory.tsx")
+);
 
+const OrgCategoryForm = lazy(
+  () => import("./components/admin_components/orgcategoryAddingForm.tsx")
+);
+
+const OTPLogin = lazy(() => import("./pages/user_pages/OTPLogin.tsx"));
+const OTPVerifyPage = lazy(() => import("./pages/user_pages/OTPVerify.tsx"));
+const AddCities = lazy(() => import("./pages/admin_pages/addCities.tsx"));
+const CityAddingForm = lazy(
+  () => import("./components/admin_components/CityAddingForm.tsx")
+);
 
 const appRouter = createBrowserRouter([
   {
     path: "/admin/login",
-    element: <AdminLogin />,
+    element: (
+      <Suspense fallback={<SpinnerComponent />}>
+        <AdminLogin />,
+      </Suspense>
+    ),
   },
   {
     path: "/admin/add-event-category",
-    element: <EventCategoryAddingPage />,
+    element: (
+      <Suspense fallback={<SpinnerComponent />}>
+        <EventCategoryAddingPage />,
+      </Suspense>
+    ),
   },
   {
     path: "/admin/edit-event-category/:id",
-    element: <EventCategoryEditForm />,
+    element: (
+      <Suspense fallback={<SpinnerComponent />}>
+        <EventCategoryEditForm />,
+      </Suspense>
+    ),
   },
   {
     path: "/admin/add-org-category",
-    element: <OrgCategoryForm />,
+    element: (
+      <Suspense fallback={<SpinnerComponent />}>
+        <OrgCategoryForm />,
+      </Suspense>
+    ),
   },
   {
     path: "/admin",
-    element: <AdminHome />,
+    element: (
+      <Suspense fallback={<SpinnerComponent />}>
+        <AdminHome />
+      </Suspense>
+    ),
     children: [
       {
         path: "/admin",
@@ -123,46 +157,86 @@ const appRouter = createBrowserRouter([
       },
       {
         path: "/admin/add-cities",
-        element: <AddCities />,
+        element: (
+          <Suspense fallback={<SpinnerComponent />}>
+            <AddCities />
+          </Suspense>
+        ),
       },
       {
         path: "/admin/add-cities/add-event-city",
-        element: <CityAddingForm />,
+        element: (
+          <Suspense>
+            <CityAddingForm />
+          </Suspense>
+        ),
       },
     ],
   },
 
   {
     path: "/register",
-    element: <RegisterHome />,
+    element: (
+      <Suspense fallback={<SpinnerComponent />}>
+        <RegisterHome />
+      </Suspense>
+    ),
     children: [
       {
         path: "/register/user-sign-up-email-verify",
-        element: <SignUpEmailVerifyPage />,
+        element: (
+          <Suspense fallback={<SpinnerComponent />}>
+            <SignUpEmailVerifyPage />
+          </Suspense>
+        ),
       },
       {
         path: "/register/user-sign-up",
-        element: <SignIn />,
+        element: (
+          <Suspense fallback={<SpinnerComponent />}>
+            <SignIn />
+          </Suspense>
+        ),
       },
       {
         path: "/register/user-login",
-        element: <LoginPage />,
+        element: (
+          <Suspense fallback={<SpinnerComponent />}>
+            <LoginPage />,
+          </Suspense>
+        ),
       },
       {
         path: "/register/OTP-login",
-        element: <OTPLogin />,
+        element: (
+          <Suspense fallback={<SpinnerComponent />}>
+            <OTPLogin />,
+          </Suspense>
+        ),
       },
       {
         path: "/register/OTP-login/OTP-login-submit/:email",
-        element: <OTPVerifyPage />,
+        element: (
+          <Suspense fallback={<SpinnerComponent />}>
+            <OTPVerifyPage />,
+          </Suspense>
+        ),
       },
     ],
   },
 
   {
     path: "/",
-    element: <UserHome />,
-    errorElement: <ErrorElement />,
+    element: (
+      <Suspense fallback={<SpinnerComponent />}>
+        <UserHome />
+      </Suspense>
+    ),
+    errorElement: (
+      <Suspense>
+        <ErrorElement />
+      </Suspense>
+    ),
     children: [
       {
         path: "/",
@@ -225,7 +299,11 @@ const appRouter = createBrowserRouter([
 
   {
     path: "/organization",
-    element: <OrganizerHome />,
+    element: (
+      <Suspense fallback={<SpinnerComponent />}>
+        <OrganizerHome />
+      </Suspense>
+    ),
     children: [
       {
         path: "/organization/home",
@@ -237,7 +315,11 @@ const appRouter = createBrowserRouter([
       },
       {
         path: "/organization/creation",
-        element: <CreationPage />,
+        element: (
+          <Suspense>
+            <CreationPage />
+          </Suspense>
+        ),
       },
       {
         path: "/organization/events",

@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
-import LoggedIn from "./loggedIn";
-import LoggedOutHeader from "./logout";
+import { lazy, Suspense } from "react";
+
+const LoggedIn = lazy(() => import("./loggedIn"));
+const LoggedOutHeader = lazy(() => import("./logout"));
 
 const Header: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>();
@@ -14,11 +16,15 @@ const Header: React.FC = () => {
 
   return isLoggedIn ? (
     <>
-      <LoggedIn />
+      <Suspense>
+        <LoggedIn />
+      </Suspense>
     </>
   ) : (
     <>
-      <LoggedOutHeader />
+      <Suspense>
+        <LoggedOutHeader />
+      </Suspense>
     </>
   );
 };

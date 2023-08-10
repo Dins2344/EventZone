@@ -1,7 +1,14 @@
 import { useNavigate } from "react-router-dom";
 import ProfileDetail from "../../../components/user_components/profile_components/profileDetail";
-import ProfileActivities from "../../../components/user_components/profile_components/userActivities";
 import { useEffect, useState } from "react";
+import { lazy, Suspense } from "react";
+
+const ProfileActivities = lazy(
+  () =>
+    import(
+      "../../../components/user_components/profile_components/userActivities"
+    )
+);
 
 const ProfilePage: React.FC = () => {
   const [token, setToken] = useState("");
@@ -12,7 +19,7 @@ const ProfilePage: React.FC = () => {
     if (!token) {
       navigate("/");
     }
-  },[]);
+  }, []);
   return (
     <>
       {token && (
@@ -21,7 +28,9 @@ const ProfilePage: React.FC = () => {
             <ProfileDetail />
           </div>
           <div className=" w-full md:w-8/12">
-            <ProfileActivities />
+            <Suspense>
+              <ProfileActivities />
+            </Suspense>
           </div>
         </div>
       )}

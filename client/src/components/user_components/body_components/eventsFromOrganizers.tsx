@@ -1,7 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, lazy, Suspense, useState } from "react";
 import { RegisteredEventInterface } from "../../../types/organizerInterface";
-import EventCards, { EventCardsShimmer } from "../../common/eventCards";
+import { EventCardsShimmer } from "../../common/eventCards";
 import { getEventsFromFollowingOrganizers } from "../../../api/userAuth/userApis";
+import SpinnerComponent from "../../common/Spinner";
+
+const EventCards = lazy(() => import("../../common/eventCards"));
 
 const EventFromOrganizers: React.FC = () => {
   const [events, setEvents] = useState<RegisteredEventInterface[]>();
@@ -16,8 +19,7 @@ const EventFromOrganizers: React.FC = () => {
     setTimeout(() => {
       setIsLoading(false);
     }, 3000);
-    };
-    
+  };
 
   return (
     <div className=" mt-24  w-full px-5 md:px-20">
@@ -54,10 +56,12 @@ const EventFromOrganizers: React.FC = () => {
             </>
           ) : (
             <>
-              {events &&
-                    events.map((item, i) => {
-                  return <EventCards key={i} approvedEvent={item} />;
-                })}
+              <Suspense fallback={<SpinnerComponent/>}>
+                {events &&
+                  events.map((item, i) => {
+                    return <EventCards key={i} approvedEvent={item} />;
+                  })}
+              </Suspense>
             </>
           )}
         </div>

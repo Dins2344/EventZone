@@ -1,8 +1,14 @@
-import { useEffect, useState } from "react";
-import ContactInfo from "../../../components/user_components/profile_components/contactInfo";
+import { lazy,Suspense, useEffect, useState } from "react";
+// import ContactInfo from "../../../components/user_components/profile_components/contactInfo";
 import ChangeEmail from "../../../components/user_components/profile_components/changeEmail";
 import { useNavigate } from "react-router-dom";
 import ChangePassword from "../../../components/user_components/profile_components/changePassword";
+
+
+const ContactInfo = lazy(
+  () =>
+    import("../../../components/user_components/profile_components/contactInfo")
+);
 
 const EditProfile: React.FC = () => {
   const [menu, setMenu] = useState("contactInfo");
@@ -50,7 +56,13 @@ const EditProfile: React.FC = () => {
               </h4>
             </div>
           </div>
-          <div>{menu === "contactInfo" && <ContactInfo />}</div>
+          <div>
+            {menu === "contactInfo" && (
+              <Suspense>
+                <ContactInfo />
+              </Suspense>
+            )}
+          </div>
           <div>{menu === "changeEmail" && <ChangeEmail />}</div>
           <div>{menu === "changePassword" && <ChangePassword />}</div>
         </div>

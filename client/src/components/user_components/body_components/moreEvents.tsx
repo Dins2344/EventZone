@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
 import { getAllApprovedEvents } from "../../../api/userAuth/userApis";
 import { RegisteredEventInterface } from "../../../types/organizerInterface";
-import EventCards from "../../common/eventCards";
+// import EventCards from "../../common/eventCards";
 import { EventCardsShimmer } from "../../common/eventCards";
+import { lazy, Suspense } from "react";
+
+const EventCards = lazy(() => import("../../common/eventCards"));
 
 const MoreEvents: React.FC = () => {
   const [approvedEvents, setApprovedEvents] =
@@ -55,10 +58,12 @@ const MoreEvents: React.FC = () => {
               </>
             ) : (
               <>
-                {approvedEvents &&
-                  approvedEvents.map((item) => {
-                    return <EventCards key={item._id} approvedEvent={item} />;
-                  })}
+                <Suspense>
+                  {approvedEvents &&
+                    approvedEvents.map((item) => {
+                      return <EventCards key={item._id} approvedEvent={item} />;
+                    })}
+                </Suspense>
               </>
             )}
           </div>

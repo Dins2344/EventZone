@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { lazy, Suspense, useEffect } from "react";
 import navLogo from "../../../assets/logos/svg/logo-no-background.svg";
 import OrgCreationModal from "./OrgCreateModal";
 import { getUserDetails } from "../../../api/userAuth/userApis";
@@ -30,7 +30,8 @@ import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { selectUser } from "../../../redux/reducers/userSlice";
 import SearchBoxComponents from "./searchBox";
-import ChatBox from "./chatBox";
+
+const ChatBox = lazy(() => import("./chatBox"));
 
 const profileMenuItems = [
   {
@@ -57,9 +58,8 @@ const profileMenuItems = [
 
 function ProfileMenu() {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
-  const navigate = useNavigate()
-  const user = useSelector(selectUser)
-  
+  const navigate = useNavigate();
+  const user = useSelector(selectUser);
 
   const closeMenu = () => setIsMenuOpen(false);
 
@@ -67,10 +67,10 @@ function ProfileMenu() {
     // Perform actions based on the clicked menu item
     if (label === "My Profile") {
       // Handle "My Profile" action
-      navigate('/user/user-profile')
+      navigate("/user/user-profile");
     } else if (label === "Edit Profile") {
       // Handle "Edit Profile" action
-      navigate('/user/edit-profile')
+      navigate("/user/edit-profile");
     } else if (label === "Inbox") {
       // Handle "Inbox" action
     } else if (label === "Help") {
@@ -143,17 +143,17 @@ function ProfileMenu() {
 export default function Example() {
   const [openNav, setOpenNav] = React.useState(false);
   const [userData, setUserData] = React.useState<LoggedUserInterface>();
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   const fetchUserData = async () => {
     const res = await getUserDetails();
-    if(res?.data){
+    if (res?.data) {
       setUserData(res?.data.data);
-      dispatch(setUser(res.data.data))
+      dispatch(setUser(res.data.data));
     }
   };
   useEffect(() => {
-      fetchUserData();
+    fetchUserData();
   }, []);
 
   React.useEffect(() => {
@@ -179,8 +179,9 @@ export default function Example() {
           <OrgCreationModal />
         )}
       </Typography>
-
-      <ChatBox />
+      <Suspense>
+        <ChatBox />
+      </Suspense>
       {/* <Typography
         as="li"
         variant="small"
@@ -219,10 +220,10 @@ export default function Example() {
       <Navbar className="sticky top z-10 h-max max-w-full rounded-none py-2 px-4 lg:px-8 lg:py-4 ">
         <div className="flex items-center justify-between text-blue-gray-900">
           <div className="flex">
-          <Link className="mr-3 md:mr-10" to={"/"}>
-            <img className="w-32" src={navLogo}></img>
-          </Link>
-          <SearchBoxComponents />
+            <Link className="mr-3 md:mr-10" to={"/"}>
+              <img className="w-32" src={navLogo}></img>
+            </Link>
+            <SearchBoxComponents />
           </div>
           <div className="flex items-center gap-4">
             <div className="mr-4 hidden lg:block">{navList}</div>

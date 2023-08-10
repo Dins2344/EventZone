@@ -10,7 +10,7 @@ import {
   Typography,
 } from "@material-tailwind/react";
 
-import PaypalPayment from "../../paypal/paypalButtonComponent";
+// import PaypalPayment from "../../paypal/paypalButtonComponent";
 import { EventDetailsInterface } from "../../../types/userInterface";
 import { useSelector } from "react-redux";
 import { selectUser } from "../../../redux/reducers/userSlice";
@@ -22,6 +22,9 @@ import { ticketBooking } from "../../../api/userAuth/userApis";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { lazy, Suspense } from "react";
+
+const PaypalPayment = lazy(() => import("../../paypal/paypalButtonComponent"));
 
 type ReserveSeatProps = {
   eventDetails: EventDetailsInterface;
@@ -512,12 +515,14 @@ const ReserveSeatComponent: React.FC<ReserveSeatProps> = ({
                             </Button>
                             {showPaypal && (
                               <div>
-                                <PaypalPayment
-                                  setBookingRes={setBookingRes}
-                                  registerInfo={registerInfo && registerInfo}
-                                  total={total}
-                                  eventName={eventDetails.eventName}
-                                />
+                                <Suspense>
+                                  <PaypalPayment
+                                    setBookingRes={setBookingRes}
+                                    registerInfo={registerInfo && registerInfo}
+                                    total={total}
+                                    eventName={eventDetails.eventName}
+                                  />
+                                </Suspense>
                               </div>
                             )}
                           </>
