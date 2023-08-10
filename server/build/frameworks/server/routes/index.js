@@ -15,7 +15,7 @@ const chat_1 = __importDefault(require("./chat"));
 const routes = (app) => {
     app.use('/auth', (0, auth_1.default)());
     app.use('/admin', authJWT_1.default, roleChecking_1.adminRoleChecking, (0, admin_1.default)());
-    app.use('/user', (0, user_1.default)());
+    app.use('/api/user', (0, user_1.default)());
     app.use('/organization', authJWT_1.default, roleChecking_2.userRoleChecking, (0, organization_1.default)());
     app.use('/my-server', (0, paypal_1.default)());
     app.use('/user/chat', (0, chat_1.default)());

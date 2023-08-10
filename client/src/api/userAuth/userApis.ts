@@ -5,6 +5,7 @@ import {
 } from "../../types/userInterface";
 import api from "../interceptors/userInterceptor";
 import { AddressFormData } from "../../components/user_components/profile_components/contactInfo";
+import config from "../../config/envConfig";
 
 interface createOrganizerInterface {
   orgName: string;
@@ -13,7 +14,7 @@ interface createOrganizerInterface {
 export const updateEmail = async (email: string) => {
   try {
     const data = { email };
-    const res = api.post("http://localhost:4000/user/update-email", data);
+    const res = api.post(`${config.BASE_URL}/user/update-email`, data);
     return res;
   } catch (error) {
     console.log(error);
@@ -22,7 +23,7 @@ export const updateEmail = async (email: string) => {
 export const createOrganizer = async (OrgData: createOrganizerInterface) => {
   try {
     const response = await api.post(
-      "http://localhost:4000/user/register-organization",
+      `${config.BASE_URL}/user/register-organization`,
       OrgData
     );
     console.log(response);
@@ -34,9 +35,7 @@ export const createOrganizer = async (OrgData: createOrganizerInterface) => {
 
 export const getUserDetails = async () => {
   try {
-    const response = await api.get(
-      `http://localhost:4000/user/get-user-details`
-    );
+    const response = await api.get(`${config.BASE_URL}/user/get-user-details`);
 
     return response;
   } catch (error) {
@@ -47,7 +46,7 @@ export const getUserDetails = async () => {
 export const getUserDetailsById = async () => {
   try {
     const data = await api.get(
-      "http://localhost:4000/user/get-user-details-by-Id"
+      `${config.BASE_URL}/user/get-user-details-by-Id`
     );
     return data;
   } catch (error) {
@@ -58,7 +57,7 @@ export const getUserDetailsById = async () => {
 export const getAllApprovedEvents = async () => {
   try {
     const data = await api.get(
-      `http://localhost:4000/user/get-all-approved-events`
+      `${config.BASE_URL}/user/get-all-approved-events`
     );
     return data;
   } catch (error) {
@@ -69,7 +68,7 @@ export const getAllApprovedEvents = async () => {
 export const getEventsFromFollowingOrganizers = async () => {
   try {
     const data = await api.get(
-      "http://localhost:4000/user/get-all-events-from-following-organizers"
+      `${config.BASE_URL}/user/get-all-events-from-following-organizers`
     );
     return data;
   } catch (error) {
@@ -80,7 +79,7 @@ export const getEventsFromFollowingOrganizers = async () => {
 export const getCompleteEventDetails = async (id: string) => {
   try {
     const data = await api.get(
-      `http://localhost:4000/user/get-complete-event-details/${id}`
+      `${config.BASE_URL}/user/get-complete-event-details/${id}`
     );
     return data;
   } catch (error) {
@@ -90,10 +89,7 @@ export const getCompleteEventDetails = async (id: string) => {
 
 export const ticketBooking = async (data: ticketBookingCreationInterface) => {
   try {
-    const res = await api.post(
-      "http://localhost:4000/user/ticket-booking",
-      data
-    );
+    const res = await api.post(`${config.BASE_URL}/user/ticket-booking`, data);
     return res;
   } catch (error) {
     console.log(error);
@@ -102,9 +98,7 @@ export const ticketBooking = async (data: ticketBookingCreationInterface) => {
 
 export const getBookingDetails = async () => {
   try {
-    const data = await api.get(
-      "http://localhost:4000/user/get-booking-details"
-    );
+    const data = await api.get(`${config.BASE_URL}/user/get-booking-details`);
     return data;
   } catch (error) {
     console.log(error);
@@ -114,7 +108,7 @@ export const getBookingDetails = async () => {
 export const getOneBookingDetails = async (bookingId: string) => {
   try {
     const data = await api.get(
-      `http://localhost:4000/user/get-one-booking-details/${bookingId}`
+      `${config.BASE_URL}/user/get-one-booking-details/${bookingId}`
     );
     return data;
   } catch (error) {
@@ -125,7 +119,7 @@ export const getOneBookingDetails = async (bookingId: string) => {
 export const cancelBooking = async (bookingId: string) => {
   try {
     const res = await api.get(
-      `http://localhost:4000/user/cancel-booking/${bookingId}`
+      `${config.BASE_URL}/user/cancel-booking/${bookingId}`
     );
     return res;
   } catch (error) {
@@ -135,7 +129,7 @@ export const cancelBooking = async (bookingId: string) => {
 
 export const getAllOrganizers = async () => {
   try {
-    const data = await api.get("http://localhost:4000/user/get-all-organizers");
+    const data = await api.get(`${config.BASE_URL}/user/get-all-organizers`);
     return data;
   } catch (error) {
     console.log(error);
@@ -146,7 +140,7 @@ export const addProfileContactInfo = async (data: FormData) => {
   console.log(data);
   try {
     const res = await api.post(
-      "http://localhost:4000/user/add-profile-contact-info",
+      `${config.BASE_URL}/user/add-profile-contact-info`,
       data
     );
     return res;
@@ -157,7 +151,7 @@ export const addProfileContactInfo = async (data: FormData) => {
 
 export const addAddress = async (data: AddressFormData) => {
   try {
-    const res = await api.post("http://localhost:4000/user/add-address", data);
+    const res = await api.post(`${config.BASE_URL}/user/add-address`, data);
     return res;
   } catch (error) {
     console.log(error);
@@ -166,7 +160,7 @@ export const addAddress = async (data: AddressFormData) => {
 
 export const getAddressInfo = async () => {
   try {
-    const data = await api.get("http://localhost:4000/user/get-address-info");
+    const data = await api.get(`${config.BASE_URL}/user/get-address-info`);
     return data;
   } catch (error) {
     console.log(error);
@@ -176,10 +170,7 @@ export const getAddressInfo = async () => {
 export const verifyPassword = async (password: string) => {
   try {
     const data = { password };
-    const res = await api.post(
-      "http://localhost:4000/user/verify-password",
-      data
-    );
+    const res = await api.post(`${config.BASE_URL}/user/verify-password`, data);
     return res;
   } catch (error) {
     console.log(error);
@@ -194,7 +185,7 @@ export const getSearchData = async (
   category: string
 ) => {
   try {
-    const data = await api.get(`http://localhost:4000/user/search`, {
+    const data = await api.get(`${config.BASE_URL}/user/search`, {
       params: { searchFor, searchText, city, price, category },
     });
     return data;
@@ -210,7 +201,7 @@ export const accessChat = async (
 ) => {
   const data = { secondUserId, orgName, logo };
   try {
-    const res = await api.post("http://localhost:4000/user/chat", data);
+    const res = await api.post(`${config.BASE_URL}/user/chat`, data);
     return res;
   } catch (error) {
     console.log(error);
@@ -219,7 +210,7 @@ export const accessChat = async (
 
 export const getUsersChat = async () => {
   try {
-    const data = await api.get("http://localhost:4000/user/chat/get-chats");
+    const data = await api.get(`${config.BASE_URL}/user/chat/get-chats`);
     return data;
   } catch (error) {
     console.log(error);
@@ -230,7 +221,7 @@ export const sendMessage = async (chatId: string, content: string) => {
   const data = { chatId, content };
   try {
     const res = await api.post(
-      "http://localhost:4000/user/chat/send-message",
+      `${config.BASE_URL}/user/chat/send-message`,
       data
     );
     return res;
@@ -242,7 +233,7 @@ export const sendMessage = async (chatId: string, content: string) => {
 export const getMessages = async (chatId: string) => {
   try {
     const data = await api.get(
-      `http://localhost:4000/user/chat/get-chat-messages/${chatId}`
+      `${config.BASE_URL}/user/chat/get-chat-messages/${chatId}`
     );
     return data;
   } catch (error) {
@@ -253,7 +244,7 @@ export const getMessages = async (chatId: string) => {
 export const unFollow = async (orgId: string) => {
   try {
     const res = await api.put(
-      `http://localhost:4000/user/update-following/${orgId}`
+      `${config.BASE_URL}/user/update-following/${orgId}`
     );
     return res;
   } catch (error) {
@@ -264,7 +255,7 @@ export const unFollow = async (orgId: string) => {
 export const addFollowing = async (orgId: string) => {
   try {
     const res = await api.get(
-      `http://localhost:4000/user/update-following/${orgId}`
+      `${config.BASE_URL}/user/update-following/${orgId}`
     );
     return res;
   } catch (error) {
@@ -275,7 +266,7 @@ export const addFollowing = async (orgId: string) => {
 export const likeEvent = async (eventId: string) => {
   try {
     const res = await api.get(
-      `http://localhost:4000/user/update-like-list/${eventId}`
+      `${config.BASE_URL}/user/update-like-list/${eventId}`
     );
     return res;
   } catch (error) {
@@ -286,7 +277,7 @@ export const likeEvent = async (eventId: string) => {
 export const unLikeEvent = async (eventId: string) => {
   try {
     const res = await api.put(
-      `http://localhost:4000/user/update-like-list/${eventId}`
+      `${config.BASE_URL}/user/update-like-list/${eventId}`
     );
     return res;
   } catch (error) {
@@ -296,9 +287,7 @@ export const unLikeEvent = async (eventId: string) => {
 
 export const getLikedEvents = async () => {
   try {
-    const data = await api.get(
-      "http://localhost:4000/user/get-all-liked-events"
-    );
+    const data = await api.get(`${config.BASE_URL}/user/get-all-liked-events`);
     return data;
   } catch (error) {
     console.log(error);
@@ -308,7 +297,8 @@ export const getLikedEvents = async () => {
 export const getFollowingOrgs = async () => {
   try {
     const data = await api.get(
-      "http://localhost:4000/user/get-all-following-orgs"
+      `${config.BASE_URL}/user/get-all-following-orgs`
+
     );
     return data;
   } catch (error) {
@@ -319,7 +309,7 @@ export const getFollowingOrgs = async () => {
 export const updateBooking = async (bookingId: string) => {
   try {
     await api.get(
-      `http://localhost:4000/user/update-booking-attended/${bookingId}`
+      `${config.BASE_URL}/user/update-booking-attended/${bookingId}`
     );
   } catch (error) {
     console.log(error);
@@ -328,7 +318,7 @@ export const updateBooking = async (bookingId: string) => {
 
 export const addReview = async (data: ReviewData) => {
   try {
-    const res = await api.post("http://localhost:4000/user/add-review", data);
+    const res = await api.post(`${config.BASE_URL}/user/add-review`, data);
     return res;
   } catch (error) {
     console.log(error);
@@ -338,7 +328,7 @@ export const addReview = async (data: ReviewData) => {
 export const getReview = async (eventId: string) => {
   try {
     const data = await api.get(
-      `http://localhost:4000/user/get-reviews/${eventId}`
+      `${config.BASE_URL}/user/get-reviews/${eventId}`
     );
     return data;
   } catch (error) {
@@ -351,10 +341,7 @@ export const changePassword = async (
 ) => {
   const data = { newPassword };
   try {
-    const res = await api.post(
-      "http://localhost:4000/user/change-password",
-      data
-    );
+    const res = await api.post(`${config.BASE_URL}/user/change-password`, data);
     return res;
   } catch (error) {
     console.log(error);

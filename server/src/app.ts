@@ -15,16 +15,19 @@ const { startServer, io } = serverConfig(server);
 expressConfig(app);
 connectDB();
 
+routes(app);
 app.use(express.static(path.join(__dirname,'../../client/dist')))
 app.get("*", (req: Request, res: Response) => {
   res.sendFile(path.resolve(__dirname, "../../client/dist", "index.html"));
 });
-app.use(errorHandlingMiddleware);
-routes(app);
 
-app.all("*", (req, res, next: NextFunction) => {
-  next(new AppError("Not found", 404));
-});
+
+
+app.use(errorHandlingMiddleware);
+
+// app.all("*", (req, res, next: NextFunction) => {
+//   next(new AppError("Not found", 404));
+// });
 
 io.on("connection", (socket) => {
   console.log("A new client connected!");
