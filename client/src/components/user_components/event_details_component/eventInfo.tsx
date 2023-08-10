@@ -3,12 +3,17 @@ import {
   CompleteReviewData,
   EventDetailsInterface,
 } from "../../../types/userInterface";
-import { lazy, Suspense, useEffect, useState } from "react";
+import {
+  // lazy,
+  // Suspense,
+  useEffect,
+  useState
+} from "react";
 import { getReview } from "../../../api/userAuth/userApis";
 import { Avatar } from "@material-tailwind/react";
 import StartRating from "../profile_components/starRating";
 
-const VideoPlayer = lazy(() => import("./youtube"));
+// const VideoPlayer = lazy(() => import("./youtube"));
 
 export type EventData = {
   _id: string;
@@ -49,8 +54,8 @@ type EventDetailsProps = {
 };
 const EventInfo: React.FC<EventDetailsProps> = ({ event }) => {
   const [reviews, setReviews] = useState<CompleteReviewData[]>();
-  const youtubeVideoUrl = event?.videoURL;
-  const videoId = youtubeVideoUrl?.split("v=")[1];
+  // const youtubeVideoUrl = event?.videoURL;
+  // const videoId = youtubeVideoUrl?.split("v=")[1];
   const organization = event?.organizerInfo;
 
   useEffect(() => {
@@ -59,7 +64,6 @@ const EventInfo: React.FC<EventDetailsProps> = ({ event }) => {
 
   const fetchEventReviews = async () => {
     const data = await getReview(event._id);
-    console.log(data?.data.data);
     setReviews(data?.data.data.reviews);
   };
   return (
@@ -195,11 +199,11 @@ const EventInfo: React.FC<EventDetailsProps> = ({ event }) => {
               </p>
             </div>
           </div>
-          <div className="mt-3 overflow-scroll no-scrollbar">
+          {/* <div className="mt-3 overflow-scroll no-scrollbar">
             <Suspense>
               <VideoPlayer videoId={videoId} />
             </Suspense>
-          </div>
+          </div> */}
           <div className="flex flex-col mt-8">
             <h3 className="text-3xl  font-bold dark:text-white block mb-3">
               About the organizer

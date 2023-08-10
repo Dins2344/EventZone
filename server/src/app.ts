@@ -15,10 +15,10 @@ const { startServer, io } = serverConfig(server);
 expressConfig(app);
 connectDB();
 
-// app.use(express.static(path.join(__dirname,'../../client/dist')))
-// app.get("*", (req: Request, res: Response) => {
-//   res.sendFile(path.resolve(__dirname, "../../client/dist", "index.html"));
-// });
+app.use(express.static(path.join(__dirname,'../../client/dist')))
+app.get("*", (req: Request, res: Response) => {
+  res.sendFile(path.resolve(__dirname, "../../client/dist", "index.html"));
+});
 app.use(errorHandlingMiddleware);
 routes(app);
 
