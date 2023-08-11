@@ -13,12 +13,12 @@ import chatRouter from "./chat";
 
 
 const routes = (app:Application)=>{
-    app.use('/auth',authRouter())
-    app.use('/admin', jwtAuthMiddleware,adminRoleChecking,adminRouter())
-    app.use('/user',userRouter())
-    app.use('/organization',jwtAuthMiddleware,userRoleChecking,organizationRouter())
-    app.use('/my-server', paypalRouter())
-    app.use('/user/chat',chatRouter())
+    app.use('/api/auth',authRouter())
+    app.use('/api/admin', jwtAuthMiddleware,adminRoleChecking,adminRouter())
+    app.use('/api/user',userRouter())
+    app.use('/api/organization',jwtAuthMiddleware,userRoleChecking,organizationRouter())
+    app.use('/api/my-server', paypalRouter())
+    app.use('/api/user/chat',chatRouter())
 }
 
 

@@ -8,8 +8,9 @@ const DashboardComponents = lazy(
 const AdminLanding = () => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>();
   const navigate = useNavigate();
-  const token = localStorage.getItem("adminToken");
-  const loginCheck = (): void => {
+
+  const loginCheck =  () => {
+    const token = localStorage.getItem("adminToken");
     token ? setIsLoggedIn(true) : setIsLoggedIn(false);
   };
   useEffect(() => {
@@ -26,8 +27,11 @@ const AdminLanding = () => {
       </>
     );
   } else {
-    navigate("/admin/login");
-    return null;
+    return (
+    <>
+    {navigate("/admin/login")}
+    </>
+    )
   }
 };
 
