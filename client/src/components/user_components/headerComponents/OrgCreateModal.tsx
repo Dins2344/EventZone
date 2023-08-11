@@ -1,7 +1,6 @@
 import React, { ChangeEvent, useEffect, } from "react";
 import { createOrganizer } from "../../../api/userAuth/userApis";
 import { useNavigate } from "react-router-dom";
-import { getAllOrgCategories } from "../../../api/adminAuth/admin";
    
 import {
   Button,
@@ -13,6 +12,7 @@ import {
 } from "@material-tailwind/react";
 import { XMarkIcon } from "@heroicons/react/24/solid";
 import { OrganizationCategoriesInterface } from "../../../types/adminInterface";
+import { getAllOrgCategories } from "../../../api/organizer/organizer";
 
 
 
