@@ -9,8 +9,6 @@ const citesSchema = new mongoose_1.Schema({
     },
     state: {
         type: String,
-        required: [true, "please add address line 1"],
-        unique: true
     },
 });
 const Cities = (0, mongoose_1.model)("Cities", citesSchema, "cities");

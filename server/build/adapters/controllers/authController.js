@@ -52,17 +52,17 @@ const authController = (userDbRepository, userDbRepositoryImpl, authServiceInter
     const OTPLogin = (0, express_async_handler_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
         const email = req.params.email;
         const mode = req.params.mode;
-        if (mode === 'emailVerification') {
+        if (mode === "emailVerification") {
             const user = yield (0, userAuth_1.emailVerify)(email, dbRepositoryUser);
             if (user) {
-                res.json({ error: 'user exist' });
+                res.json({ error: "user exist" });
             }
             else {
                 emailService.sendEmail(email);
-                res.json({ message: 'OTP has send', ok: true });
+                res.json({ message: "OTP has send", ok: true });
             }
         }
-        else if (mode === 'OTPLogin') {
+        else if (mode === "OTPLogin") {
             const user = yield (0, userAuth_1.emailVerify)(email, dbRepositoryUser);
             if (user) {
                 console.log(user);
@@ -70,7 +70,7 @@ const authController = (userDbRepository, userDbRepositoryImpl, authServiceInter
                 res.json({ status: true });
             }
             else {
-                res.status(404).json({ error: "User not found" });
+                res.json({ error: "User not found" });
             }
         }
     }));
@@ -82,8 +82,8 @@ const authController = (userDbRepository, userDbRepositoryImpl, authServiceInter
         const { message } = emailService.verifyOTP(OTP);
         console.log(message);
         if (message == "OTP verified") {
-            if (mode == 'signUpOTP') {
-                res.json({ OTPValidation: true, });
+            if (mode == "signUpOTP") {
+                res.json({ OTPValidation: true });
             }
             const token = yield (0, userAuth_1.tokenGenerator)(email, dbRepositoryUser, authService);
             res.json({ OTPValidation: true, token });
@@ -101,16 +101,30 @@ const authController = (userDbRepository, userDbRepositoryImpl, authServiceInter
             lastName: decodedData.family_name,
             email: decodedData.email,
             profileImage: decodedData.picture,
-            status: 'active'
+            status: "active",
         };
         const isUser = yield (0, userAuth_1.emailVerify)(user.email, dbRepositoryUser);
         if (isUser) {
             const token = yield (0, userAuth_1.googleLogin)(isUser, dbRepositoryUser, authService);
-            res.json({ message: 'login done', ok: true, token, isUser });
+            res.json({ message: "login done", ok: true, token, isUser });
         }
         else {
             const { token, registeredUser: isUser } = yield (0, userAuth_1.googleSignup)(user, dbRepositoryUser, authService);
             res.json({ message: "user sign up done", token, isUser, ok: true });
+        }
+    }));
+    const forgotPasswordController = (0, express_async_handler_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+        const data = req.body;
+        const user = yield (0, userAuth_1.getUserByEmail)(data.email, dbRepositoryUser);
+        const response = yield (0, userAuth_1.changePassword)(data.newPassword, user._id, dbRepositoryUser, authService);
+        console.log(response);
+        if (response) {
+            res.json({ message: "password changed", ok: true });
+        }
+        else {
+            res.json({
+                error: "changing password failed",
+            });
         }
     }));
     return {
@@ -120,6 +134,7 @@ const authController = (userDbRepository, userDbRepositoryImpl, authServiceInter
         OTPLogin,
         OTPVerify,
         googleLoginController,
+        forgotPasswordController,
     };
 };
 exports.default = authController;

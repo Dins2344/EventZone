@@ -40,7 +40,7 @@ const EventFromOrganizers: React.FC = () => {
         </svg>
         Events from organizers you follow
       </h4>
-      {events?.length === 0 ? (
+      {(events?.length === 0 || events === undefined) ? (
         <>
           <div className="w-full flex justify-center h-80 items-center">
             <h4 className="text-2xl md:text-4xl">

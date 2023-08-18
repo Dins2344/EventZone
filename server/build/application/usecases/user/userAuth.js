@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getEventsFromFollowingOrganizers = exports.getReviews = exports.addReview = exports.updateBookings = exports.getFollowing = exports.getLikedEvents = exports.unLikeEvent = exports.likeEvent = exports.unFollow = exports.addFollow = exports.getAllMessage = exports.sendMessage = exports.getUsersChat = exports.createChat = exports.getChat = exports.searchAnything = exports.getAddressInfo = exports.updateEmail = exports.addAddress = exports.addProfileContactInfo = exports.getAllOrganizers = exports.cancelBooking = exports.getOneBookingDetails = exports.getBookings = exports.createBooking = exports.getCompleteEventDetails = exports.getApprovedEvents = exports.addOrganization = exports.getUserById = exports.tokenGenerator = exports.emailVerify = exports.googleSignup = exports.googleLogin = exports.userLogin = exports.changePassword = exports.verifyPassword = exports.userRegister = void 0;
+exports.getEventsFromFollowingOrganizers = exports.getReviews = exports.addReview = exports.updateBookings = exports.getFollowing = exports.getLikedEvents = exports.unLikeEvent = exports.likeEvent = exports.unFollow = exports.addFollow = exports.getAllMessage = exports.sendMessage = exports.getUsersChat = exports.createChat = exports.getChat = exports.searchAnything = exports.getAddressInfo = exports.updateEmail = exports.addAddress = exports.addProfileContactInfo = exports.getAllOrganizers = exports.cancelBooking = exports.getOneBookingDetails = exports.getBookings = exports.createBooking = exports.getCompleteEventDetails = exports.getApprovedEvents = exports.addOrganization = exports.getUserByEmail = exports.getUserById = exports.tokenGenerator = exports.emailVerify = exports.googleSignup = exports.googleLogin = exports.userLogin = exports.changePassword = exports.verifyPassword = exports.userRegister = void 0;
 const httpStatus_1 = require("../../../types/httpStatus");
 const appError_1 = __importDefault(require("../../../utils/appError"));
 const qrcode_1 = __importDefault(require("qrcode"));
@@ -112,6 +112,14 @@ const getUserById = (userId, userRepository) => __awaiter(void 0, void 0, void 0
     return data;
 });
 exports.getUserById = getUserById;
+const getUserByEmail = (email, userRepository) => __awaiter(void 0, void 0, void 0, function* () {
+    const data = yield userRepository.getUserByEmail(email);
+    if (!data) {
+        throw new appError_1.default('user not found', httpStatus_1.HttpStatus.BAD_REQUEST);
+    }
+    return data;
+});
+exports.getUserByEmail = getUserByEmail;
 const addOrganization = (orgId, userId, userRepository) => __awaiter(void 0, void 0, void 0, function* () {
     const res = yield userRepository.addOrganization(orgId, userId);
     if (!res) {

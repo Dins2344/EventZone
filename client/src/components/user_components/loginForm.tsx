@@ -53,7 +53,6 @@ const LoginForm: React.FC = () => {
       // Handle form submission
       try {
         const res = await loginPost(values);
-        console.log(res);
         if (res?.data.userData) {
           localStorage.setItem("token", res.data.token);
           dispatch(setUser(res?.data.userData));
@@ -61,8 +60,6 @@ const LoginForm: React.FC = () => {
           // navigate("/");
         }
       } catch (error: any) {
-        alert(error);
-        console.log(error.toString());
         setError(error.toString());
       }
     },
@@ -153,12 +150,12 @@ const LoginForm: React.FC = () => {
                 >
                   Login
                 </button>
-                <a
+                <Link
                   className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800"
-                  href="#"
+                  to={"/register/forgot-password"}
                 >
                   Forgot Password?
-                </a>
+                </Link>
               </div>
             </form>
             <p className="mt-4">
@@ -172,7 +169,7 @@ const LoginForm: React.FC = () => {
             </p>
             <Divider text="or" />
             <div className="w-full flex justify-center">
-            <GoogleLogin />
+              <GoogleLogin />
             </div>
             <p className="mt-2">
               Login with{" "}

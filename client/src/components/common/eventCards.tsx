@@ -8,8 +8,13 @@ import {
   likeEvent,
   unLikeEvent,
 } from "../../api/userAuth/userApis";
+
+
 import {
   Button,
+  Dialog,
+  DialogBody,
+  DialogFooter,
   Card,
   CardBody,
   CardFooter,
@@ -27,6 +32,10 @@ interface EventCardProps {
 
 const EventCards: React.FC<EventCardProps> = ({ approvedEvent }) => {
   const [isClick, setIsClick] = useState<boolean>(false);
+  const [open, setOpen] = useState(false);
+
+  const handleOpen = () => setOpen(!open);
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useSelector(selectUser);
@@ -58,6 +67,8 @@ const EventCards: React.FC<EventCardProps> = ({ approvedEvent }) => {
           likeNotify();
         }
       }
+    } else {
+      handleOpen()
     }
   };
 
@@ -88,6 +99,41 @@ const EventCards: React.FC<EventCardProps> = ({ approvedEvent }) => {
 
   return (
     <>
+      <Dialog open={open} handler={handleOpen}>
+        <DialogBody divider className="grid place-items-center gap-4">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            className="h-16 w-16 text-red-500"
+          >
+            <path
+              fillRule="evenodd"
+              d="M5.25 9a6.75 6.75 0 0113.5 0v.75c0 2.123.8 4.057 2.118 5.52a.75.75 0 01-.297 1.206c-1.544.57-3.16.99-4.831 1.243a3.75 3.75 0 11-7.48 0 24.585 24.585 0 01-4.831-1.244.75.75 0 01-.298-1.205A8.217 8.217 0 005.25 9.75V9zm4.502 8.9a2.25 2.25 0 104.496 0 25.057 25.057 0 01-4.496 0z"
+              clipRule="evenodd"
+            />
+          </svg>
+          <Typography color="red" variant="h4">
+            You should login...!
+          </Typography>
+          <Typography className="text-center font-normal">
+            You should have to login to explore more features
+          </Typography>
+        </DialogBody>
+        <DialogFooter className="space-x-2">
+          <Button size="sm" variant="text" color="red" onClick={handleOpen}>
+            close
+          </Button>
+          <Button
+            size="sm"
+            onClick={() => {
+              navigate("/register/user-login");
+            }}
+          >
+            lets login
+          </Button>
+        </DialogFooter>
+      </Dialog>
       <ToastContainer
         position="bottom-right"
         autoClose={3000}
@@ -204,7 +250,10 @@ export const EventCardsShimmer = () => {
     <>
       {array.map((item, index) => {
         return (
-          <div key={index} className="p-3">
+          <div
+            key={index}
+            className="p-3 xl:w-1/4 lg:w-2/4 px-2 md:w-1/2 w-full mt-2"
+          >
             <p className="hidden">{item}</p>
             <div
               role="status"
@@ -226,20 +275,8 @@ export const EventCardsShimmer = () => {
               <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-700 mb-2.5"></div>
               <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-700 mb-2.5"></div>
               <div className="h-2 bg-gray-200 rounded-full dark:bg-gray-700"></div>
-              <div className="flex items-center mt-4 space-x-3">
-                <svg
-                  className="w-10 h-10 text-gray-200 dark:text-gray-700"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                >
-                  <path d="M10 0a10 10 0 1 0 10 10A10.011 10.011 0 0 0 10 0Zm0 5a3 3 0 1 1 0 6 3 3 0 0 1 0-6Zm0 13a8.949 8.949 0 0 1-4.951-1.488A3.987 3.987 0 0 1 9 13h2a3.987 3.987 0 0 1 3.951 3.512A8.949 8.949 0 0 1 10 18Z" />
-                </svg>
-                <div>
-                  <div className="h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 w-32 mb-2"></div>
-                  <div className="w-48 h-2 bg-gray-200 rounded-full dark:bg-gray-700"></div>
-                </div>
+              <div className="flex justify-center mt-4 space-x-3">
+                <div className="h-10 w-60 bg-gray-200 rounded-md dark:bg-gray-700"></div>
               </div>
               <span className="sr-only">Loading...</span>
             </div>

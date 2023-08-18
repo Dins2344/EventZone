@@ -163,19 +163,22 @@ const EventsHomeComponent = () => {
                             {event.ticketSold}/{event.eventCapacity}
                           </td>
                           <td className="px-4 py-3">
-                            ${event.ticketPrice * event.ticketSold}
+                            &#8377;{event.ticketPrice * event.ticketSold}
                           </td>
                           <td className="px-4 py-3">{event.status}</td>
                           <td className="px-4 py-3">
                             <div className="flex">
                               <Button
-                                onClick={() => {navigate(`/organization/events/event/?eventId=${event._id}`)}}
+                                onClick={() => {
+                                  navigate(
+                                    `/organization/events/event/?eventId=${event._id}`
+                                  );
+                                }}
                                 variant="outlined"
                                 className="h-6 w-50 mr-2 p-2 text-center text py-1"
                               >
                                 View more
                               </Button>
-                              
                             </div>
                           </td>
                         </tr>

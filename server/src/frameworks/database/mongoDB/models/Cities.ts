@@ -8,8 +8,6 @@ const citesSchema = new Schema({
     },
   state: {
     type: String,
-    required: [true, "please add address line 1"],
-    unique:true
   },
  
 });

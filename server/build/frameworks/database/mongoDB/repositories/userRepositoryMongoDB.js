@@ -443,6 +443,7 @@ const userRepositoryMongoDB = () => {
     });
     const getReview = (eventId) => __awaiter(void 0, void 0, void 0, function* () {
         const data = yield eventModel_1.default.findById(eventId).populate("reviews.userId");
+        console.log('got reviews');
         console.log(data);
         return data;
     });

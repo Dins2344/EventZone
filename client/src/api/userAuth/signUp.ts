@@ -67,3 +67,14 @@ export const loginWithGoogle = async (token: string) => {
     console.log(error)
   }
 }
+
+
+export const forgotChangePassword = async (email: string, newPassword: string) => {
+  const data = {email,newPassword}
+  try {
+    const res = await axios.post(`${config.BASE_URL}/auth/forgot-password`, data)
+    return res
+  } catch (error) {
+    console.log(error)
+  }
+}

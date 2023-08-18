@@ -3,7 +3,6 @@ import {
   MagnifyingGlassIcon,
   ChevronUpDownIcon,
 } from "@heroicons/react/24/outline";
-import {  UserPlusIcon } from "@heroicons/react/24/solid";
 import {
   Card,
   CardHeader,
@@ -12,31 +11,11 @@ import {
   Button,
   CardBody,
   CardFooter,
-  Tabs,
-  TabsHeader,
-  Tab,
+ 
   Avatar,
 } from "@material-tailwind/react";
 import { getOrganizationBookings } from "../../api/organizer/organizer";
 import { Bookings } from "../../types/userInterface";
-
-const TABS = [
-  {
-    label: "All",
-    value: "all",
-  },
-  {
-    label: "Monitored",
-    value: "monitored",
-  },
-  {
-    label: "Unmonitored",
-    value: "unmonitored",
-  },
-];
-
-
-
 
 
 const BookingTable: React.FC = () => {
@@ -46,7 +25,6 @@ const BookingTable: React.FC = () => {
   }, []);
   const fetchBookingDetail = async () => {
     const data = await getOrganizationBookings();
-    console.log(data);
     setBookingData(data?.data.data);
   };
   const TABLE_ROWS = bookingData
@@ -63,25 +41,8 @@ const BookingTable: React.FC = () => {
               See information about all bookings of your events
             </Typography>
           </div>
-          <div className="flex shrink-0 flex-col gap-2 sm:flex-row">
-            <Button variant="outlined" color="blue-gray" size="sm">
-              view all
-            </Button>
-            <Button className="flex items-center gap-3" color="blue" size="sm">
-              <UserPlusIcon strokeWidth={2} className="h-4 w-4" /> Add member
-            </Button>
-          </div>
         </div>
         <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
-          <Tabs value="all" className="w-full md:w-max">
-            <TabsHeader>
-              {TABS.map(({ label, value }) => (
-                <Tab key={value} value={value}>
-                  &nbsp;&nbsp;{label}&nbsp;&nbsp;
-                </Tab>
-              ))}
-            </TabsHeader>
-          </Tabs>
           <div className="w-full md:w-72">
             <Input
               label="Search"
@@ -125,7 +86,11 @@ const BookingTable: React.FC = () => {
                   <tr key={_id}>
                     <td className={classes}>
                       <div className="flex items-center gap-3">
-                        <Avatar src={user.profileImage} alt="https://img.freepik.com/free-icon/user_318-159711.jpg" size="sm" />
+                        <Avatar
+                          src={user.profileImage}
+                          alt="https://img.freepik.com/free-icon/user_318-159711.jpg"
+                          size="sm"
+                        />
                         <div className="flex flex-col">
                           <Typography
                             variant="small"
@@ -170,7 +135,7 @@ const BookingTable: React.FC = () => {
                       </div>
                     </td>
                     <td className={classes}>
-                    <div className="flex flex-col">
+                      <div className="flex flex-col">
                         <Typography
                           variant="small"
                           color="blue-gray"
@@ -183,7 +148,7 @@ const BookingTable: React.FC = () => {
                           color="blue-gray"
                           className="font-normal opacity-70"
                         >
-                         category: {event.category}
+                          category: {event.category}
                         </Typography>
                         <Typography
                           variant="small"
@@ -192,10 +157,10 @@ const BookingTable: React.FC = () => {
                         >
                           starts on:{event.startDate} {event.startTime}
                         </Typography>
-                      </div> 
+                      </div>
                     </td>
                     <td className={classes}>
-                    <div className="flex flex-col">
+                      <div className="flex flex-col">
                         <Typography
                           variant="small"
                           color="blue-gray"
@@ -206,7 +171,7 @@ const BookingTable: React.FC = () => {
                       </div>
                     </td>
                     <td className={classes}>
-                    <div className="flex flex-col">
+                      <div className="flex flex-col">
                         <Typography
                           variant="small"
                           color="blue-gray"
@@ -219,16 +184,16 @@ const BookingTable: React.FC = () => {
                           color="blue-gray"
                           className="font-normal opacity-70"
                         >
-                         Booked on: {bookingTime}
+                          Booked on: {bookingTime}
                         </Typography>
                         <Typography
                           variant="small"
                           color="blue-gray"
                           className="font-normal opacity-70"
                         >
-                          Total paid:{totalAmount}
+                          Total paid: &#8377;{totalAmount}
                         </Typography>
-                      </div> 
+                      </div>
                     </td>
                     {/* <td className={classes}>
                       <Tooltip content="Edit User">

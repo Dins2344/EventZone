@@ -201,7 +201,9 @@ const userController = (userDbRepository, userDbRepositoryImpl, authServiceInter
         var _j;
         const userId = (_j = req.user) === null || _j === void 0 ? void 0 : _j.Id;
         if (userId) {
+            console.log(userId);
             const data = yield (0, userAuth_2.getAddressInfo)(userId, dbRepositoryUser);
+            console.log(data);
             if (data) {
                 res.json({ message: "fetching address data done", ok: true, data });
             }

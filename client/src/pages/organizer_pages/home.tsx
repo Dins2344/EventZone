@@ -1,7 +1,7 @@
 import { useSelector } from "react-redux";
 import { selectUser } from "../../redux/reducers/userSlice";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@material-tailwind/react";
 import {
   getOrganizersAllEvents,
@@ -39,6 +39,7 @@ const OrganizationDetails = () => {
   const [organizationDetails, setOrganizationDetails] =
     useState<OrganizationInterface>();
   const [nextEvent, setNextEvent] = useState<RegisteredEventInterface>();
+
 
   const fetchOrganizations = async () => {
     const data = await getUsersOrganizations();
@@ -140,6 +141,8 @@ const OrganizationDetails = () => {
 };
 
 const NextEvent = (props: homeComponents) => {
+    const navigate = useNavigate();
+
   const nextEvent = props.nextEvent;
   return (
     <>
@@ -155,13 +158,17 @@ const NextEvent = (props: homeComponents) => {
             <p>Date</p>
             <p>{nextEvent?.startDate}</p>
           </div>
-          <div className=" ml-2 w-16 h-16 bg-black"></div>
+              <div className=" ml-2 w-40 h-16 bg-black">
+                <img src= {nextEvent.imageURL[0]} />
+          </div>
           <div className="flex flex-col ml-2 justify-center max-w-max ">
             <h6>{nextEvent?.eventName}</h6>
             <h6>tickets sold</h6>
           </div>
-          <div className="flex place-content-center lg:place-content-end items-center lg:w-9/12 w-full mt-2 ">
-            <Button size="sm" color="deep-orange">
+          <div className="flex place-content-center lg:place-content-end items-center lg:w-7/12 w-full mt-2 ">
+                <Button onClick={() => {
+                  navigate(`/organization/events/event/?eventId=${nextEvent._id}`);
+            }} size="sm" color="deep-orange">
               Make a change
             </Button>
           </div>

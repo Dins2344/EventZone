@@ -80,6 +80,7 @@ const AddCities = lazy(() => import("./pages/admin_pages/addCities.tsx"));
 const CityAddingForm = lazy(
   () => import("./components/admin_components/CityAddingForm.tsx")
 );
+const ForgotPassword = lazy(()=>import('../src/pages/user_pages/forgotPassword.tsx'))
 
 const appRouter = createBrowserRouter([
   {
@@ -219,6 +220,14 @@ const appRouter = createBrowserRouter([
         element: (
           <Suspense fallback={<SpinnerComponent />}>
             <OTPVerifyPage />,
+          </Suspense>
+        ),
+      },
+      {
+        path: "/register/forgot-password",
+        element: (
+          <Suspense fallback={<SpinnerComponent />}>
+            <ForgotPassword />,
           </Suspense>
         ),
       },

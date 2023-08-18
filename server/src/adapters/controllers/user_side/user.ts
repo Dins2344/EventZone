@@ -261,7 +261,9 @@ const userController = (
     async (req: CustomRequest, res: Response) => {
       const userId = req.user?.Id;
       if (userId) {
+        console.log(userId)
         const data = await getAddressInfo(userId, dbRepositoryUser);
+        console.log(data)
         if (data) {
           res.json({ message: "fetching address data done", ok: true, data });
         } else {

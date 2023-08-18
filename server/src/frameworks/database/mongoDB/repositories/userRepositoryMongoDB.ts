@@ -513,6 +513,7 @@ export const userRepositoryMongoDB = () => {
 
   const getReview = async (eventId: string) => {
     const data = await Event.findById(eventId).populate("reviews.userId");
+    console.log('got reviews')
     console.log(data);
     return data;
   };

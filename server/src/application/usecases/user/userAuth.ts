@@ -160,6 +160,13 @@ export const getUserById = async (
   }
   return data;
 };
+export const getUserByEmail = async (email: string,userRepository:ReturnType<UserDBInterface>) => {
+  const data = await userRepository.getUserByEmail(email)
+  if (!data) {
+    throw new AppError('user not found',HttpStatus.BAD_REQUEST)
+  }
+  return data
+}
 
 export const addOrganization = async (
   orgId: string,

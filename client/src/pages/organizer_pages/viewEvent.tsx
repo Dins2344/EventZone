@@ -17,7 +17,6 @@ const ViewEvent: React.FC = () => {
 
   const fetchEventInfo = async (id: string) => {
     const data = await getCompleteEventDetails(id);
-    console.log(data?.data);
     setEventInfo(data?.data.data[0]);
   };
   return (

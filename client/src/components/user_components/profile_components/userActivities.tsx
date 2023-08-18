@@ -139,7 +139,7 @@ const ProfileActivities: React.FC = () => {
 
         <h3 className="text-2xl mb-2">Bookings</h3>
         <div className="flex flex-col p-2 border-4 rounded-lg h-80 mb-5 overflow-scroll no-scrollbar">
-          {bookings &&
+          {bookings && bookings.length > 0 ? (
             bookings.map((item) => {
               return (
                 <div
@@ -179,7 +179,10 @@ const ProfileActivities: React.FC = () => {
                   </div>
                 </div>
               );
-            })}
+            })
+          ) : (
+            <div>No bookings to display.</div>
+          )}
         </div>
 
         <div className="w-full mb-5 border-2"></div>
@@ -204,7 +207,7 @@ const ProfileActivities: React.FC = () => {
               return <OrganizersCard key={item._id} organization={item} />;
             })
           ) : (
-            <div>No liked events to display.</div>
+            <div>No following organizers to display.</div>
           )}
         </div>
       </div>

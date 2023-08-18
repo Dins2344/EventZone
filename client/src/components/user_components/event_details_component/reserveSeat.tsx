@@ -215,15 +215,32 @@ const ReserveSeatComponent: React.FC<ReserveSeatProps> = ({
               </label>
               {eventDetails.ticketSold + ticketPass <=
               eventDetails.eventCapacity ? (
-                <Button
-                  onClick={() => {
-                    const check = handleLoggedIn();
-                    check && handleOpen("xl");
-                  }}
-                  color="deep-orange"
-                >
-                  Reserve a spot
-                </Button>
+                <>
+                  {user ? (
+                    <>
+                      <Button
+                        onClick={() => {
+                          const check = handleLoggedIn();
+                          check && handleOpen("xl");
+                        }}
+                        color="deep-orange"
+                      >
+                        Reserve a spot
+                      </Button>
+                    </>
+                  ) : (
+                    <>
+                      <Button
+                        onClick={() => {
+                          navigate("/register/user-login");
+                        }}
+                        color="deep-orange"
+                      >
+                        Login for reserve
+                      </Button>
+                    </>
+                  )}
+                </>
               ) : (
                 <Button onClick={() => handleOpen("xl")} color="deep-orange">
                   can't provide that much tickets
@@ -393,7 +410,7 @@ const ReserveSeatComponent: React.FC<ReserveSeatProps> = ({
                         <div className="flex flex-col w-1/2 gap-6 px-2">
                           <Input
                             variant="outlined"
-                            value={user.email}
+                            value={user?.email}
                             readOnly
                           />
                         </div>

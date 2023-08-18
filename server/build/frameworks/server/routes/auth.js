@@ -22,6 +22,7 @@ const authRouter = () => {
     router.get('/user-OTP-verify/:OTP/:email/:mode', controller.OTPVerify);
     router.post('/admin-login', controller.loginAdmin);
     router.get('/user-google-login/:id', controller.googleLoginController);
+    router.post('/forgot-password', controller.forgotPasswordController);
     return router;
 };
 exports.default = authRouter;

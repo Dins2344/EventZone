@@ -20,6 +20,7 @@ const userSchema = new mongoose_1.Schema({
     },
     profileImage: {
         type: String,
+        default: "https://cdn-icons-png.flaticon.com/512/149/149071.png",
     },
     organizations: {
         type: Array,
@@ -32,11 +33,11 @@ const userSchema = new mongoose_1.Schema({
     },
     status: {
         type: String,
-        default: 'active'
+        default: "active",
     },
     joinedOn: {
         type: String,
-        default: new Date().toDateString()
+        default: new Date().toDateString(),
     },
     following: [
         {
