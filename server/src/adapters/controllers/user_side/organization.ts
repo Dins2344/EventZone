@@ -294,38 +294,47 @@ const organizationController = (
   );
 
   const getMonthlySalesController = asyncHandler(
-    async (req: Request, res: Response) => {
-      const data = await getMonthlySales(dbRepositoryOrganization);
-      if (data) {
-        res.json({ message: "fetching data done ", ok: true, data });
-      } else {
-        res.json({ error: "monthly data fetching failed" });
+    async (req: CustomRequest, res: Response) => {
+      const userId = req.user?.Id
+      if (userId) {
+        const data = await getMonthlySales(userId,dbRepositoryOrganization);
+        if (data) {
+          res.json({ message: "fetching data done ", ok: true, data });
+        } else {
+          res.json({ error: "monthly data fetching failed" });
+        }
       }
     }
   );
 
   const getMonthlyTicketSalesController = asyncHandler(
-    async (req: Request, res: Response) => {
-      const data = await getMonthlyTicketSales(dbRepositoryOrganization);
-      if (data) {
-        res.json({
-          message: "ticket sales data fetching done",
-          ok: true,
-          data,
-        });
-      } else {
-        res.json({ error: "ticket sales data fetching error" });
+    async (req: CustomRequest, res: Response) => {
+      const userId = req.user?.Id
+      if (userId) {
+        const data = await getMonthlyTicketSales(userId,dbRepositoryOrganization);
+        if (data) {
+          res.json({
+            message: "ticket sales data fetching done",
+            ok: true,
+            data,
+          });
+        } else {
+          res.json({ error: "ticket sales data fetching error" });
+        }
       }
     }
   );
 
   const getTicketTypeSoldController = asyncHandler(
-    async (req: Request, res: Response) => {
-      const data = await getTicketTypeSold(dbRepositoryOrganization);
-      if (data) {
-        res.json({ message: "fetching ticket type sold done", ok: true, data });
-      } else {
-        res.json({ error: "fetching ticket type sold failed ", ok: false });
+    async (req: CustomRequest, res: Response) => {
+      const userId = req.user?.Id
+      if (userId) {
+        const data = await getTicketTypeSold(userId,dbRepositoryOrganization);
+        if (data) {
+          res.json({ message: "fetching ticket type sold done", ok: true, data });
+        } else {
+          res.json({ error: "fetching ticket type sold failed ", ok: false });
+        }
       }
     }
   );

@@ -32,10 +32,10 @@ export const organizationRepositoryMongoDB = () => {
     return data;
   };
 
-  const getAllCities = async()=>{
-    const data = await Cities.find({})
-    return data
-  }
+  const getAllCities = async () => {
+    const data = await Cities.find({});
+    return data;
+  };
 
   const getOrganizationDetails = async (orgId: string) => {
     const data = await Organization.findOne({ _id: new ObjectId(orgId) });
@@ -206,8 +206,8 @@ export const organizationRepositoryMongoDB = () => {
   };
 
   const updateOrganizationInfo = async (data: RegisteredOrganization) => {
-    console.log(data)
-    try{
+    console.log(data);
+    try {
       const res = await Organization.updateOne(
         { _id: new ObjectId(data._id) },
         {
@@ -218,144 +218,153 @@ export const organizationRepositoryMongoDB = () => {
         }
       );
       return res;
-
-    }catch(error){
-      console.log(error)
+    } catch (error) {
+      console.log(error);
     }
   };
 
-
-  const getMonthlySales = async()=>{
+  const getMonthlySales = async (userId: string) => {
     const data = await Bookings.aggregate([
+      {
+        $match: { orgOwnerId: userId },
+      },
       {
         $addFields: {
           // Convert the bookingTime string into a date object
-          bookingDate: { $dateFromString: { dateString: '$bookingTime' } }
-        }
+          bookingDate: { $dateFromString: { dateString: "$bookingTime" } },
+        },
       },
       {
         $group: {
-          _id: { $dateToString: { format: '%Y-%m', date: '$bookingDate' } },
-          totalSales: { $sum: '$totalAmount' }
-        }
+          _id: { $dateToString: { format: "%Y-%m", date: "$bookingDate" } },
+          totalSales: { $sum: "$totalAmount" },
+        },
       },
       {
         $project: {
           _id: 0,
-          month: '$_id', // Rename _id field to month
-          totalSales: 1
-        }
+          month: "$_id", // Rename _id field to month
+          totalSales: 1,
+        },
       },
       {
         $sort: {
-          month: 1
-        }
-      }
-    ])
-    return data
-  }
+          month: 1,
+        },
+      },
+    ]);
+    return data;
+  };
 
-  const getMonthlyTicketSales = async()=>{
+  const getMonthlyTicketSales = async (userId: string) => {
     const data = await Bookings.aggregate([
+      {
+        $match: { orgOwnerId: userId },
+      },
       {
         $addFields: {
           // Convert the bookingTime string into a date object
-          bookingDate: { $dateFromString: { dateString: '$bookingTime' } }
-        }
+          bookingDate: { $dateFromString: { dateString: "$bookingTime" } },
+        },
       },
       {
         $group: {
-          _id: { $dateToString: { format: '%Y-%m', date: '$bookingDate' } },
-          totalTickets: { $sum: '$ticketCount' }
-        }
+          _id: { $dateToString: { format: "%Y-%m", date: "$bookingDate" } },
+          totalTickets: { $sum: "$ticketCount" },
+        },
       },
       {
         $project: {
           _id: 0,
-          month: '$_id', // Rename _id field to month
-          totalTickets: 1
-        }
+          month: "$_id", // Rename _id field to month
+          totalTickets: 1,
+        },
       },
       {
         $sort: {
-          month: 1
-        }
-      }
-    ])
-    return data
-  }
+          month: 1,
+        },
+      },
+    ]);
+    return data;
+  };
 
-  const getTicketTypeSold = async()=>{
+  const getTicketTypeSold = async (userId: string) => {
     const data = await Bookings.aggregate([
-    
+      {
+        $match: { orgOwnerId: userId },
+      },
+
       {
         $group: {
-          _id: '$paymentType',
-          totalTickets: { $sum: '$ticketCount' }
-        }
+          _id: "$paymentType",
+          totalTickets: { $sum: "$ticketCount" },
+        },
       },
       {
         $project: {
           _id: 0,
-          paymentType: '$_id', // Rename _id field to month
-          totalTickets: 1
-        }
+          paymentType: "$_id",
+          totalTickets: 1,
+        },
       },
-      
-    ])
-    return data
-  }
+    ]);
+    return data;
+  };
 
-  const getTicketsSoldByEvents = async(userId:string)=>{
+  const getTicketsSoldByEvents = async (userId: string) => {
     const data = await Event.aggregate([
       {
-        $match:{orgOwnerId:userId}
+        $match: { orgOwnerId: userId },
       },
-    
+
       {
         $group: {
-          _id: '$eventName',
-          totalTickets: { $sum: '$ticketSold' }
-        }
+          _id: "$eventName",
+          totalTickets: { $sum: "$ticketSold" },
+        },
       },
       {
         $project: {
           _id: 0,
-          eventName: '$_id', // Rename _id field to month
-          totalTickets: 1
-        }
+          eventName: "$_id", // Rename _id field to month
+          totalTickets: 1,
+        },
       },
-     
-    ])
-    console.log(data)
-    return data
-  }
-   
-  const updateEventInfo = async (data: EditEventFormData) => {
-    const res = await Event.updateOne({ _id: data.eventId }, {
-      eventName: data.eventName,
-      category: data.category,
-      description: data.description,
-      agenda: data.agenda,
-      addressLine1: data.addressLine1,
-      addressLine2: data.addressLine2,
-      state: data.state,
-      city: data.city,
-      startDate: data.startDate,
-      startTime: data.startTime,
-      endDate: data.endDate,
-      endTime:data.endTime
-    })
-    return res
-  }
-  
-  const getEventBookedUsers = async (eventId: string) => {
-    const data = Bookings.find({ eventId: eventId })
-      .populate({ path: "userId", select: "email" })
-      
-    return data
-  }
+    ]);
+    console.log(data);
+    return data;
+  };
 
+  const updateEventInfo = async (data: EditEventFormData) => {
+    const res = await Event.updateOne(
+      { _id: data.eventId },
+      {
+        eventName: data.eventName,
+        category: data.category,
+        description: data.description,
+        agenda: data.agenda,
+        addressLine1: data.addressLine1,
+        addressLine2: data.addressLine2,
+        state: data.state,
+        city: data.city,
+        startDate: data.startDate,
+        startTime: data.startTime,
+        endDate: data.endDate,
+        endTime: data.endTime,
+      }
+    );
+    return res;
+  };
+
+  const getEventBookedUsers = async (eventId: string) => {
+    const data = Bookings.find({ eventId: eventId }).populate({
+      path: "userId",
+      select: "email",
+    });
+
+    return data;
+  };
 
   return {
     addOrganization,

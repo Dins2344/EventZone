@@ -85,7 +85,6 @@ export const userRepositoryMongoDB = () => {
     );
     const newData = new Bookings(data);
     const res = await newData.save();
-    console.log(res);
     return res;
   };
 
@@ -538,10 +537,12 @@ export const userRepositoryMongoDB = () => {
     //   },
     // ]);
     const user = await User.findById(userId);
-    const followingArray = user?.following.map((item) => item.toString());
-    const events = await Event.find({ organizer: { $in: followingArray }, status: 'approved' });
-    console.log(events)
-    return events;
+    if (user) {
+      const followingArray:string[] = user?.following.map((item) => item.toString());
+      const events = await Event.find({ organizer: { $in: followingArray }, status: 'approved' });
+      console.log(events)
+      return events;
+    }
   };
 
   return {

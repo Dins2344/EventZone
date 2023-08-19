@@ -146,24 +146,24 @@ const updateOrganizationInfo = (data, organizationRepository) => __awaiter(void 
     return data;
 });
 exports.updateOrganizationInfo = updateOrganizationInfo;
-const getMonthlySales = (organizationRepository) => __awaiter(void 0, void 0, void 0, function* () {
-    const data = yield organizationRepository.getMonthlySales();
+const getMonthlySales = (userId, organizationRepository) => __awaiter(void 0, void 0, void 0, function* () {
+    const data = yield organizationRepository.getMonthlySales(userId);
     if (!data) {
         throw new appError_1.default('fetching monthly sales data done', httpStatus_1.HttpStatus.BAD_REQUEST);
     }
     return data;
 });
 exports.getMonthlySales = getMonthlySales;
-const getMonthlyTicketSales = (organizationRepository) => __awaiter(void 0, void 0, void 0, function* () {
-    const data = yield organizationRepository.getMonthlyTicketSales();
+const getMonthlyTicketSales = (userId, organizationRepository) => __awaiter(void 0, void 0, void 0, function* () {
+    const data = yield organizationRepository.getMonthlyTicketSales(userId);
     if (!data) {
         throw new appError_1.default('fetching monthly ticket sales data', httpStatus_1.HttpStatus.BAD_REQUEST);
     }
     return data;
 });
 exports.getMonthlyTicketSales = getMonthlyTicketSales;
-const getTicketTypeSold = (organizationRepository) => __awaiter(void 0, void 0, void 0, function* () {
-    const data = yield organizationRepository.getTicketTypeSold();
+const getTicketTypeSold = (userId, organizationRepository) => __awaiter(void 0, void 0, void 0, function* () {
+    const data = yield organizationRepository.getTicketTypeSold(userId);
     if (!data) {
         throw new appError_1.default('fetching ticket type sold data failed', httpStatus_1.HttpStatus.BAD_REQUEST);
     }

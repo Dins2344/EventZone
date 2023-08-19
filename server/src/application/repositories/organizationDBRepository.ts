@@ -93,18 +93,18 @@ export const organizationDbRepository = (
     return res
   }
 
-  const getMonthlySales = async()=>{
-    const data = await repository.getMonthlySales()
+  const getMonthlySales = async(userId:string)=>{
+    const data = await repository.getMonthlySales(userId)
     return data
   }
 
-  const getMonthlyTicketSales = async()=>{
-    const data = await repository.getMonthlyTicketSales()
+  const getMonthlyTicketSales = async(userId:string)=>{
+    const data = await repository.getMonthlyTicketSales(userId)
     return data
   }
 
-  const getTicketTypeSold = async()=>{
-    const data = await repository.getTicketTypeSold()
+  const getTicketTypeSold = async(userId:string)=>{
+    const data = await repository.getTicketTypeSold(userId)
     return data
   }
 

@@ -198,78 +198,87 @@ const organizationRepositoryMongoDB = () => {
             console.log(error);
         }
     });
-    const getMonthlySales = () => __awaiter(void 0, void 0, void 0, function* () {
+    const getMonthlySales = (userId) => __awaiter(void 0, void 0, void 0, function* () {
         const data = yield bookings_1.default.aggregate([
+            {
+                $match: { orgOwnerId: userId },
+            },
             {
                 $addFields: {
                     // Convert the bookingTime string into a date object
-                    bookingDate: { $dateFromString: { dateString: '$bookingTime' } }
-                }
+                    bookingDate: { $dateFromString: { dateString: "$bookingTime" } },
+                },
             },
             {
                 $group: {
-                    _id: { $dateToString: { format: '%Y-%m', date: '$bookingDate' } },
-                    totalSales: { $sum: '$totalAmount' }
-                }
+                    _id: { $dateToString: { format: "%Y-%m", date: "$bookingDate" } },
+                    totalSales: { $sum: "$totalAmount" },
+                },
             },
             {
                 $project: {
                     _id: 0,
-                    month: '$_id',
-                    totalSales: 1
-                }
+                    month: "$_id",
+                    totalSales: 1,
+                },
             },
             {
                 $sort: {
-                    month: 1
-                }
-            }
+                    month: 1,
+                },
+            },
         ]);
         return data;
     });
-    const getMonthlyTicketSales = () => __awaiter(void 0, void 0, void 0, function* () {
+    const getMonthlyTicketSales = (userId) => __awaiter(void 0, void 0, void 0, function* () {
         const data = yield bookings_1.default.aggregate([
+            {
+                $match: { orgOwnerId: userId },
+            },
             {
                 $addFields: {
                     // Convert the bookingTime string into a date object
-                    bookingDate: { $dateFromString: { dateString: '$bookingTime' } }
-                }
+                    bookingDate: { $dateFromString: { dateString: "$bookingTime" } },
+                },
             },
             {
                 $group: {
-                    _id: { $dateToString: { format: '%Y-%m', date: '$bookingDate' } },
-                    totalTickets: { $sum: '$ticketCount' }
-                }
+                    _id: { $dateToString: { format: "%Y-%m", date: "$bookingDate" } },
+                    totalTickets: { $sum: "$ticketCount" },
+                },
             },
             {
                 $project: {
                     _id: 0,
-                    month: '$_id',
-                    totalTickets: 1
-                }
+                    month: "$_id",
+                    totalTickets: 1,
+                },
             },
             {
                 $sort: {
-                    month: 1
-                }
-            }
+                    month: 1,
+                },
+            },
         ]);
         return data;
     });
-    const getTicketTypeSold = () => __awaiter(void 0, void 0, void 0, function* () {
+    const getTicketTypeSold = (userId) => __awaiter(void 0, void 0, void 0, function* () {
         const data = yield bookings_1.default.aggregate([
             {
+                $match: { orgOwnerId: userId },
+            },
+            {
                 $group: {
-                    _id: '$paymentType',
-                    totalTickets: { $sum: '$ticketCount' }
-                }
+                    _id: "$paymentType",
+                    totalTickets: { $sum: "$ticketCount" },
+                },
             },
             {
                 $project: {
                     _id: 0,
-                    paymentType: '$_id',
-                    totalTickets: 1
-                }
+                    paymentType: "$_id",
+                    totalTickets: 1,
+                },
             },
         ]);
         return data;
@@ -277,20 +286,20 @@ const organizationRepositoryMongoDB = () => {
     const getTicketsSoldByEvents = (userId) => __awaiter(void 0, void 0, void 0, function* () {
         const data = yield eventModel_1.default.aggregate([
             {
-                $match: { orgOwnerId: userId }
+                $match: { orgOwnerId: userId },
             },
             {
                 $group: {
-                    _id: '$eventName',
-                    totalTickets: { $sum: '$ticketSold' }
-                }
+                    _id: "$eventName",
+                    totalTickets: { $sum: "$ticketSold" },
+                },
             },
             {
                 $project: {
                     _id: 0,
-                    eventName: '$_id',
-                    totalTickets: 1
-                }
+                    eventName: "$_id",
+                    totalTickets: 1,
+                },
             },
         ]);
         console.log(data);
@@ -309,13 +318,15 @@ const organizationRepositoryMongoDB = () => {
             startDate: data.startDate,
             startTime: data.startTime,
             endDate: data.endDate,
-            endTime: data.endTime
+            endTime: data.endTime,
         });
         return res;
     });
     const getEventBookedUsers = (eventId) => __awaiter(void 0, void 0, void 0, function* () {
-        const data = bookings_1.default.find({ eventId: eventId })
-            .populate({ path: "userId", select: "email" });
+        const data = bookings_1.default.find({ eventId: eventId }).populate({
+            path: "userId",
+            select: "email",
+        });
         return data;
     });
     return {

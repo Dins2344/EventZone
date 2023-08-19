@@ -75,16 +75,16 @@ const organizationDbRepository = (repository) => {
         const res = yield repository.updateOrganizationInfo(data);
         return res;
     });
-    const getMonthlySales = () => __awaiter(void 0, void 0, void 0, function* () {
-        const data = yield repository.getMonthlySales();
+    const getMonthlySales = (userId) => __awaiter(void 0, void 0, void 0, function* () {
+        const data = yield repository.getMonthlySales(userId);
         return data;
     });
-    const getMonthlyTicketSales = () => __awaiter(void 0, void 0, void 0, function* () {
-        const data = yield repository.getMonthlyTicketSales();
+    const getMonthlyTicketSales = (userId) => __awaiter(void 0, void 0, void 0, function* () {
+        const data = yield repository.getMonthlyTicketSales(userId);
         return data;
     });
-    const getTicketTypeSold = () => __awaiter(void 0, void 0, void 0, function* () {
-        const data = yield repository.getTicketTypeSold();
+    const getTicketTypeSold = (userId) => __awaiter(void 0, void 0, void 0, function* () {
+        const data = yield repository.getTicketTypeSold(userId);
         return data;
     });
     const getTicketsSoldByEvents = (userId) => __awaiter(void 0, void 0, void 0, function* () {

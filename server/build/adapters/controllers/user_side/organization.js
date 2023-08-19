@@ -207,34 +207,46 @@ const organizationController = (organizationDbRepository, organizationDbReposito
         }
     }));
     const getMonthlySalesController = (0, express_async_handler_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        const data = yield (0, organization_1.getMonthlySales)(dbRepositoryOrganization);
-        if (data) {
-            res.json({ message: "fetching data done ", ok: true, data });
-        }
-        else {
-            res.json({ error: "monthly data fetching failed" });
+        var _b;
+        const userId = (_b = req.user) === null || _b === void 0 ? void 0 : _b.Id;
+        if (userId) {
+            const data = yield (0, organization_1.getMonthlySales)(userId, dbRepositoryOrganization);
+            if (data) {
+                res.json({ message: "fetching data done ", ok: true, data });
+            }
+            else {
+                res.json({ error: "monthly data fetching failed" });
+            }
         }
     }));
     const getMonthlyTicketSalesController = (0, express_async_handler_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        const data = yield (0, organization_1.getMonthlyTicketSales)(dbRepositoryOrganization);
-        if (data) {
-            res.json({
-                message: "ticket sales data fetching done",
-                ok: true,
-                data,
-            });
-        }
-        else {
-            res.json({ error: "ticket sales data fetching error" });
+        var _c;
+        const userId = (_c = req.user) === null || _c === void 0 ? void 0 : _c.Id;
+        if (userId) {
+            const data = yield (0, organization_1.getMonthlyTicketSales)(userId, dbRepositoryOrganization);
+            if (data) {
+                res.json({
+                    message: "ticket sales data fetching done",
+                    ok: true,
+                    data,
+                });
+            }
+            else {
+                res.json({ error: "ticket sales data fetching error" });
+            }
         }
     }));
     const getTicketTypeSoldController = (0, express_async_handler_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        const data = yield (0, organization_1.getTicketTypeSold)(dbRepositoryOrganization);
-        if (data) {
-            res.json({ message: "fetching ticket type sold done", ok: true, data });
-        }
-        else {
-            res.json({ error: "fetching ticket type sold failed ", ok: false });
+        var _d;
+        const userId = (_d = req.user) === null || _d === void 0 ? void 0 : _d.Id;
+        if (userId) {
+            const data = yield (0, organization_1.getTicketTypeSold)(userId, dbRepositoryOrganization);
+            if (data) {
+                res.json({ message: "fetching ticket type sold done", ok: true, data });
+            }
+            else {
+                res.json({ error: "fetching ticket type sold failed ", ok: false });
+            }
         }
     }));
     const getTicketsSoldByEventsController = (0, express_async_handler_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {

@@ -75,7 +75,6 @@ const userRepositoryMongoDB = () => {
         yield eventModel_1.default.updateOne({ _id: new mongodb_1.ObjectId(data.eventId) }, { $inc: { ticketSold: data.ticketCount } });
         const newData = new bookings_1.default(data);
         const res = yield newData.save();
-        console.log(res);
         return res;
     });
     const getBookings = (userId) => __awaiter(void 0, void 0, void 0, function* () {
@@ -468,10 +467,12 @@ const userRepositoryMongoDB = () => {
         //   },
         // ]);
         const user = yield userModel_1.default.findById(userId);
-        const followingArray = user === null || user === void 0 ? void 0 : user.following.map((item) => item.toString());
-        const events = yield eventModel_1.default.find({ organizer: { $in: followingArray }, status: 'approved' });
-        console.log(events);
-        return events;
+        if (user) {
+            const followingArray = user === null || user === void 0 ? void 0 : user.following.map((item) => item.toString());
+            const events = yield eventModel_1.default.find({ organizer: { $in: followingArray }, status: 'approved' });
+            console.log(events);
+            return events;
+        }
     });
     return {
         addUser,

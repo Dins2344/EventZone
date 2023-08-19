@@ -194,24 +194,24 @@ export const updateOrganizationInfo = async(data:RegisteredOrganization,organiza
   return data
 }
 
-export const getMonthlySales = async(organizationRepository:ReturnType<OrganizationDBInterface>)=>{
-  const data = await organizationRepository.getMonthlySales()
+export const getMonthlySales = async(userId:string,organizationRepository:ReturnType<OrganizationDBInterface>)=>{
+  const data = await organizationRepository.getMonthlySales(userId)
   if(!data){
     throw new AppError('fetching monthly sales data done',HttpStatus.BAD_REQUEST)
   }
   return data
 }
 
-export const getMonthlyTicketSales = async(organizationRepository:ReturnType<OrganizationDBInterface>)=>{
-  const data = await organizationRepository.getMonthlyTicketSales()
+export const getMonthlyTicketSales = async(userId:string,organizationRepository:ReturnType<OrganizationDBInterface>)=>{
+  const data = await organizationRepository.getMonthlyTicketSales(userId)
   if(!data){
     throw new AppError('fetching monthly ticket sales data',HttpStatus.BAD_REQUEST)
   }
   return data
 }
 
-export const getTicketTypeSold = async(organizationRepository:ReturnType<OrganizationDBInterface>)=>{
-  const data = await organizationRepository.getTicketTypeSold()
+export const getTicketTypeSold = async(userId:string,organizationRepository:ReturnType<OrganizationDBInterface>)=>{
+  const data = await organizationRepository.getTicketTypeSold(userId)
   if(!data){
     throw new AppError('fetching ticket type sold data failed',HttpStatus.BAD_REQUEST)
   }
