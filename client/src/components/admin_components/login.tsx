@@ -20,9 +20,7 @@ const AdminLoginComponent = () => {
       validationSchema,
       onSubmit: async (values) => {
         // Handle form submission here
-        console.log(values);
         const res = await adminLoginPost(values)
-        console.log(res)
         if(res?.data){
           localStorage.setItem("adminToken",res.data.token)
           navigate('/admin')

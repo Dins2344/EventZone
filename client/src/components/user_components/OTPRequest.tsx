@@ -11,7 +11,6 @@ const OTPRequestForm: React.FC = () => {
     e.preventDefault();
     const mode = 'OTPLogin'
     const res = await OTPRequestPost(email,mode);
-    console.log(res);
     if(res){
       navigate(`/register/OTP-login/OTP-login-submit/:${email}`)
     }

@@ -30,34 +30,31 @@ const ForgotPasswordComponents: React.FC = () => {
       // Handle form submission
       const mode = "OTPLogin";
       try {
-        console.log(values);
         setEmail(values.email);
         const res = await OTPRequestPost(values.email, mode);
         if (res?.data.status) {
-            setOTPSend(true);
-            notify()
+          setOTPSend(true);
+          notify();
         } else {
           setError("Entered email is not registered");
         }
       } catch (error: any) {
-        alert(error);
-        console.log(error.toString());
-        // setError(error.toString());
+        setError(error.toString());
       }
     },
   });
-    const notify = () => {
-        toast.success("OTP has been successfully sent to this email address.", {
-          position: "bottom-right",
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "colored",
-        });
-    }
+  const notify = () => {
+    toast.success("OTP has been successfully sent to this email address.", {
+      position: "bottom-right",
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+    });
+  };
   return (
     <>
       <ToastContainer
@@ -194,6 +191,7 @@ interface ChangePasswordProps {
 }
 
 const ChangePasswordComponents: React.FC<ChangePasswordProps> = ({ email }) => {
+  const [error, setError] = useState("");
   const navigate = useNavigate();
   const formik = useFormik({
     initialValues: {
@@ -218,23 +216,25 @@ const ChangePasswordComponents: React.FC<ChangePasswordProps> = ({ email }) => {
           notify();
         }
       } catch (error: any) {
-        alert(error);
-        console.log(error.toString());
+        setError(error.toString());
       }
     },
   });
 
   const notify = () => {
-    toast.success("Successfully changed password. Please login with your new password", {
-      position: "bottom-right",
-      autoClose: 3000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "colored",
-    });
+    toast.success(
+      "Successfully changed password. Please login with your new password",
+      {
+        position: "bottom-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      }
+    );
     setTimeout(() => navigate("/register/user-login"), 3000);
   };
   return (
@@ -252,6 +252,11 @@ const ChangePasswordComponents: React.FC<ChangePasswordProps> = ({ email }) => {
         theme="colored"
       />
       <form onSubmit={formik.handleSubmit}>
+        {error.length && (
+          <>
+            <div className="text-red-500">{error}</div>
+          </>
+        )}
         <h2 className="text-2xl font-bold mb-6">Enter new password</h2>
 
         <div className="mb-6">

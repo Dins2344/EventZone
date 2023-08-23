@@ -71,7 +71,6 @@ const organizationController = (organizationDbRepository, organizationDbReposito
         }
     }));
     const getOrganizationDetailController = (0, express_async_handler_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        console.log(req.params.id);
         const orgId = req.params.id;
         const data = yield (0, organization_1.getOrganizationDetails)(orgId, dbRepositoryOrganization);
         if (data) {
@@ -105,7 +104,6 @@ const organizationController = (organizationDbRepository, organizationDbReposito
     }));
     const addPublishEventInfoController = (0, express_async_handler_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
         const data = req.body;
-        console.log(data);
         const response = yield (0, organization_2.addPublishEventInfo)(data, dbRepositoryOrganization);
         if (response) {
             res.json({ message: "adding ticket details done", response });
@@ -126,7 +124,6 @@ const organizationController = (organizationDbRepository, organizationDbReposito
     }));
     const publishEventController = (0, express_async_handler_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
         const id = req.params.id;
-        console.log(id);
         const response = yield (0, organization_2.publishEvent)(id, dbRepositoryOrganization);
         if (response) {
             res.json({ message: "publishing request sent", response });
@@ -150,7 +147,6 @@ const organizationController = (organizationDbRepository, organizationDbReposito
     }));
     const getOrganizersAllEventController = (0, express_async_handler_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
         const orgId = req.params.id;
-        console.log(orgId);
         const data = yield (0, organization_2.getOrganizersAllEvent)(orgId, dbRepositoryOrganization);
         if (data) {
             res.json({ message: "events fetching done", data });
@@ -162,7 +158,6 @@ const organizationController = (organizationDbRepository, organizationDbReposito
     const getOrganizersAllBookingsController = (0, express_async_handler_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
         const user = req.user;
         if (user) {
-            console.log(user);
             const { Id } = user;
             const data = yield (0, organization_1.getOrganizersAllBookings)(Id, dbRepositoryOrganization);
             if (data) {
@@ -273,9 +268,7 @@ const organizationController = (organizationDbRepository, organizationDbReposito
         if (response.modifiedCount >= 1) {
             const message = "We kindly request your cooperation as there have been some updates made to the event you have booked in the event zone. Your attention and understanding regarding these changes are highly appreciated. Thank you for your cooperation.";
             const users = yield (0, organization_1.getEventBookedUsers)(data.eventId, dbRepositoryOrganization);
-            console.log(users);
             const response = users.map((item) => __awaiter(void 0, void 0, void 0, function* () {
-                console.log(item.email);
                 return yield emailService.sendEmail(item === null || item === void 0 ? void 0 : item.email, message);
             }));
             if (response) {

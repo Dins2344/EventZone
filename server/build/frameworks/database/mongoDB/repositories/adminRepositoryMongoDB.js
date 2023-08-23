@@ -284,11 +284,9 @@ const adminRepositoryMongoDB = () => {
                 $sort: { _id: -1 },
             },
         ]).exec();
-        console.log(data.length);
         return data;
     });
     const addCities = (data) => __awaiter(void 0, void 0, void 0, function* () {
-        console.log(data);
         const cityModel = new Cities_1.default(data);
         const res = yield cityModel.save();
         return res;

@@ -88,7 +88,6 @@ const Inbox: React.FC<InboxProps> = ({ open, setOpen }) => {
     socket.emit("setup", user);
     socket.on("connection", () => {
       // setSocketConnection(true));
-      console.log("socket connected");
     });
   }, []);
 
@@ -235,7 +234,6 @@ const Messages: React.FC<MessagesProps> = ({ selectedChat }) => {
     const handleMessageUpdate = (
       newMessageReceived: CompleteMessageInterface
     ) => {
-      console.log(newMessageReceived);
       if (
         !selectedChatCompare || // if chat is not selected or doesn't match current chat
         selectedChatCompare._id !== newMessageReceived.chat._id

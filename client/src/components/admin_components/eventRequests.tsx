@@ -84,7 +84,6 @@ export default function EventRequests() {
   const handleApprove = async (id: string) => {
     handleOpen();
     const res = await approveEvent(id);
-    console.log(res);
     if (res?.data) {
       setUpdated(!updated);
     }

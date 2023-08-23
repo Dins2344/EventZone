@@ -80,7 +80,6 @@ const BasicInfoComponent = ({ setActiveStep }: ChildComponentProps) => {
   // Form submission handler
   const handleSubmit = async (values: BasicFormInterface) => {
     const res = await addBasicEventInfo(values);
-    console.log(res.data.response);
     dispatch(setEvent(res.data.response));
     setActiveStep(1);
   };

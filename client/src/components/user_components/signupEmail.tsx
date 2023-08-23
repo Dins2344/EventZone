@@ -22,11 +22,9 @@ const SignUpEmailVerify: React.FC = () => {
     validationSchema,
     onSubmit: async (values) => {
       // Handle form submission here
-      console.log(values);
       setEmail(values.email);
       const mode = "emailVerification";
       const res = await OTPRequestPost(values.email, mode);
-      console.log(res);
       if (res?.data.error === "user exist") {
         setError("Email already registered. Please login or reset password.");
         setTimeout(() => {
@@ -112,7 +110,6 @@ const OTPSubmit = ({ email }: { email: string }) => {
     e.preventDefault()
     const mode = 'signUpOTP'
     const res = await OTPVerifyPost(OTP,email,mode)
-    console.log(res)
     if(res?.data.message == 'OTP is invalid'){
         setError('enter valid OTP')
         setTimeout(()=>{setError('')},3000)

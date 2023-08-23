@@ -19,9 +19,7 @@ const OrgCategoryForm : React.FC = () => {
     validationSchema,
     onSubmit: async (values) => {
       // Handle form submission here
-      console.log(values);
       const res = await orgCategoryFormSubmit(values);
-      console.log(res);
       if(res?.statusText == 'OK'){
         // navigate('/admin/add-event-category')
       }

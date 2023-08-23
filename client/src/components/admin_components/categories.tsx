@@ -38,7 +38,6 @@ export const EventCategory = () => {
 
   const handleDelete = async () => {
     const res = await deleteEventCategory(deleteId);
-    console.log(res);
     if (res?.data.message) {
       const deleted = categories.filter((item) => item._id !== deleteId);
       setCategories(deleted);

@@ -1,12 +1,9 @@
-import {
-  Button,
-  Input,
-  Dialog,
-  DialogBody,
-} from "@material-tailwind/react";
+import { Button, Input, Dialog, DialogBody } from "@material-tailwind/react";
 import { useEffect, useState } from "react";
 import { updateEmail, verifyPassword } from "../../../api/userAuth/userApis";
 import { OTPRequestPost, OTPVerifyPost } from "../../../api/userAuth/signUp";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const ChangeEmail: React.FC = () => {
   const [password, setPassword] = useState("");
@@ -20,7 +17,6 @@ const ChangeEmail: React.FC = () => {
 
   const handlePasswordVerify = async () => {
     const res = await verifyPassword(password);
-    console.log(res);
     if (res?.data.ok) {
       setPasswordVerified(true);
     } else {
@@ -31,7 +27,6 @@ const ChangeEmail: React.FC = () => {
   const handleSendOTP = async () => {
     const mode = "emailVerification";
     const res = await OTPRequestPost(email, mode);
-    console.log(res);
     if (res?.data.ok) {
       setEmailVerified(true);
     }
@@ -40,15 +35,41 @@ const ChangeEmail: React.FC = () => {
   const handleOTPVerify = async () => {
     const mode = "signUpOTP";
     const res = await OTPVerifyPost(OTP, email, mode);
-    console.log(res);
     if (res?.data.OTPValidation) {
-      handleOpen()
-      const res = await updateEmail(email)
-      console.log(res)
+      handleOpen();
+      const res = await updateEmail(email);
+      if (res?.data) {
+        notify();
+      }
     }
+  };
+
+  const notify = () => {
+    toast.success("Successfully updated email", {
+      position: "bottom-right",
+      autoClose: 4000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+    });
   };
   return (
     <>
+      <ToastContainer
+        position="bottom-right"
+        autoClose={4000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      />
       <div className="px-5 md:px-10 lg:px-40 mt-5">
         <h3 className="font-semibold text-sm md:text-lg lg:text-xl">
           Change E-mail
@@ -98,7 +119,7 @@ const ChangeEmail: React.FC = () => {
       <>
         <Dialog size="sm" open={open} handler={handleOpen}>
           <DialogBody>
-            <TimerModal handleOpen = {handleOpen}/>
+            <TimerModal handleOpen={handleOpen} />
           </DialogBody>
         </Dialog>
       </>
@@ -108,31 +129,33 @@ const ChangeEmail: React.FC = () => {
 
 export default ChangeEmail;
 
-interface TimerModalProp{
-  handleOpen:()=>void
+interface TimerModalProp {
+  handleOpen: () => void;
 }
 
-const TimerModal: React.FC <TimerModalProp>= ({handleOpen}) => {
+const TimerModal: React.FC<TimerModalProp> = ({ handleOpen }) => {
   const [timeRemaining, setTimeRemaining] = useState<number>(5);
 
   useEffect(() => {
     const timerId = setTimeout(() => {
       setTimeRemaining((prevTime) => prevTime - 1);
-    }, 1000); 
-    if(timeRemaining === 0){
-      localStorage.removeItem('token')
-      handleOpen()
-      window.location.reload()
+    }, 1000);
+    if (timeRemaining === 0) {
+      localStorage.removeItem("token");
+      handleOpen();
+      window.location.reload();
     }
-    return () =>{
+    return () => {
       clearTimeout(timerId);
-    } 
+    };
   }, [timeRemaining]);
   return (
     <>
       <div className="flex flex-col items-center">
         <p>You will be logged out soon, so please re-login!</p>
-        <h3 className="font-semibold text-sm md:text-lg lg:text-xl">{timeRemaining} Seconds</h3>
+        <h3 className="font-semibold text-sm md:text-lg lg:text-xl">
+          {timeRemaining} Seconds
+        </h3>
       </div>
     </>
   );

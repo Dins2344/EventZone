@@ -22,7 +22,6 @@ const userController = (userDbRepository, userDbRepositoryImpl, authServiceInter
         var _a;
         const userId = (_a = req.user) === null || _a === void 0 ? void 0 : _a.Id;
         const password = req.body.password;
-        console.log(userId, password);
         if (userId) {
             const response = yield (0, userAuth_2.verifyPassword)(userId, password, dbRepositoryUser, authService);
             if (response) {
@@ -39,7 +38,6 @@ const userController = (userDbRepository, userDbRepositoryImpl, authServiceInter
         const userId = (_b = req.user) === null || _b === void 0 ? void 0 : _b.Id;
         if (userId && newPassword) {
             const response = yield (0, userAuth_1.changePassword)(newPassword, userId, dbRepositoryUser, authService);
-            console.log(response);
             if (response) {
                 res.json({ message: 'changing password is done', ok: true, response });
             }
@@ -67,7 +65,6 @@ const userController = (userDbRepository, userDbRepositoryImpl, authServiceInter
     const getUserByIdController = (0, express_async_handler_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
         var _d;
         const userId = (_d = req.user) === null || _d === void 0 ? void 0 : _d.Id;
-        console.log(userId);
         if (userId) {
             const data = yield (0, userAuth_2.getUserById)(userId, dbRepositoryUser);
             if (data) {
@@ -132,7 +129,6 @@ const userController = (userDbRepository, userDbRepositoryImpl, authServiceInter
     }));
     const cancelBookingController = (0, express_async_handler_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
         const bookingId = req.params.id;
-        console.log(bookingId);
         const response = yield (0, userAuth_2.cancelBooking)(bookingId, dbRepositoryUser);
         if (response) {
             res.json({ message: "canceling order done", response });
@@ -161,7 +157,6 @@ const userController = (userDbRepository, userDbRepositoryImpl, authServiceInter
             }
             const response = yield (0, userAuth_2.addProfileContactInfo)(data, userId, dbRepositoryUser);
             if (response) {
-                console.log(response);
                 res.json({ ok: true, message: "data added to user db", response });
             }
             else {
@@ -201,9 +196,7 @@ const userController = (userDbRepository, userDbRepositoryImpl, authServiceInter
         var _j;
         const userId = (_j = req.user) === null || _j === void 0 ? void 0 : _j.Id;
         if (userId) {
-            console.log(userId);
             const data = yield (0, userAuth_2.getAddressInfo)(userId, dbRepositoryUser);
-            console.log(data);
             if (data) {
                 res.json({ message: "fetching address data done", ok: true, data });
             }

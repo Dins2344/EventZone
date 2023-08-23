@@ -7,7 +7,6 @@ const APP_SECRET = configKeys.APP_SECRET
 const base = "https://api-m.sandbox.paypal.com";
 
 export async function createOrder(data:any) {
-    console.log(data)
   const accessToken = await generateAccessToken();
   const url = `${base}/v2/checkout/orders`;
   const response = await fetch(url, {
@@ -42,7 +41,6 @@ export async function capturePayment(orderId:string) {
       Authorization: `Bearer ${accessToken}`,
     },
   });
-  console.log(response)
 
   return handleResponse(response);
 }

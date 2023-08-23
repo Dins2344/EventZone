@@ -19,9 +19,7 @@ const EventCategoryForm = () => {
     validationSchema,
     onSubmit: async (values) => {
       // Handle form submission here
-      console.log(values);
       const res = await eventCategoryFormSubmit(values);
-      console.log(res);
       if(res?.statusText == 'OK'){
         // navigate('/admin/add-event-category')
       }

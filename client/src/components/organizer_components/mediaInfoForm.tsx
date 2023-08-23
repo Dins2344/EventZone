@@ -26,7 +26,6 @@ const MediaInfoForm = ({setActiveStep}:ChildComponentProps) => {
   });
 
   const handleSubmit = async(values:mediaFormInterface) => {
-    console.log(event)  
     const formData = new FormData();
     formData.append('description', values?.description);
     formData.append('videoURL', values?.videoURL);

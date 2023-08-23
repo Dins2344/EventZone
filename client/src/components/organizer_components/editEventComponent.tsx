@@ -119,7 +119,6 @@ const EditEventComponent: React.FC<EditEventProps> = ({ eventId, setMode }) => {
         // Your form submission logic goes here
         setErrors({});
         formData.eventId = eventId;
-        console.log(formData);
           const res = await editEventInfo(formData);
           if (res?.data.message) {
               

@@ -52,7 +52,6 @@ const EventCategoryEditForm = () => {
       values.id !== undefined && formData.append("id", values.id);
       // Handle form submission here
       const res = await eventCategoryEditFormSubmit(values);
-      console.log(res);
       if (res?.statusText == "OK") {
         // navigate('/admin/add-event-category')
       }

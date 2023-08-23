@@ -109,7 +109,6 @@ const adminController = (
   const deleteOrgCategoryController = asyncHandler(
     async (req: Request, res: Response) => {
       const id = req.params.id;
-      console.log(id)
       const response = await deleteOrgCategory(id, dbRepositoryAdmin);
       if (response) {
         res.json({ message: "deleted" });
@@ -282,7 +281,6 @@ const adminController = (
 
   const deleteCityController = asyncHandler(async(req:Request,res:Response)=>{
     const id = req.params.id
-    console.log(id)
     const response = await deleteCity(id,dbRepositoryAdmin)
     if(response){
       res.json({message:'deleting city done',ok:true,response})

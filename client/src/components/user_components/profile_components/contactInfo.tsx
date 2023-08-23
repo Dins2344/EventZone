@@ -102,7 +102,6 @@ const ContactInfo: React.FC = () => {
         const res = await addProfileContactInfo(data);
         setErrors({});
         if (res?.data.ok) {
-          console.log(res.data);
           setUpdated(!updated);
           setIsLoading(false);
         }

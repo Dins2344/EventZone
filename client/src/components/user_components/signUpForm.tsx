@@ -36,9 +36,7 @@ const SignUpForm: React.FC = () => {
     onSubmit: async (values) => {
       // Handle form submission here
       values.email = email;
-      console.log(values);
       const res = await signUpPost(values);
-      console.log(res?.data);
       if (res?.data) {
         localStorage.setItem("token", res.data.token);
         notify();

@@ -34,7 +34,6 @@ export const addBasicEventInfo = async (data: BasicFormInterface) => {
 };
 
 export const addMediaEventInfo = async (data: FormData) => {
-  console.log(data);
   try {
     const res = await api.post(
       `${config.BASE_URL}/organization/add-event-media-info`,
@@ -71,7 +70,6 @@ export const getEventDetails = async (id: string) => {
 // export const getEditableEventDetails = async(id:strign)
 
 export const publishEvent = async (id: string) => {
-  console.log("publish called");
   try {
     const res = await api.get(
       `${config.BASE_URL}/organization/publish-event/${id}`

@@ -36,8 +36,9 @@ const PublishFormComponent :React.FC<SubmittedChildComponentProps>= ({ submitted
       const data = { eventCapacity, ticketPrice, ticketValue,eventId:'' };
       data.eventId = event.eventDetails._id
       const res = await addPublishEventInfo(data)
-      console.log(res)
-      setSubmitted(false);
+      if (res) {
+        setSubmitted(false);
+      }
     }
   };
 

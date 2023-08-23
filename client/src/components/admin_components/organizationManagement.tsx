@@ -32,7 +32,6 @@ const OrganizationsTable = () => {
     
     const fetchAllOrganizations = async() => {
         const data = await getTotalOrganizers()
-        console.log(data)
         setOrganizers(data?.data.data)
     }
     const TABLE_ROWS = organizers

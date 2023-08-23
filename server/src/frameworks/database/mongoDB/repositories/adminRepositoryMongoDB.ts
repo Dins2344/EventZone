@@ -312,12 +312,10 @@ export const adminRepositoryMongoDB = () => {
         $sort: { _id: -1 },
       },
     ]).exec();
-    console.log(data.length);
     return data;
   };
 
   const addCities = async (data: CityInterface) => {
-    console.log(data);
     const cityModel = new Cities(data);
     const res = await cityModel.save();
     return res;

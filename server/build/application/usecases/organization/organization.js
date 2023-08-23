@@ -89,7 +89,6 @@ const getEventDetails = (id, organizationRepository) => __awaiter(void 0, void 0
 exports.getEventDetails = getEventDetails;
 const publishEvent = (id, organizationRepository) => __awaiter(void 0, void 0, void 0, function* () {
     const time = new Date().toDateString();
-    console.log(time);
     const res = yield organizationRepository.publishEvent(id, time);
     if (!res) {
         throw new appError_1.default("publishing event failed", httpStatus_1.HttpStatus.BAD_REQUEST);
@@ -106,7 +105,6 @@ const getUsersAllEvents = (userId, organizationRepository) => __awaiter(void 0, 
 });
 exports.getUsersAllEvents = getUsersAllEvents;
 const getOrganizersAllEvent = (id, organizationRepository) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log(id);
     const data = yield organizationRepository.getOrganizersAllEvent(id);
     if (!data) {
         throw new appError_1.default("getting organizers all events has failed", httpStatus_1.HttpStatus.BAD_REQUEST);

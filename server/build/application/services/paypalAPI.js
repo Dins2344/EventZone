@@ -19,7 +19,6 @@ const APP_SECRET = config_1.default.APP_SECRET;
 const base = "https://api-m.sandbox.paypal.com";
 function createOrder(data) {
     return __awaiter(this, void 0, void 0, function* () {
-        console.log(data);
         const accessToken = yield generateAccessToken();
         const url = `${base}/v2/checkout/orders`;
         const response = yield fetch(url, {
@@ -55,7 +54,6 @@ function capturePayment(orderId) {
                 Authorization: `Bearer ${accessToken}`,
             },
         });
-        console.log(response);
         return handleResponse(response);
     });
 }

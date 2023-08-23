@@ -212,7 +212,6 @@ export const userRepositoryMongoDB = () => {
   };
 
   const cancelBooking = async (bookingId: string) => {
-    console.log(bookingId);
     const res = await Bookings.updateOne(
       { _id: new ObjectId(bookingId) },
       { status: "canceled" }
@@ -345,7 +344,6 @@ export const userRepositoryMongoDB = () => {
   };
 
   const createChat = async (chatData: CreateChatInterface) => {
-    console.log(chatData);
     const res = await Chat.create(chatData);
     const fullChat = await Chat.find({ _id: res._id }).populate(
       "users",
@@ -430,7 +428,6 @@ export const userRepositoryMongoDB = () => {
       { _id: new ObjectId(userId) },
       { $push: { likedEvents: eventId } }
     );
-    console.log(res);
     if (res) {
       return { message: "successfully added to like list", ok: true };
     } else {
@@ -460,7 +457,6 @@ export const userRepositoryMongoDB = () => {
   };
   const getFollowingOrgs = async (userId: string) => {
     const data = await User.findById({ _id: userId }).populate("following");
-    console.log(data);
     return data;
   };
 
@@ -498,7 +494,6 @@ export const userRepositoryMongoDB = () => {
       event.avgRating =
         event.reviews.reduce((acc, item) => item.rating + acc, 0) /
         event.numOfReviews;
-      console.log(event.avgRating);
       const res = await event.save({ validateBeforeSave: false });
       if (res) {
         return { message: "reviews updated", ok: true };
@@ -512,8 +507,6 @@ export const userRepositoryMongoDB = () => {
 
   const getReview = async (eventId: string) => {
     const data = await Event.findById(eventId).populate("reviews.userId");
-    console.log('got reviews')
-    console.log(data);
     return data;
   };
   const getEventsFromFollowingOrganizers = async (userId: string) => {
@@ -540,7 +533,6 @@ export const userRepositoryMongoDB = () => {
     if (user) {
       const followingArray:string[] = user?.following.map((item) => item.toString());
       const events = await Event.find({ organizer: { $in: followingArray }, status: 'approved' });
-      console.log(events)
       return events;
     }
   };

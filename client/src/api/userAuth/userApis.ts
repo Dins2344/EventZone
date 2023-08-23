@@ -26,7 +26,6 @@ export const createOrganizer = async (OrgData: createOrganizerInterface) => {
       `${config.BASE_URL}/user/register-organization`,
       OrgData
     );
-    console.log(response);
     return response.data;
   } catch (error) {
     console.log("error in fetching", error);

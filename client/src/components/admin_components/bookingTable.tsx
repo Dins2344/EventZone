@@ -21,7 +21,6 @@ const AllBookingTable: React.FC = () => {
   }, []);
   const fetchBookingDetail = async () => {
     const data = await getAllBookings();
-    console.log(data);
     setBookingData(data?.data.data);
   };
   const TABLE_ROWS = bookingData;

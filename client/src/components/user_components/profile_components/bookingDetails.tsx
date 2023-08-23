@@ -50,9 +50,10 @@ const BookingDetails = () => {
   const handleCancel = async () => {
     if (bookingDetail) {
       const res = await cancelBooking(bookingDetail?._id);
-      console.log(res);
-      handleUpdated();
-      handleOpen();
+      if (res) {
+        handleUpdated();
+        handleOpen();
+      }
     }
   };
 

@@ -184,7 +184,6 @@ const organizationRepositoryMongoDB = () => {
         return data;
     });
     const updateOrganizationInfo = (data) => __awaiter(void 0, void 0, void 0, function* () {
-        console.log(data);
         try {
             const res = yield organizationModel_1.default.updateOne({ _id: new mongodb_1.ObjectId(data._id) }, {
                 orgName: data.orgName,

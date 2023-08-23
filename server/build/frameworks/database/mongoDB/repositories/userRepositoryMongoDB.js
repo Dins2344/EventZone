@@ -199,7 +199,6 @@ const userRepositoryMongoDB = () => {
         return data;
     });
     const cancelBooking = (bookingId) => __awaiter(void 0, void 0, void 0, function* () {
-        console.log(bookingId);
         const res = yield bookings_1.default.updateOne({ _id: new mongodb_1.ObjectId(bookingId) }, { status: "canceled" });
         return res;
     });
@@ -305,7 +304,6 @@ const userRepositoryMongoDB = () => {
         return fullChat;
     });
     const createChat = (chatData) => __awaiter(void 0, void 0, void 0, function* () {
-        console.log(chatData);
         const res = yield chats_1.default.create(chatData);
         const fullChat = yield chats_1.default.find({ _id: res._id }).populate("users", "-password");
         return fullChat;
@@ -364,7 +362,6 @@ const userRepositoryMongoDB = () => {
     });
     const likeEvent = (userId, eventId) => __awaiter(void 0, void 0, void 0, function* () {
         const res = yield userModel_1.default.updateOne({ _id: new mongodb_1.ObjectId(userId) }, { $push: { likedEvents: eventId } });
-        console.log(res);
         if (res) {
             return { message: "successfully added to like list", ok: true };
         }
@@ -392,7 +389,6 @@ const userRepositoryMongoDB = () => {
     });
     const getFollowingOrgs = (userId) => __awaiter(void 0, void 0, void 0, function* () {
         const data = yield userModel_1.default.findById({ _id: userId }).populate("following");
-        console.log(data);
         return data;
     });
     const updateBookings = (bookingId) => __awaiter(void 0, void 0, void 0, function* () {
@@ -427,7 +423,6 @@ const userRepositoryMongoDB = () => {
             event.avgRating =
                 event.reviews.reduce((acc, item) => item.rating + acc, 0) /
                     event.numOfReviews;
-            console.log(event.avgRating);
             const res = yield event.save({ validateBeforeSave: false });
             if (res) {
                 return { message: "reviews updated", ok: true };
@@ -442,8 +437,6 @@ const userRepositoryMongoDB = () => {
     });
     const getReview = (eventId) => __awaiter(void 0, void 0, void 0, function* () {
         const data = yield eventModel_1.default.findById(eventId).populate("reviews.userId");
-        console.log('got reviews');
-        console.log(data);
         return data;
     });
     const getEventsFromFollowingOrganizers = (userId) => __awaiter(void 0, void 0, void 0, function* () {
@@ -470,7 +463,6 @@ const userRepositoryMongoDB = () => {
         if (user) {
             const followingArray = user === null || user === void 0 ? void 0 : user.following.map((item) => item.toString());
             const events = yield eventModel_1.default.find({ organizer: { $in: followingArray }, status: 'approved' });
-            console.log(events);
             return events;
         }
     });

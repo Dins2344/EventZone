@@ -206,7 +206,6 @@ export const organizationRepositoryMongoDB = () => {
   };
 
   const updateOrganizationInfo = async (data: RegisteredOrganization) => {
-    console.log(data);
     try {
       const res = await Organization.updateOne(
         { _id: new ObjectId(data._id) },

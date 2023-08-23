@@ -65,7 +65,6 @@ const authController = (userDbRepository, userDbRepositoryImpl, authServiceInter
         else if (mode === "OTPLogin") {
             const user = yield (0, userAuth_1.emailVerify)(email, dbRepositoryUser);
             if (user) {
-                console.log(user);
                 emailService.sendEmail(email);
                 res.json({ status: true });
             }
@@ -78,9 +77,7 @@ const authController = (userDbRepository, userDbRepositoryImpl, authServiceInter
         const OTP = req.params.OTP;
         const email = req.params.email;
         const mode = req.params.mode;
-        console.log(OTP, email);
         const { message } = emailService.verifyOTP(OTP);
-        console.log(message);
         if (message == "OTP verified") {
             if (mode == "signUpOTP") {
                 res.json({ OTPValidation: true });
@@ -95,7 +92,6 @@ const authController = (userDbRepository, userDbRepositoryImpl, authServiceInter
     const googleLoginController = (0, express_async_handler_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
         const token = req.params.id;
         const decodedData = (0, jwt_decode_1.default)(token);
-        console.log(decodedData);
         const user = {
             firstName: decodedData.given_name,
             lastName: decodedData.family_name,
@@ -117,7 +113,6 @@ const authController = (userDbRepository, userDbRepositoryImpl, authServiceInter
         const data = req.body;
         const user = yield (0, userAuth_1.getUserByEmail)(data.email, dbRepositoryUser);
         const response = yield (0, userAuth_1.changePassword)(data.newPassword, user._id, dbRepositoryUser, authService);
-        console.log(response);
         if (response) {
             res.json({ message: "password changed", ok: true });
         }

@@ -57,7 +57,6 @@ const userController = (
     async (req: CustomRequest, res: Response) => {
       const userId = req.user?.Id;
       const password = req.body.password;
-      console.log(userId, password);
       if (userId) {
         const response = await verifyPassword(
           userId,
@@ -79,7 +78,6 @@ const userController = (
     const userId = req.user?.Id
     if (userId && newPassword) {
       const response = await changePassword(newPassword, userId, dbRepositoryUser, authService)
-      console.log(response);
       if (response) {
         res.json({message:'changing password is done',ok:true,response})
       } else {
@@ -106,7 +104,6 @@ const userController = (
   const getUserByIdController = asyncHandler(
     async (req: CustomRequest, res: Response) => {
       const userId = req.user?.Id;
-      console.log(userId);
       if (userId) {
         const data = await getUserById(userId, dbRepositoryUser);
         if (data) {
@@ -182,7 +179,6 @@ const userController = (
   const cancelBookingController = asyncHandler(
     async (req: Request, res: Response) => {
       const bookingId: string = req.params.id;
-      console.log(bookingId);
       const response = await cancelBooking(bookingId, dbRepositoryUser);
       if (response) {
         res.json({ message: "canceling order done", response });
@@ -218,7 +214,6 @@ const userController = (
           dbRepositoryUser
         );
         if (response) {
-          console.log(response);
           res.json({ ok: true, message: "data added to user db", response });
         } else {
           res.json({ error: "data adding failed" });
@@ -261,9 +256,7 @@ const userController = (
     async (req: CustomRequest, res: Response) => {
       const userId = req.user?.Id;
       if (userId) {
-        console.log(userId)
         const data = await getAddressInfo(userId, dbRepositoryUser);
-        console.log(data)
         if (data) {
           res.json({ message: "fetching address data done", ok: true, data });
         } else {

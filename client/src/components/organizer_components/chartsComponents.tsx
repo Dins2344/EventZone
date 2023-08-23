@@ -212,7 +212,6 @@ export const DonutChartComponent: React.FC = () => {
 
   const fetchData = async()=>{
     const data = await getTicketsSoldByEvents()
-    console.log(data?.data.data)
     setData(data?.data.data)
   }
   const eventName:string[] = []

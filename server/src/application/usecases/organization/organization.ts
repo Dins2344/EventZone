@@ -118,7 +118,6 @@ export const publishEvent = async (
   organizationRepository: ReturnType<OrganizationDBInterface>
 ) => {
   const time = new Date().toDateString();
-  console.log(time);
   const res = await organizationRepository.publishEvent(id, time);
   if (!res) {
     throw new AppError("publishing event failed", HttpStatus.BAD_REQUEST);
@@ -144,7 +143,6 @@ export const getOrganizersAllEvent = async (
   id: string,
   organizationRepository: ReturnType<OrganizationDBInterface>
 ) => {
-  console.log(id);
   const data = await organizationRepository.getOrganizersAllEvent(id);
   if (!data) {
     throw new AppError(

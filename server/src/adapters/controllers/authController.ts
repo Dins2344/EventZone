@@ -91,7 +91,6 @@ const authController = (
     } else if (mode === "OTPLogin") {
       const user = await emailVerify(email, dbRepositoryUser);
       if (user) {
-        console.log(user);
         emailService.sendEmail(email);
         res.json({ status: true });
       } else {
@@ -104,9 +103,7 @@ const authController = (
     const OTP: string = req.params.OTP;
     const email: string = req.params.email;
     const mode: string = req.params.mode;
-    console.log(OTP, email);
     const { message } = emailService.verifyOTP(OTP);
-    console.log(message);
     if (message == "OTP verified") {
       if (mode == "signUpOTP") {
         res.json({ OTPValidation: true });
@@ -122,7 +119,6 @@ const authController = (
     async (req: Request, res: Response) => {
       const token = req.params.id;
       const decodedData: any = jwtDecode(token);
-      console.log(decodedData);
       const user = {
         firstName: decodedData.given_name,
         lastName: decodedData.family_name,
@@ -155,7 +151,6 @@ const authController = (
         dbRepositoryUser,
         authService
       );
-      console.log(response);
       if (response) {
         res.json({ message: "password changed", ok: true });
       } else {

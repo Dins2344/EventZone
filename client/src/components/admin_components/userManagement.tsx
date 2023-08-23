@@ -55,7 +55,6 @@ const UserManagement: React.FC = () => {
 
   const fetchUsers = async () => {
     const data = await getTotalUsers();
-    console.log(data?.data.data);
     data && setUsers(data.data.data);
   };
 

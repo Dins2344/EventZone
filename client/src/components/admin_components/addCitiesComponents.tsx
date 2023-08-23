@@ -24,7 +24,6 @@ const AddCitiesComponents: React.FC = () => {
 
   const fetchCities = async () => {
     const data = await getAllCities();
-    console.log(data);
     setCities(data?.data.data);
   };
 

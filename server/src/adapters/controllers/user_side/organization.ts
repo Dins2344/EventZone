@@ -119,7 +119,6 @@ const organizationController = (
 
   const getOrganizationDetailController = asyncHandler(
     async (req: Request, res: Response) => {
-      console.log(req.params.id);
       const orgId = req.params.id;
       const data = await getOrganizationDetails(
         orgId,
@@ -166,7 +165,6 @@ const organizationController = (
   const addPublishEventInfoController = asyncHandler(
     async (req: Request, res: Response) => {
       const data = req.body;
-      console.log(data);
       const response = await addPublishEventInfo(
         data,
         dbRepositoryOrganization
@@ -194,7 +192,6 @@ const organizationController = (
   const publishEventController = asyncHandler(
     async (req: Request, res: Response) => {
       const id = req.params.id;
-      console.log(id);
       const response = await publishEvent(id, dbRepositoryOrganization);
       if (response) {
         res.json({ message: "publishing request sent", response });
@@ -222,7 +219,6 @@ const organizationController = (
   const getOrganizersAllEventController = asyncHandler(
     async (req: Request, res: Response) => {
       const orgId = req.params.id;
-      console.log(orgId);
       const data = await getOrganizersAllEvent(orgId, dbRepositoryOrganization);
       if (data) {
         res.json({ message: "events fetching done", data });
@@ -236,7 +232,6 @@ const organizationController = (
     async (req: CustomRequest, res: Response) => {
       const user = req.user;
       if (user) {
-        console.log(user);
         const { Id } = user;
         const data = await getOrganizersAllBookings(
           Id,
@@ -369,9 +364,7 @@ const organizationController = (
         const message =
           "We kindly request your cooperation as there have been some updates made to the event you have booked in the event zone. Your attention and understanding regarding these changes are highly appreciated. Thank you for your cooperation.";
         const users = await getEventBookedUsers(data.eventId, dbRepositoryOrganization)
-        console.log(users)
        const response = users.map(async(item:any) => {
-          console.log(item.email)
         return await emailService.sendEmail(item?.email,message)
        })
         if (response) {

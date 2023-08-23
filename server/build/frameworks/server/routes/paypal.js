@@ -42,7 +42,6 @@ const paypalRouter = () => {
     router.post("/create-paypal-order", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         try {
             const order = yield paypal.createOrder(req.body);
-            console.log(order);
             res.json(order);
         }
         catch (err) {
@@ -53,7 +52,6 @@ const paypalRouter = () => {
         const { orderID } = req.body;
         try {
             const captureData = yield paypal.capturePayment(orderID);
-            console.log(captureData);
             res.json(captureData);
         }
         catch (err) {

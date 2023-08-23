@@ -112,7 +112,6 @@ const ReserveSeatComponent: React.FC<ReserveSeatProps> = ({
         organizationId: eventDetails.organizer,
       };
       const res = await ticketBooking(data);
-      console.log(res);
       if (res?.data.message === "booking confirmed") {
         notify();
         setBookingRes(res.data.response);

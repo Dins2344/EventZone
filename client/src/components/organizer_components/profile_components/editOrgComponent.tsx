@@ -47,20 +47,17 @@ const EditOrgComponent: React.FC = () => {
 
   const fetchOrgOwner = async (ownerId: string) => {
     const data = await getOwnerDetails(ownerId);
-    console.log(data);
     setOwner(data?.data.data);
   };
 
   const fetchOrganization = async (id: string) => {
     const data = await getOrganizationDetails(id);
-    console.log(data.data.data);
     setOrganizations(data?.data.data);
     setFormData(data?.data.data);
   };
 
   const fetchOrganizationCategories = async () => {
     const data = await getAllOrgCategories();
-    console.log(data?.data);
     setOrgCategories(data?.data.data);
   };
 
@@ -103,7 +100,6 @@ const EditOrgComponent: React.FC = () => {
             data.append(`images`, image, `images${index}`);
           });
         }
-        console.log(formData);
         setIsLoading(true);
         const res = await updateOrganizationInfo(data);
         setErrors({});

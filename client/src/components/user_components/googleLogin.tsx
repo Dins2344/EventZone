@@ -37,10 +37,8 @@ const GoogleLogin = () => {
   }, []);
 
   const handleGoogleResponse = async (response: any) => {
-    console.log(response.credential);
     const res = await loginWithGoogle(response.credential);
     if (res?.data.ok) {
-      console.log(res);
       localStorage.setItem("token", res.data.token);
       dispatch(setUser(res?.data.isUser));
       notify();

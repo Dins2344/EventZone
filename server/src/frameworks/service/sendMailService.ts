@@ -23,7 +23,6 @@ export const sendEmailService = () => {
       otp = null
     },120000)
    
-    console.log(otpData)
     const mailOptions = {
       from:'dinson.cd@gmail.com',
       to: email,

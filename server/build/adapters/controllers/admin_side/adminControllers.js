@@ -78,7 +78,6 @@ const adminController = (adminDbRepository, adminDbRepositoryImpl) => {
     }));
     const deleteOrgCategoryController = (0, express_async_handler_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
         const id = req.params.id;
-        console.log(id);
         const response = yield (0, adminUsecases_2.deleteOrgCategory)(id, dbRepositoryAdmin);
         if (response) {
             res.json({ message: "deleted" });
@@ -249,7 +248,6 @@ const adminController = (adminDbRepository, adminDbRepositoryImpl) => {
     }));
     const deleteCityController = (0, express_async_handler_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
         const id = req.params.id;
-        console.log(id);
         const response = yield (0, adminUsecases_2.deleteCity)(id, dbRepositoryAdmin);
         if (response) {
             res.json({ message: 'deleting city done', ok: true, response });
