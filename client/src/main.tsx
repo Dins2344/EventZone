@@ -80,14 +80,15 @@ const AddCities = lazy(() => import("./pages/admin_pages/addCities.tsx"));
 const CityAddingForm = lazy(
   () => import("./components/admin_components/CityAddingForm.tsx")
 );
-const ForgotPassword = lazy(()=>import('../src/pages/user_pages/forgotPassword.tsx'))
+const ForgotPassword = lazy(() => import('../src/pages/user_pages/forgotPassword.tsx'))
+const ExploreEvents = lazy(()=>import('./pages/user_pages/exploreEvents.tsx'))
 
 const appRouter = createBrowserRouter([
   {
     path: "/admin/login",
     element: (
       <Suspense fallback={<SpinnerComponent />}>
-        <AdminLogin />,
+        <AdminLogin />
       </Suspense>
     ),
   },
@@ -95,7 +96,7 @@ const appRouter = createBrowserRouter([
     path: "/admin/add-event-category",
     element: (
       <Suspense fallback={<SpinnerComponent />}>
-        <EventCategoryAddingPage />,
+        <EventCategoryAddingPage />
       </Suspense>
     ),
   },
@@ -103,7 +104,7 @@ const appRouter = createBrowserRouter([
     path: "/admin/edit-event-category/:id",
     element: (
       <Suspense fallback={<SpinnerComponent />}>
-        <EventCategoryEditForm />,
+        <EventCategoryEditForm />
       </Suspense>
     ),
   },
@@ -111,7 +112,7 @@ const appRouter = createBrowserRouter([
     path: "/admin/add-org-category",
     element: (
       <Suspense fallback={<SpinnerComponent />}>
-        <OrgCategoryForm />,
+        <OrgCategoryForm />
       </Suspense>
     ),
   },
@@ -127,7 +128,7 @@ const appRouter = createBrowserRouter([
         path: "/admin",
         element: (
           <Suspense fallback={<SpinnerComponent />}>
-            <AdminLanding />,
+            <AdminLanding />
           </Suspense>
         ),
       },
@@ -136,7 +137,7 @@ const appRouter = createBrowserRouter([
         path: "/admin/category-management",
         element: (
           <Suspense fallback={<SpinnerComponent></SpinnerComponent>}>
-            <CategoryManagement />,
+            <CategoryManagement />
           </Suspense>
         ),
       },
@@ -144,7 +145,7 @@ const appRouter = createBrowserRouter([
         path: "/admin/events-management",
         element: (
           <Suspense fallback={<SpinnerComponent />}>
-            <RequestManagement />,
+            <RequestManagement />
           </Suspense>
         ),
       },
@@ -152,7 +153,7 @@ const appRouter = createBrowserRouter([
         path: "/admin/users-organization-management",
         element: (
           <Suspense fallback={<SpinnerComponent />}>
-            <UsersAndOrganization />,
+            <UsersAndOrganization />
           </Suspense>
         ),
       },
@@ -203,7 +204,7 @@ const appRouter = createBrowserRouter([
         path: "/register/user-login",
         element: (
           <Suspense fallback={<SpinnerComponent />}>
-            <LoginPage />,
+            <LoginPage />
           </Suspense>
         ),
       },
@@ -211,7 +212,7 @@ const appRouter = createBrowserRouter([
         path: "/register/OTP-login",
         element: (
           <Suspense fallback={<SpinnerComponent />}>
-            <OTPLogin />,
+            <OTPLogin />
           </Suspense>
         ),
       },
@@ -219,7 +220,7 @@ const appRouter = createBrowserRouter([
         path: "/register/OTP-login/OTP-login-submit/:email",
         element: (
           <Suspense fallback={<SpinnerComponent />}>
-            <OTPVerifyPage />,
+            <OTPVerifyPage />
           </Suspense>
         ),
       },
@@ -227,7 +228,7 @@ const appRouter = createBrowserRouter([
         path: "/register/forgot-password",
         element: (
           <Suspense fallback={<SpinnerComponent />}>
-            <ForgotPassword />,
+            <ForgotPassword />
           </Suspense>
         ),
       },
@@ -251,7 +252,15 @@ const appRouter = createBrowserRouter([
         path: "/",
         element: (
           <Suspense fallback={<SpinnerComponent />}>
-            <Body />,
+            <Body />
+          </Suspense>
+        ),
+      },
+      {
+        path: "/explore-events",
+        element: (
+          <Suspense fallback={<SpinnerComponent />}>
+            <ExploreEvents />
           </Suspense>
         ),
       },
@@ -259,7 +268,7 @@ const appRouter = createBrowserRouter([
         path: "/show-event",
         element: (
           <Suspense fallback={<SpinnerComponent />}>
-            <EventDetails />,
+            <EventDetails />
           </Suspense>
         ),
       },
@@ -267,7 +276,7 @@ const appRouter = createBrowserRouter([
         path: "/user/user-profile",
         element: (
           <Suspense fallback={<SpinnerComponent />}>
-            <ProfilePage />,
+            <ProfilePage />
           </Suspense>
         ),
       },
@@ -275,7 +284,7 @@ const appRouter = createBrowserRouter([
         path: "/user/edit-profile",
         element: (
           <Suspense fallback={<SpinnerComponent />}>
-            <EditProfile />,
+            <EditProfile />
           </Suspense>
         ),
       },
@@ -283,7 +292,7 @@ const appRouter = createBrowserRouter([
         path: "/show-booking",
         element: (
           <Suspense fallback={<SpinnerComponent />}>
-            <BookingDetailsPage />,
+            <BookingDetailsPage />
           </Suspense>
         ),
       },
@@ -291,7 +300,7 @@ const appRouter = createBrowserRouter([
         path: "/search-events",
         element: (
           <Suspense fallback={<SpinnerComponent />}>
-            <SearchPage />,
+            <SearchPage />
           </Suspense>
         ),
       },
@@ -299,7 +308,7 @@ const appRouter = createBrowserRouter([
         path: "/show-organizer",
         element: (
           <Suspense fallback={<SpinnerComponent />}>
-            <ShowOrganizer />,
+            <ShowOrganizer />
           </Suspense>
         ),
       },
@@ -318,7 +327,7 @@ const appRouter = createBrowserRouter([
         path: "/organization/home",
         element: (
           <Suspense fallback={<SpinnerComponent />}>
-            <OrganizationHome />,
+            <OrganizationHome />
           </Suspense>
         ),
       },
@@ -334,7 +343,7 @@ const appRouter = createBrowserRouter([
         path: "/organization/events",
         element: (
           <Suspense fallback={<SpinnerComponent />}>
-            <EventsHome />,
+            <EventsHome />
           </Suspense>
         ),
       },
@@ -342,7 +351,7 @@ const appRouter = createBrowserRouter([
         path: "/organization/settings",
         element: (
           <Suspense fallback={<SpinnerComponent />}>
-            <OrganizationSettings />,
+            <OrganizationSettings />
           </Suspense>
         ),
       },
@@ -350,7 +359,7 @@ const appRouter = createBrowserRouter([
         path: "/organization/settings/edit-organization",
         element: (
           <Suspense fallback={<SpinnerComponent />}>
-            <EditOrganization />,
+            <EditOrganization />
           </Suspense>
         ),
       },
@@ -358,7 +367,7 @@ const appRouter = createBrowserRouter([
         path: "/organization/reports",
         element: (
           <Suspense fallback={<SpinnerComponent />}>
-            <Reports />,
+            <Reports />
           </Suspense>
         ),
       },
@@ -366,7 +375,7 @@ const appRouter = createBrowserRouter([
         path: "/organization/events/event",
         element: (
           <Suspense fallback={<SpinnerComponent />}>
-            <ViewEvent />,
+            <ViewEvent />
           </Suspense>
         ),
       },
@@ -374,7 +383,7 @@ const appRouter = createBrowserRouter([
         path: "/organization/add-event",
         element: (
           <Suspense fallback={<SpinnerComponent />}>
-            <EventAddingPage />,
+            <EventAddingPage />
           </Suspense>
         ),
       },
@@ -382,7 +391,7 @@ const appRouter = createBrowserRouter([
         path: "/organization/bookings",
         element: (
           <Suspense fallback={<SpinnerComponent />}>
-            <BookingHome />,
+            <BookingHome />
           </Suspense>
         ),
       },
