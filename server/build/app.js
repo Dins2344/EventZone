@@ -8,6 +8,7 @@ const express_1 = __importDefault(require("express"));
 const http_1 = __importDefault(require("http"));
 const routes_1 = __importDefault(require("./frameworks/server/routes"));
 const connection_1 = __importDefault(require("./frameworks/database/mongoDB/connection"));
+const appError_1 = __importDefault(require("./utils/appError"));
 const errorHandling_1 = __importDefault(require("./frameworks/server/middlewares/errorHandling"));
 const server_2 = __importDefault(require("./frameworks/server/server"));
 const path_1 = __importDefault(require("path"));
@@ -22,9 +23,9 @@ app.get("*", (req, res) => {
     res.sendFile(path_1.default.resolve(__dirname, "../../client/dist", "index.html"));
 });
 app.use(errorHandling_1.default);
-// app.all("*", (req, res, next: NextFunction) => {
-//   next(new AppError("Not found", 404));
-// });
+app.all("*", (req, res, next) => {
+    next(new appError_1.default("Not found", 404));
+});
 io.on("connection", (socket) => {
     console.log("A new client connected!");
     socket.on("setup", (userData) => {
