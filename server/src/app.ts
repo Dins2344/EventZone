@@ -26,9 +26,9 @@ app.get("*", (req: Request, res: Response) => {
 
 app.use(errorHandlingMiddleware);
 
-// app.all("*", (req, res, next: NextFunction) => {
-//   next(new AppError("Not found", 404));
-// });
+app.all("*", (req, res, next: NextFunction) => {
+  next(new AppError("Not found", 404));
+});
 
 io.on("connection", (socket) => {
   console.log("A new client connected!");
