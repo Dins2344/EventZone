@@ -21,9 +21,11 @@ import {
 import { useSelector } from "react-redux";
 import { selectUser } from "../../../redux/reducers/userSlice";
 import io from "socket.io-client";
-import config from "../../../config/envConfig";
+// import config from "../../../config/envConfig";
 
-const ENDPOINT = config.BASE_URL;
+// const ENDPOINT = config.BASE_URL;
+// const ENDPOINT = "http://localhost:4000";
+const ENDPOINT = "https://eventzone.site";
 let socket: any, selectedChatCompare: CompleteRegisteredChatInterface;
 
 const ChatBox = () => {
