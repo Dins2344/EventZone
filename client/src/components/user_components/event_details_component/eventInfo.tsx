@@ -59,13 +59,22 @@ type EventDetailsProps = {
 };
 const EventInfo: React.FC<EventDetailsProps> = ({ event }) => {
   const [reviews, setReviews] = useState<CompleteReviewData[]>();
-  
+  const [expiry,setExpiry] = useState(false)
   // const youtubeVideoUrl = event?.videoURL;
   // const videoId = youtubeVideoUrl?.split("v=")[1];
 
   useEffect(() => {
     fetchEventReviews();
+    checkExpiry()
   }, []);
+
+  const checkExpiry = () => {
+    const currDate = new Date().getTime()
+    const eventDate = new Date(event.startDate).getTime()
+    if (currDate > eventDate) {
+      setExpiry(true)
+    }
+  }
 
   const fetchEventReviews = async () => {
     const data = await getReview(event._id);
@@ -75,7 +84,7 @@ const EventInfo: React.FC<EventDetailsProps> = ({ event }) => {
     <>
       <div className=" mt-5 mb-10">
         <div className="flex flex-col">
-          <p className="font-bold">Date : {event?.startDate}</p>
+          <p className="font-bold text-red-500">Date : {event?.startDate} {expiry && <>Expired</> }</p>
           <h1 className="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white">
             {event?.eventName}
           </h1>

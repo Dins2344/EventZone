@@ -33,6 +33,7 @@ interface EventCardProps {
 const EventCards: React.FC<EventCardProps> = ({ approvedEvent }) => {
   const [isClick, setIsClick] = useState<boolean>(false);
   const [open, setOpen] = useState(false);
+  const [expired,setExpired] = useState(false)
 
   const handleOpen = () => setOpen(!open);
 
@@ -41,8 +42,21 @@ const EventCards: React.FC<EventCardProps> = ({ approvedEvent }) => {
   const user = useSelector(selectUser);
   
   useEffect(() => {
+    checkExpiry()
+  },[])
+  useEffect(() => {
     initialCheck();
   }, [isClick]);
+
+  const checkExpiry = async () => {
+    const date = new Date().getTime()
+    const eventDate = new Date(approvedEvent.startDate).getTime()
+    if (date > eventDate) {
+      setExpired(true)
+    } else {
+      setExpired(false)
+    }
+  }
 
   const initialCheck = async () => {
     const data = await getUserDetailsById();
@@ -163,6 +177,13 @@ const EventCards: React.FC<EventCardProps> = ({ approvedEvent }) => {
         className="xl:w-1/4 lg:w-2/4 px-2 md:w-1/2 w-full mt-2 "
       >
         <Card className="w-full max-w-[26rem] shadow-lg ">
+          {expired && (
+            <>
+              <div className="absolute top-2 left-1 z-50 bg-red-500 rounded-full w-36 ">
+                <p className="w-36 text-center text-white">Event got expired</p>
+              </div>
+            </>
+          )}
           <div className="!absolute top-0 right-0 rounded-full w-min h-min z-10">
             <Heart isClick={isClick} onClick={handleLike} />
           </div>

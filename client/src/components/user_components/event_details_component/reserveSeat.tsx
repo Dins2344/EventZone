@@ -56,6 +56,7 @@ const ReserveSeatComponent: React.FC<ReserveSeatProps> = ({
       organizationId: "",
     });
   const [open, setOpen] = useState(false);
+  const [expired, setExpired] = useState(false)
 
   const handleLoginPrompt = () => setOpen(!open);
   const user = useSelector(selectUser);
@@ -66,7 +67,22 @@ const ReserveSeatComponent: React.FC<ReserveSeatProps> = ({
     token && setToken(token);
   }, []);
 
-  const handleOpen = (value: string | null) => setSize(value);
+  useEffect(() => {
+    const date = new Date().getTime()
+    const eventDate = new Date(eventDetails.startDate).getTime()
+    if (date > eventDate) {
+      setExpired(true)
+    }
+  },[])
+
+  const handleOpen = (value: string | null) => {
+    console.log('called')
+    if (expired) {
+      notify()
+    } else {
+      setSize(value);
+    }
+  }
   const handleIncrement = () => {
     setTicketPass(ticketPass + 1);
   };
@@ -113,31 +129,29 @@ const ReserveSeatComponent: React.FC<ReserveSeatProps> = ({
       };
       const res = await ticketBooking(data);
       if (res?.data.message === "booking confirmed") {
-        notify();
         setBookingRes(res.data.response);
       }
     }
   };
   const notify = () => {
-    toast.success("successfully booked tickets!", {
-      position: "bottom-right",
-      autoClose: 3000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "colored",
-    });
+   toast.error("Sorry event got expired...!", {
+     position: "bottom-right",
+     autoClose: 5000,
+     hideProgressBar: false,
+     closeOnClick: true,
+     pauseOnHover: false,
+     draggable: true,
+     progress: undefined,
+     theme: "colored",
+   });
   };
   const total = ticketPass * eventDetails?.ticketPrice;
 
   return (
     <>
       <ToastContainer
-        className="z-50"
         position="bottom-right"
-        autoClose={3000}
+        autoClose={5000}
         hideProgressBar={false}
         newestOnTop={false}
         closeOnClick
