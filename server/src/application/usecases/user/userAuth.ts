@@ -180,10 +180,10 @@ export const addOrganization = async (
   return res;
 };
 
-export const getApprovedEvents = async (
+export const getApprovedEvents = async (size:number,skip:number,
   userRepository: ReturnType<UserDBInterface>
 ) => {
-  const data = await userRepository.getApprovedEvents();
+  const data = await userRepository.getApprovedEvents(size,skip);
   if (!data) {
     throw new AppError(
       "fetching approved events failed",

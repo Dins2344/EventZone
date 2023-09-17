@@ -49,9 +49,10 @@ export const userRepositoryMongoDB = () => {
     );
     return res;
   };
-  const getApprovedEvents = async () => {
-    const data = await Event.find({ status: "approved" });
-    return data;
+  const getApprovedEvents = async (size: number, skip: number) => {
+    const total = await Event.find({status:'approved'}).count()
+    const data = await Event.find({ status: "approved" }).skip(skip).limit(size)
+    return {total,data};
   };
 
   const getCompleteEventDetails = async (id: string) => {

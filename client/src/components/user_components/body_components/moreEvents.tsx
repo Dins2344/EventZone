@@ -4,6 +4,8 @@ import { RegisteredEventInterface } from "../../../types/organizerInterface";
 // import EventCards from "../../common/eventCards";
 import { EventCardsShimmer } from "../../common/eventCards";
 import { lazy, Suspense } from "react";
+import { Button, IconButton } from "@material-tailwind/react";
+import { ArrowRightIcon, ArrowLeftIcon } from "@heroicons/react/24/outline";
 
 const EventCards = lazy(() => import("../../common/eventCards"));
 
@@ -11,16 +13,58 @@ const MoreEvents: React.FC = () => {
   const [approvedEvents, setApprovedEvents] =
     useState<RegisteredEventInterface[]>();
   const [isLoading, setIsLoading] = useState(false);
+  const [page, setPage] = useState(1);
+  const [totalData, setTotalData] = useState<string>("");
+  const [pages, setPages] = useState<number[]>();
+  const size = 8;
+
+  const [active, setActive] = useState(1);
+   useEffect(() => {
+     setIsLoading(true);
+     fetchEvents();
+     setTotalPage();
+   }, [page]);
+
+  const getItemProps = (index: number) =>
+    ({
+      variant: active === index ? "filled" : "text",
+      color: "gray",
+      onClick: () => {
+        setActive(index)
+        setPage(index)
+      },
+    } as any);
+
+  const next = () => {
+    if (active === Math.ceil(parseInt(totalData) / size)) return;
+    setPage(active + 1);
+    setActive(active + 1);
+  };
+  const prev = () => {
+    if (active === 1) return;
+    setPage(active - 1);
+    setActive(active - 1);
+
+  };
 
   const fetchEvents = async () => {
-    const data = await getAllApprovedEvents();
-    setApprovedEvents(data?.data.data);
+   const data = await fetchApprovedEvents()
+    setTotalData(data?.data.total);
     setTimeout(() => setIsLoading(false), 2000);
   };
-  useEffect(() => {
-    setIsLoading(true);
-    fetchEvents();
-  }, []);
+  const fetchApprovedEvents = async() => {
+   const data = await getAllApprovedEvents(size, page);
+    setApprovedEvents(data?.data.data);
+    return data
+ }
+
+  const setTotalPage = () => {
+    const pages = [];
+    for (let i = 0; i < parseInt(totalData) / size; i++) {
+      pages.push(i + 1);
+    }
+    setPages(pages);
+  };
   return (
     <>
       <div className=" mt-24  w-full px-5 md:px-20">
@@ -68,6 +112,35 @@ const MoreEvents: React.FC = () => {
             )}
           </div>
         )}
+
+        <div className="flex justify-center mt-8 gap-4">
+          <Button
+            variant="text"
+            className="flex items-center gap-2"
+            onClick={prev}
+            disabled={active === 1}
+          >
+            <ArrowLeftIcon strokeWidth={2} className="h-4 w-4" /> Previous
+          </Button>
+          <div className="flex items-center gap-2">
+            {pages?.map((item) => {
+              return (
+                <IconButton key={item} {...getItemProps(item)}>
+                  {item}
+                </IconButton>
+              );
+            })}
+          </div>
+          <Button
+            variant="text"
+            className="flex items-center gap-2"
+            onClick={next}
+            disabled={active === Math.ceil(parseInt(totalData) / size)}
+          >
+            Next
+            <ArrowRightIcon strokeWidth={2} className="h-4 w-4" />
+          </Button>
+        </div>
       </div>
     </>
   );

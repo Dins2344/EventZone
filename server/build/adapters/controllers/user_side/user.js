@@ -39,10 +39,14 @@ const userController = (userDbRepository, userDbRepositoryImpl, authServiceInter
         if (userId && newPassword) {
             const response = yield (0, userAuth_1.changePassword)(newPassword, userId, dbRepositoryUser, authService);
             if (response) {
-                res.json({ message: 'changing password is done', ok: true, response });
+                res.json({
+                    message: "changing password is done",
+                    ok: true,
+                    response,
+                });
             }
             else {
-                res.json({ error: 'changing password failed', ok: false, });
+                res.json({ error: "changing password failed", ok: false });
             }
         }
     }));
@@ -76,9 +80,13 @@ const userController = (userDbRepository, userDbRepositoryImpl, authServiceInter
         }
     }));
     const getApprovedEventsController = (0, express_async_handler_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-        const data = yield (0, userAuth_2.getApprovedEvents)(dbRepositoryUser);
+        console.log(req.query);
+        const page = req.query ? parseInt(req.query.page) : 1;
+        const size = req.query ? parseInt(req.query.size) : 8;
+        const skip = (page - 1) * size;
+        const data = yield (0, userAuth_2.getApprovedEvents)(size, skip, dbRepositoryUser);
         if (data) {
-            res.json({ message: "approved events fetched", data });
+            res.json({ message: "approved events fetched", data: data.data, total: data.total, page, });
         }
         else {
             res.json({ error: "approved events fetching failed" });

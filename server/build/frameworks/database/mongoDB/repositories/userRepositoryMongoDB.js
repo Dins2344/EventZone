@@ -44,9 +44,10 @@ const userRepositoryMongoDB = () => {
         const res = yield userModel_1.default.updateOne({ _id: new mongodb_1.ObjectId(userId) }, { password: newPassword });
         return res;
     });
-    const getApprovedEvents = () => __awaiter(void 0, void 0, void 0, function* () {
-        const data = yield eventModel_1.default.find({ status: "approved" });
-        return data;
+    const getApprovedEvents = (size, skip) => __awaiter(void 0, void 0, void 0, function* () {
+        const total = yield eventModel_1.default.find({ status: 'approved' }).count();
+        const data = yield eventModel_1.default.find({ status: "approved" }).skip(skip).limit(size);
+        return { total, data };
     });
     const getCompleteEventDetails = (id) => __awaiter(void 0, void 0, void 0, function* () {
         const data = yield eventModel_1.default.aggregate([

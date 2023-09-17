@@ -26,8 +26,8 @@ const userDbRepository = (repository) => {
     const addOrganization = (orgId, userId) => __awaiter(void 0, void 0, void 0, function* () {
         return yield repository.addOrganization(orgId, userId);
     });
-    const getApprovedEvents = () => __awaiter(void 0, void 0, void 0, function* () {
-        return yield repository.getApprovedEvents();
+    const getApprovedEvents = (size, skip) => __awaiter(void 0, void 0, void 0, function* () {
+        return yield repository.getApprovedEvents(size, skip);
     });
     const getCompleteEventDetails = (id) => __awaiter(void 0, void 0, void 0, function* () {
         return yield repository.getCompleteEventDetails(id);

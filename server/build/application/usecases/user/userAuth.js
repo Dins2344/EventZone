@@ -128,8 +128,8 @@ const addOrganization = (orgId, userId, userRepository) => __awaiter(void 0, voi
     return res;
 });
 exports.addOrganization = addOrganization;
-const getApprovedEvents = (userRepository) => __awaiter(void 0, void 0, void 0, function* () {
-    const data = yield userRepository.getApprovedEvents();
+const getApprovedEvents = (size, skip, userRepository) => __awaiter(void 0, void 0, void 0, function* () {
+    const data = yield userRepository.getApprovedEvents(size, skip);
     if (!data) {
         throw new appError_1.default("fetching approved events failed", httpStatus_1.HttpStatus.BAD_REQUEST);
     }

@@ -167,6 +167,12 @@ export interface SearchQueryInterface extends Request {
     category: string;
   };
 }
+export interface explorePageDataQueryInterface extends Request{
+  query: {
+    size: string,
+    page:string
+  }
+}
 
 export interface searchDataInterface {
   searchFor: string;

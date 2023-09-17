@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
   const [events,setEvents] = useState<RegisteredEventInterface[]>()
   const navigate = useNavigate()
   const fetchEvents = async()=>{
-    const data = await getAllApprovedEvents()
+    const data = await getAllApprovedEvents(0,0)
     const promotedEvents = data?.data.data.filter((item:RegisteredEventInterface) => {
       if (item.isPromoted) {
         return item

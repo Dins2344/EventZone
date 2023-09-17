@@ -22,8 +22,8 @@ export const userDbRepository = (repository:ReturnType<UserRepositoryMongoDB>)=>
         return await repository.addOrganization(orgId,userId)
     }
 
-    const getApprovedEvents = async()=>{
-        return await repository.getApprovedEvents()
+    const getApprovedEvents = async(size:number,skip:number)=>{
+        return await repository.getApprovedEvents(size,skip)
     }
 
     const getCompleteEventDetails = async(id:string)=>{

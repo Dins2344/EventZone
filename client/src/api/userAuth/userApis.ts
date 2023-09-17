@@ -53,10 +53,10 @@ export const getUserDetailsById = async () => {
   }
 };
 
-export const getAllApprovedEvents = async () => {
+export const getAllApprovedEvents = async (size:number,page:number) => {
   try {
     const data = await api.get(
-      `${config.BASE_URL}/user/get-all-approved-events`
+      `${config.BASE_URL}/user/get-all-approved-events?size=${size}&page=${page}`
     );
     return data;
   } catch (error) {

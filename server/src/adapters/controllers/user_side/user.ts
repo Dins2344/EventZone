@@ -21,6 +21,7 @@ import asyncHandler from "express-async-handler";
 import {
   CustomRequest,
   SearchQueryInterface,
+  explorePageDataQueryInterface,
   ticketBookingCreationInterface,
 } from "../../../types/userInterface";
 import {
@@ -73,18 +74,29 @@ const userController = (
     }
   );
 
-  const changePasswordController = asyncHandler(async (req: CustomRequest, res: Response) => {
-    const newPassword = req.body.newPassword
-    const userId = req.user?.Id
-    if (userId && newPassword) {
-      const response = await changePassword(newPassword, userId, dbRepositoryUser, authService)
-      if (response) {
-        res.json({message:'changing password is done',ok:true,response})
-      } else {
-        res.json({ error: 'changing password failed', ok:false,})
+  const changePasswordController = asyncHandler(
+    async (req: CustomRequest, res: Response) => {
+      const newPassword = req.body.newPassword;
+      const userId = req.user?.Id;
+      if (userId && newPassword) {
+        const response = await changePassword(
+          newPassword,
+          userId,
+          dbRepositoryUser,
+          authService
+        );
+        if (response) {
+          res.json({
+            message: "changing password is done",
+            ok: true,
+            response,
+          });
+        } else {
+          res.json({ error: "changing password failed", ok: false });
+        }
       }
     }
-  })
+  );
 
   const getUserByEmail = asyncHandler(
     async (req: CustomRequest, res: Response) => {
@@ -116,10 +128,14 @@ const userController = (
   );
 
   const getApprovedEventsController = asyncHandler(
-    async (req: Request, res: Response) => {
-      const data = await getApprovedEvents(dbRepositoryUser);
+    async (req: explorePageDataQueryInterface, res: Response) => {
+      console.log(req.query)
+      const page = req.query ? parseInt(req.query.page) : 1;
+      const size = req.query ? parseInt(req.query.size) : 8;
+      const skip = (page - 1) * size;
+      const data = await getApprovedEvents(size, skip, dbRepositoryUser);
       if (data) {
-        res.json({ message: "approved events fetched", data });
+        res.json({ message: "approved events fetched", data:data.data, total:data.total,page, });
       } else {
         res.json({ error: "approved events fetching failed" });
       }
@@ -527,7 +543,7 @@ const userController = (
           res.json({
             error: "getting following organizers events failed",
             ok: false,
-          })
+          });
         } else {
           res.json({
             message: "getting following organizers events done",
